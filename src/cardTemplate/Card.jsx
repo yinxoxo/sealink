@@ -42,6 +42,13 @@ const DraggableItem = ({ id, children, index, moveItem }) => {
   );
 };
 
+DraggableItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  index: PropTypes.number.isRequired,
+  moveItem: PropTypes.func.isRequired,
+};
+
 const Card = () => {
   const buttons = [
     { id: uuidv4(), text: "Our drinks" },
@@ -117,14 +124,15 @@ const Card = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="relative min-h-full w-full rounded-xl bg-white p-6 text-center shadow-lg">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            className="h-full w-full object-cover opacity-60"
-            alt="Background Image"
-          />
-        </div>
-
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: Card.backgroundSettings.backgroundImage,
+            opacity: 0.6,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
         <div className="relative z-10">
           {items.map((item, index) => (
             <DraggableItem
@@ -142,11 +150,9 @@ const Card = () => {
   );
 };
 
-export default Card;
-
-DraggableItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  index: PropTypes.number.isRequired,
-  moveItem: PropTypes.func.isRequired,
+Card.backgroundSettings = {
+  backgroundImage:
+    "url('https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
 };
+
+export default Card;

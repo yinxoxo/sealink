@@ -104,7 +104,10 @@ const Card2 = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="relative mx-auto min-h-full w-full rounded-lg bg-[#f5f3ee] p-4 shadow-lg">
+      <div
+        className="relative mx-auto min-h-full w-full rounded-3xl p-4 shadow-lg"
+        style={{ backgroundColor: Card2.backgroundSettings.backgroundColor }}
+      >
         <div className="flex items-center justify-center bg-transparent p-4">
           <h1 className="font-serif text-4xl text-[#8d4925]">SHEILA</h1>
         </div>
@@ -143,6 +146,9 @@ const Card2 = () => {
       </div>
     </DndProvider>
   );
+};
+Card2.backgroundSettings = {
+  backgroundColor: "#f5f3ee",
 };
 
 export default Card2;
