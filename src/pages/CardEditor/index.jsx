@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Card2 from "../../CardTemplate/Card2";
-import Card from "../../CardTemplate/Card";
+import ArtCard from "../../CardTemplate/ArtCard";
+import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 
@@ -11,31 +11,31 @@ const CardEditor = () => {
 
   const renderTemplate = () => {
     switch (template) {
-      case "Card":
-        return <Card />;
-      case "Card2":
-        return <Card2 />;
+      case "SimpleCard":
+        return <SimpleCard />;
+      case "ArtCard":
+        return <ArtCard />;
       case "BusinessCard":
         return <BusinessCard />;
       default:
-        return <Card />;
+        return <SimpleCard />;
     }
   };
 
   useEffect(() => {
     let selectedCard;
     switch (template) {
-      case "Card":
-        selectedCard = Card;
+      case "SimpleCard":
+        selectedCard = SimpleCard;
         break;
-      case "Card2":
-        selectedCard = Card2;
+      case "ArtCard":
+        selectedCard = ArtCard;
         break;
       case "BusinessCard":
         selectedCard = BusinessCard;
         break;
       default:
-        selectedCard = Card;
+        selectedCard = SimpleCard;
     }
 
     setBackgroundStyle({

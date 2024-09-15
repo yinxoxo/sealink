@@ -1,4 +1,4 @@
-import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa6";
+import { FaFacebook, FaGithub } from "react-icons/fa";
 import { useState, useCallback } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -49,46 +49,27 @@ DraggableItem.propTypes = {
   moveItem: PropTypes.func.isRequired,
 };
 
-const Card = () => {
+const ArtCard = () => {
   const buttons = [
-    { id: uuidv4(), text: "Our drinks" },
-    { id: uuidv4(), text: "Find us" },
-    { id: uuidv4(), text: "Wellbeing" },
+    { id: uuidv4(), text: "VISIT MY WEBSITE" },
+    { id: uuidv4(), text: "MY SERVICES" },
+    { id: uuidv4(), text: "READ MY BLOG" },
+    { id: uuidv4(), text: "CONNECT WITH ME" },
   ];
 
   const icons = [
-    { id: uuidv4(), icon: <FaFacebook size={30} color="#fff" />, link: "#" },
-    { id: uuidv4(), icon: <FaGithub size={30} color="#fff" />, link: "#" },
-    {
-      id: uuidv4(),
-      icon: <FaInstagram size={30} color="#fff" />,
-      link: "#",
-    },
+    { id: uuidv4(), icon: <FaFacebook size={30} color="#d1c3a1" />, link: "#" },
+    { id: uuidv4(), icon: <FaGithub size={30} color="#d1c3a1" />, link: "#" },
   ];
 
   const [items, setItems] = useState([
-    {
-      id: uuidv4(),
-      content: (
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-800">
-          <h1 className="text-2xl font-bold text-orange-500">Hydra</h1>
-        </div>
-      ),
-    },
-    {
-      id: uuidv4(),
-      content: <h2 className="mt-4 text-lg font-semibold">Hydra Juice</h2>,
-    },
-    {
-      id: uuidv4(),
-      content: (
-        <p className="mb-8 text-gray-500">Your daily dose of vitamin C</p>
-      ),
-    },
     ...buttons.map((button) => ({
       id: button.id,
       content: (
-        <button className="my-2 w-full rounded-full bg-gray-200 py-4 transition hover:bg-gray-300">
+        <button
+          key={button.id}
+          className="my-2 block w-full rounded-l-none rounded-r-full bg-[#87794e] py-3 text-white hover:bg-[#746945]"
+        >
           {button.text}
         </button>
       ),
@@ -123,17 +104,34 @@ const Card = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="relative min-h-full w-full rounded-xl bg-white p-6 text-center shadow-lg">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: Card.backgroundSettings.backgroundImage,
-            opacity: 0.6,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <div className="relative z-10">
+      <div
+        className="card-container p-4"
+        style={{ backgroundColor: ArtCard.backgroundSettings.backgroundColor }}
+      >
+        <div className="flex items-center justify-center bg-transparent p-4">
+          <h1 className="font-serif text-4xl text-[#8d4925]">SHEILA</h1>
+        </div>
+
+        <div className="relative bg-transparent p-6">
+          <div className="flex flex-row items-center">
+            <div className="flex h-full w-1/2 items-center justify-center bg-[#d1c3a1] p-4">
+              <div>
+                <h2 className="text-4xl font-bold text-[#8d4925]">HI!</h2>
+                <p className="mt-2 font-bold text-[#554f46]">I AM SHEILA</p>
+              </div>
+            </div>
+
+            <div className="relative h-full w-1/2 overflow-hidden rounded-br-[50%] bg-[#d04d37]">
+              <img
+                className="h-full w-full object-cover"
+                src="https://images.unsplash.com/photo-1720048171419-b515a96a73b8?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="profile"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-transparent p-6">
           {items.map((item, index) => (
             <DraggableItem
               key={item.id}
@@ -149,10 +147,8 @@ const Card = () => {
     </DndProvider>
   );
 };
-
-Card.backgroundSettings = {
-  backgroundImage:
-    "url('https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+ArtCard.backgroundSettings = {
+  backgroundColor: "#f5f3ee",
 };
 
-export default Card;
+export default ArtCard;

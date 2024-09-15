@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import Card from "../../CardTemplate/Card"; // 模板1
-import Card2 from "../../CardTemplate/Card2"; // 模板2
+import SimpleCard from "../../CardTemplate/SimpleCard";
+import ArtCard from "../../CardTemplate/ArtCard";
+import BusinessCard from "../../CardTemplate/BusinessCard";
 
 const Template = () => {
   const navigate = useNavigate();
@@ -13,22 +14,31 @@ const Template = () => {
   return (
     <section className="flex flex-wrap justify-center">
       <div
-        className="m-4 flex cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-gray-300"
+        className="template-card"
         style={{ width: "300px", height: "650px" }}
-        onClick={() => handleTemplateClick("Card")}
+        onClick={() => handleTemplateClick("SimpleCard")}
       >
-        <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
-          <Card />
+        <div className="template-card-size">
+          <SimpleCard />
         </div>
       </div>
 
       <div
-        className="m-4 flex cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-gray-300"
+        className="template-card"
         style={{ width: "300px", height: "650px" }}
-        onClick={() => handleTemplateClick("Card2")}
+        onClick={() => handleTemplateClick("ArtCard")}
       >
-        <div style={{ width: "100%", height: "100%", overflow: "hidden" }}>
-          <Card2 />
+        <div className="template-card-size">
+          <ArtCard />
+        </div>
+      </div>
+      <div
+        className="template-card"
+        style={{ width: "300px", height: "650px" }}
+        onClick={() => handleTemplateClick("BusinessCard")}
+      >
+        <div className="template-card-size">
+          <BusinessCard />
         </div>
       </div>
     </section>
