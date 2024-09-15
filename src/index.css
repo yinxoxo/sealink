@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .card-container {
+    @apply relative mx-auto min-h-full w-full rounded-3xl shadow-lg;
+  }
+}
+
+@layer components {
+  .template-card {
+    @apply m-4 flex cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-gray-300;
+  }
+
+  .template-card-size {
+    @apply h-full w-full;
+  }
+}
