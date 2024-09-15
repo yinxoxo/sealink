@@ -4,6 +4,7 @@ import ArtCard from "../../CardTemplate/ArtCard";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
+import ErrorMessage from "../../components/ErrorMessage";
 
 const CardEditor = () => {
   const { template } = useParams();
@@ -18,7 +19,7 @@ const CardEditor = () => {
       case "BusinessCard":
         return <BusinessCard />;
       default:
-        return <SimpleCard />;
+        return <ErrorMessage message="No matching template found." />;
     }
   };
 
@@ -35,17 +36,24 @@ const CardEditor = () => {
         selectedCard = BusinessCard;
         break;
       default:
-        selectedCard = SimpleCard;
+        selectedCard = null;
     }
 
-    setBackgroundStyle({
-      backgroundColor:
-        selectedCard.backgroundSettings.backgroundColor || "white",
-      backgroundImage:
-        selectedCard.backgroundSettings.backgroundImage || "none",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    });
+    if (selectedCard && selectedCard.backgroundSettings) {
+      setBackgroundStyle({
+        backgroundColor:
+          selectedCard.backgroundSettings.backgroundColor || "white",
+        backgroundImage:
+          selectedCard.backgroundSettings.backgroundImage || "none",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      });
+    } else {
+      setBackgroundStyle({
+        backgroundColor: "white",
+        backgroundImage: "none",
+      });
+    }
   }, [template]);
 
   return (
