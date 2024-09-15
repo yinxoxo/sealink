@@ -47,11 +47,6 @@ const Card = () => {
     { id: uuidv4(), text: "Our drinks" },
     { id: uuidv4(), text: "Find us" },
     { id: uuidv4(), text: "Wellbeing" },
-    { id: uuidv4(), text: "Our latest Podcast" },
-    { id: uuidv4(), text: "Our drinks" },
-    { id: uuidv4(), text: "Find us" },
-    { id: uuidv4(), text: "Wellbeing" },
-    { id: uuidv4(), text: "Our latest Podcast" },
   ];
 
   const icons = [
@@ -86,7 +81,7 @@ const Card = () => {
     ...buttons.map((button) => ({
       id: button.id,
       content: (
-        <button className="my-4 w-full rounded-full bg-gray-200 py-4 transition hover:bg-gray-300">
+        <button className="my-2 w-full rounded-full bg-gray-200 py-4 transition hover:bg-gray-300">
           {button.text}
         </button>
       ),
