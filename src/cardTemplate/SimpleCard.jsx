@@ -85,6 +85,7 @@ const SimpleCard = ({
               fontSize: `${hydraTextStyle.fontSize}px`,
               fontWeight: hydraTextStyle.fontWeight,
               color: hydraTextStyle.color,
+              fontFamily: hydraTextStyle.fontFamily,
             }}
           >
             {hydraText}
@@ -102,6 +103,7 @@ const SimpleCard = ({
             fontSize: `${juiceTextStyle.fontSize}px`,
             fontWeight: juiceTextStyle.fontWeight,
             color: juiceTextStyle.color,
+            fontFamily: juiceTextStyle.fontFamily,
           }}
         >
           {juiceText}
@@ -118,6 +120,7 @@ const SimpleCard = ({
             fontSize: `${descriptionTextStyle.fontSize}px`,
             fontWeight: descriptionTextStyle.fontWeight,
             color: descriptionTextStyle.color,
+            fontFamily: descriptionTextStyle.fontFamily,
           }}
         >
           {descriptionText}

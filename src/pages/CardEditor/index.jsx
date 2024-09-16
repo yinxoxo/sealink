@@ -5,32 +5,42 @@ import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
+import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent";
 
 const CardEditor = () => {
   const { template } = useParams();
 
-  const [hydraText, setHydraText] = useState("Hydra");
-  const [juiceText, setJuiceText] = useState("Hydra Juice");
+  const [hydraText, setHydraText] = useState(
+    initialSimpleCardContent.title.text,
+  );
+  const [juiceText, setJuiceText] = useState(
+    initialSimpleCardContent.subtitle.text,
+  );
   const [descriptionText, setDescriptionText] = useState(
-    "Your daily dose of vitamin C",
+    initialSimpleCardContent.description.text,
   );
 
   const [selectedText, setSelectedText] = useState(null);
 
   const [hydraTextStyle, setHydraTextStyle] = useState({
-    fontSize: 24,
-    fontWeight: 700,
-    color: "#ff4500",
+    fontSize: parseInt(initialSimpleCardContent.title.fontSize),
+    fontWeight: initialSimpleCardContent.title.fontWeight,
+    color: initialSimpleCardContent.title.color,
+    fontFamily: initialSimpleCardContent.title.fontFamily,
   });
+
   const [juiceTextStyle, setJuiceTextStyle] = useState({
-    fontSize: 20,
-    fontWeight: 400,
-    color: "#333333",
+    fontSize: parseInt(initialSimpleCardContent.subtitle.fontSize),
+    fontWeight: initialSimpleCardContent.subtitle.fontWeight,
+    color: initialSimpleCardContent.subtitle.color,
+    fontFamily: initialSimpleCardContent.subtitle.fontFamily,
   });
+
   const [descriptionTextStyle, setDescriptionTextStyle] = useState({
-    fontSize: 16,
-    fontWeight: 300,
-    color: "#888888",
+    fontSize: parseInt(initialSimpleCardContent.description.fontSize),
+    fontWeight: initialSimpleCardContent.description.fontWeight,
+    color: initialSimpleCardContent.description.color,
+    fontFamily: initialSimpleCardContent.description.fontFamily,
   });
 
   const [backgroundStyle, setBackgroundStyle] = useState({});

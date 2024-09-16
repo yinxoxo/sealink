@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import NavBar from "./NavBar";
 import { SketchPicker } from "react-color";
+import { fontOptions } from "../../CardTemplate/cardContent/fontOptions";
 
 const EditBoard = ({
   selectedText,
@@ -33,75 +34,62 @@ const EditBoard = ({
     }
   };
 
-  const renderInput = () => {
+  const handleFontChange = (e) => {
+    const selectedFont = e.target.value;
     switch (selectedText) {
       case "hydraText":
-        return (
-          <>
-            <input
-              type="text"
-              value={hydraText}
-              onChange={(e) => setHydraText(e.target.value)}
-              className="rounded border p-2"
-            />
-            <div className="mt-4">
-              <label>Font Size</label>
-              <input
-                type="range"
-                min="10"
-                max="100"
-                value={hydraTextStyle.fontSize}
-                onChange={(e) =>
-                  setHydraTextStyle({
-                    ...hydraTextStyle,
-                    fontSize: e.target.value,
-                  })
-                }
-                className="slider"
-              />
-              <span>{hydraTextStyle.fontSize}px</span>
-            </div>
-            <div className="mt-4">
-              <label>Font Weight</label>
-              <input
-                type="range"
-                min="100"
-                max="900"
-                step="100"
-                value={hydraTextStyle.fontWeight}
-                onChange={(e) =>
-                  setHydraTextStyle({
-                    ...hydraTextStyle,
-                    fontWeight: e.target.value,
-                  })
-                }
-                className="slider"
-              />
-              <span>{hydraTextStyle.fontWeight}</span>
-            </div>
-            <div className="mt-4">
-              <label>Font Color</label>
-              <input
-                type="color"
-                value={hydraTextStyle.color}
-                onChange={(e) =>
-                  setHydraTextStyle({
-                    ...hydraTextStyle,
-                    color: e.target.value,
-                  })
-                }
-                className="color-picker"
-              />
-            </div>
-          </>
-        );
+        setHydraTextStyle({ ...hydraTextStyle, fontFamily: selectedFont });
+        break;
       case "juiceText":
-        return (
+        setJuiceTextStyle({ ...juiceTextStyle, fontFamily: selectedFont });
+        break;
+      case "descriptionText":
+        setDescriptionTextStyle({
+          ...descriptionTextStyle,
+          fontFamily: selectedFont,
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const renderInput = () => {
+    const currentFontStyle = (() => {
+      switch (selectedText) {
+        case "hydraText":
+          return hydraTextStyle;
+        case "juiceText":
+          return juiceTextStyle;
+        case "descriptionText":
+          return descriptionTextStyle;
+        default:
+          return {};
+      }
+    })();
+
+    return (
+      <>
+        {selectedText && (
           <>
             <input
               type="text"
-              value={juiceText}
-              onChange={(e) => setJuiceText(e.target.value)}
+              value={
+                selectedText === "hydraText"
+                  ? hydraText
+                  : selectedText === "juiceText"
+                    ? juiceText
+                    : descriptionText
+              }
+              onChange={(e) => {
+                if (selectedText === "hydraText") {
+                  setHydraText(e.target.value);
+                } else if (selectedText === "juiceText") {
+                  setJuiceText(e.target.value);
+                } else {
+                  setDescriptionText(e.target.value);
+                }
+              }}
               className="rounded border p-2"
             />
             <div className="mt-4">
@@ -110,16 +98,23 @@ const EditBoard = ({
                 type="range"
                 min="10"
                 max="100"
-                value={juiceTextStyle.fontSize}
-                onChange={(e) =>
-                  setJuiceTextStyle({
-                    ...juiceTextStyle,
-                    fontSize: e.target.value,
-                  })
-                }
+                value={currentFontStyle.fontSize}
+                onChange={(e) => {
+                  const newSize = e.target.value;
+                  if (selectedText === "hydraText") {
+                    setHydraTextStyle({ ...hydraTextStyle, fontSize: newSize });
+                  } else if (selectedText === "juiceText") {
+                    setJuiceTextStyle({ ...juiceTextStyle, fontSize: newSize });
+                  } else {
+                    setDescriptionTextStyle({
+                      ...descriptionTextStyle,
+                      fontSize: newSize,
+                    });
+                  }
+                }}
                 className="slider"
               />
-              <span>{juiceTextStyle.fontSize}px</span>
+              <span>{currentFontStyle.fontSize}px</span>
             </div>
             <div className="mt-4">
               <label>Font Weight</label>
@@ -128,90 +123,55 @@ const EditBoard = ({
                 min="100"
                 max="900"
                 step="100"
-                value={juiceTextStyle.fontWeight}
-                onChange={(e) =>
-                  setJuiceTextStyle({
-                    ...juiceTextStyle,
-                    fontWeight: e.target.value,
-                  })
-                }
+                value={currentFontStyle.fontWeight}
+                onChange={(e) => {
+                  const newWeight = e.target.value;
+                  if (selectedText === "hydraText") {
+                    setHydraTextStyle({
+                      ...hydraTextStyle,
+                      fontWeight: newWeight,
+                    });
+                  } else if (selectedText === "juiceText") {
+                    setJuiceTextStyle({
+                      ...juiceTextStyle,
+                      fontWeight: newWeight,
+                    });
+                  } else {
+                    setDescriptionTextStyle({
+                      ...descriptionTextStyle,
+                      fontWeight: newWeight,
+                    });
+                  }
+                }}
                 className="slider"
               />
-              <span>{juiceTextStyle.fontWeight}</span>
+              <span>{currentFontStyle.fontWeight}</span>
+            </div>
+            <div className="mt-4">
+              <label>Font Family</label>
+              <select
+                value={currentFontStyle.fontFamily}
+                onChange={handleFontChange}
+                className="rounded border p-2"
+              >
+                {fontOptions.map((font) => (
+                  <option key={font.value} value={font.value}>
+                    {font.label}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="mt-4">
               <label>Font Color</label>
-              {/* 使用SketchPicker作為顏色選擇器 */}
               <SketchPicker
-                color={hydraTextStyle.color}
+                color={currentFontStyle.color}
                 onChangeComplete={handleColorChange}
               />
             </div>
           </>
-        );
-      case "descriptionText":
-        return (
-          <>
-            <input
-              type="text"
-              value={descriptionText}
-              onChange={(e) => setDescriptionText(e.target.value)}
-              className="rounded border p-2"
-            />
-            <div className="mt-4">
-              <label>Font Size</label>
-              <input
-                type="range"
-                min="10"
-                max="100"
-                value={descriptionTextStyle.fontSize}
-                onChange={(e) =>
-                  setDescriptionTextStyle({
-                    ...descriptionTextStyle,
-                    fontSize: e.target.value,
-                  })
-                }
-                className="slider"
-              />
-              <span>{descriptionTextStyle.fontSize}px</span>
-            </div>
-            <div className="mt-4">
-              <label>Font Weight</label>
-              <input
-                type="range"
-                min="100"
-                max="900"
-                step="100"
-                value={descriptionTextStyle.fontWeight}
-                onChange={(e) =>
-                  setDescriptionTextStyle({
-                    ...descriptionTextStyle,
-                    fontWeight: e.target.value,
-                  })
-                }
-                className="slider"
-              />
-              <span>{descriptionTextStyle.fontWeight}</span>
-            </div>
-            <div className="mt-4">
-              <label>Font Color</label>
-              <input
-                type="color"
-                value={descriptionTextStyle.color}
-                onChange={(e) =>
-                  setDescriptionTextStyle({
-                    ...descriptionTextStyle,
-                    color: e.target.value,
-                  })
-                }
-                className="color-picker"
-              />
-            </div>
-          </>
-        );
-      default:
-        return <p>Please select text to edit.</p>;
-    }
+        )}
+      </>
+    );
   };
 
   return (
@@ -221,8 +181,6 @@ const EditBoard = ({
     </section>
   );
 };
-
-export default EditBoard;
 
 EditBoard.propTypes = {
   selectedText: PropTypes.string.isRequired,
@@ -236,18 +194,23 @@ EditBoard.propTypes = {
     fontSize: PropTypes.number,
     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
+    fontFamily: PropTypes.string,
   }).isRequired,
   setHydraTextStyle: PropTypes.func.isRequired,
   juiceTextStyle: PropTypes.shape({
     fontSize: PropTypes.number,
     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
+    fontFamily: PropTypes.string,
   }).isRequired,
   setJuiceTextStyle: PropTypes.func.isRequired,
   descriptionTextStyle: PropTypes.shape({
     fontSize: PropTypes.number,
     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     color: PropTypes.string,
+    fontFamily: PropTypes.string,
   }).isRequired,
   setDescriptionTextStyle: PropTypes.func.isRequired,
 };
+
+export default EditBoard;
