@@ -1,5 +1,5 @@
 import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa6";
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { v4 as uuidv4 } from "uuid";
@@ -17,9 +17,6 @@ const DraggableItem = ({ id, children, index, moveItem }) => {
   const [, drop] = useDrop({
     accept: "item",
     hover(item, monitor) {
-      if (!drag) {
-        return;
-      }
       const dragIndex = item.index;
       const hoverIndex = index;
 
@@ -49,7 +46,15 @@ DraggableItem.propTypes = {
   moveItem: PropTypes.func.isRequired,
 };
 
-const SimpleCard = () => {
+const SimpleCard = ({
+  hydraText,
+  juiceText,
+  descriptionText,
+  setSelectedText,
+  hydraTextStyle = {},
+  juiceTextStyle = {},
+  descriptionTextStyle = {},
+}) => {
   const buttons = [
     { id: uuidv4(), text: "Our drinks" },
     { id: uuidv4(), text: "Find us" },
@@ -66,23 +71,57 @@ const SimpleCard = () => {
     },
   ];
 
-  const [items, setItems] = useState([
+  const items = [
     {
       id: uuidv4(),
       content: (
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-800">
-          <h1 className="text-2xl font-bold text-orange-500">Hydra</h1>
+        <div
+          className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-green-800"
+          onClick={() => setSelectedText("hydraText")}
+        >
+          <h1
+            className="cursor-pointer"
+            style={{
+              fontSize: `${hydraTextStyle.fontSize}px`,
+              fontWeight: hydraTextStyle.fontWeight,
+              color: hydraTextStyle.color,
+            }}
+          >
+            {hydraText}
+          </h1>
         </div>
       ),
     },
     {
       id: uuidv4(),
-      content: <h2 className="mt-4 text-lg font-semibold">Hydra Juice</h2>,
+      content: (
+        <h2
+          className="mt-4 cursor-pointer"
+          onClick={() => setSelectedText("juiceText")}
+          style={{
+            fontSize: `${juiceTextStyle.fontSize}px`,
+            fontWeight: juiceTextStyle.fontWeight,
+            color: juiceTextStyle.color,
+          }}
+        >
+          {juiceText}
+        </h2>
+      ),
     },
     {
       id: uuidv4(),
       content: (
-        <p className="mb-8 text-gray-500">Your daily dose of vitamin C</p>
+        <p
+          className="mb-8 cursor-pointer text-gray-500"
+          onClick={() => setSelectedText("descriptionText")}
+          style={{
+            fontSize: `${descriptionTextStyle.fontSize}px`,
+            fontWeight: descriptionTextStyle.fontWeight,
+            color: descriptionTextStyle.color,
+          }}
+        >
+          {descriptionText}
+        </p>
       ),
     },
     ...buttons.map((button) => ({
@@ -109,7 +148,7 @@ const SimpleCard = () => {
         </div>
       ),
     },
-  ]);
+  ];
 
   const moveItem = useCallback((dragIndex, hoverIndex) => {
     setItems((prevItems) => {
@@ -156,3 +195,25 @@ SimpleCard.backgroundSettings = {
 };
 
 export default SimpleCard;
+
+SimpleCard.propTypes = {
+  hydraText: PropTypes.string.isRequired,
+  juiceText: PropTypes.string.isRequired,
+  descriptionText: PropTypes.string.isRequired,
+  setSelectedText: PropTypes.func.isRequired,
+  hydraTextStyle: PropTypes.shape({
+    fontSize: PropTypes.number,
+    fontWeight: PropTypes.string,
+    color: PropTypes.string,
+  }),
+  juiceTextStyle: PropTypes.shape({
+    fontSize: PropTypes.number,
+    fontWeight: PropTypes.string,
+    color: PropTypes.string,
+  }),
+  descriptionTextStyle: PropTypes.shape({
+    fontSize: PropTypes.number,
+    fontWeight: PropTypes.string,
+    color: PropTypes.string,
+  }),
+};

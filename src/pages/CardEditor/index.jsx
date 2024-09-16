@@ -8,12 +8,47 @@ import ErrorMessage from "../../components/ErrorMessage";
 
 const CardEditor = () => {
   const { template } = useParams();
+
+  const [hydraText, setHydraText] = useState("Hydra");
+  const [juiceText, setJuiceText] = useState("Hydra Juice");
+  const [descriptionText, setDescriptionText] = useState(
+    "Your daily dose of vitamin C",
+  );
+
+  const [selectedText, setSelectedText] = useState(null);
+
+  const [hydraTextStyle, setHydraTextStyle] = useState({
+    fontSize: 24,
+    fontWeight: 700,
+    color: "#ff4500",
+  });
+  const [juiceTextStyle, setJuiceTextStyle] = useState({
+    fontSize: 20,
+    fontWeight: 400,
+    color: "#333333",
+  });
+  const [descriptionTextStyle, setDescriptionTextStyle] = useState({
+    fontSize: 16,
+    fontWeight: 300,
+    color: "#888888",
+  });
+
   const [backgroundStyle, setBackgroundStyle] = useState({});
 
   const renderTemplate = () => {
     switch (template) {
       case "SimpleCard":
-        return <SimpleCard />;
+        return (
+          <SimpleCard
+            hydraText={hydraText}
+            juiceText={juiceText}
+            descriptionText={descriptionText}
+            setSelectedText={setSelectedText}
+            hydraTextStyle={hydraTextStyle}
+            juiceTextStyle={juiceTextStyle}
+            descriptionTextStyle={descriptionTextStyle}
+          />
+        );
       case "ArtCard":
         return <ArtCard />;
       case "BusinessCard":
@@ -62,11 +97,25 @@ const CardEditor = () => {
         className="flex flex-[7] flex-col items-center border-2 border-solid border-neutral-300"
         style={backgroundStyle}
       >
-        <div className="w-[560px] flex-grow rounded-3xl">
+        <div className="mr-[450px] w-[560px] flex-grow rounded-3xl">
           {renderTemplate()}
         </div>
       </div>
-      <EditBoard />
+      <EditBoard
+        selectedText={selectedText}
+        setHydraText={setHydraText}
+        setJuiceText={setJuiceText}
+        setDescriptionText={setDescriptionText}
+        hydraText={hydraText}
+        juiceText={juiceText}
+        descriptionText={descriptionText}
+        hydraTextStyle={hydraTextStyle}
+        setHydraTextStyle={setHydraTextStyle}
+        juiceTextStyle={juiceTextStyle}
+        setJuiceTextStyle={setJuiceTextStyle}
+        descriptionTextStyle={descriptionTextStyle}
+        setDescriptionTextStyle={setDescriptionTextStyle}
+      />
     </section>
   );
 };
