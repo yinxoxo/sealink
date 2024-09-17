@@ -2,8 +2,8 @@ import { useNavigate } from "react-router-dom";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import ArtCard from "../../CardTemplate/ArtCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
-import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent"; // 引入 initialSimpleCardContent
-
+import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent";
+import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
 const Template = () => {
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const Template = () => {
             hydraText={initialSimpleCardContent.title.text}
             juiceText={initialSimpleCardContent.subtitle.text}
             descriptionText={initialSimpleCardContent.description.text}
-            icons={initialSimpleCardContent.icons}
+            icons={ICON_LIST.slice(0, 3)}
             hydraTextStyle={{
               fontSize: parseInt(initialSimpleCardContent.title.fontSize),
               fontWeight: initialSimpleCardContent.title.fontWeight,
