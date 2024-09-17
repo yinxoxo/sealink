@@ -5,6 +5,11 @@ import { SketchPicker } from "react-color";
 import { fontOptions } from "../../CardTemplate/cardContent/fontOptions";
 import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
 import { Select, Button } from "antd";
+
+import { Card, Tooltip } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+
+const { Meta } = Card;
 const { Option } = Select;
 
 const EditBoard = ({
@@ -27,6 +32,34 @@ const EditBoard = ({
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState("");
+
+  const IconCard = ({ icon: IconComponent, iconName, onEdit, onDelete }) => {
+    return (
+      <Card
+        className="flex h-fit w-full items-center justify-between"
+        styles={{ body: { padding: "8px" } }}
+        actions={[
+          <Tooltip title="Edit" key="edit">
+            <EditOutlined onClick={onEdit} />
+          </Tooltip>,
+          <Tooltip title="Delete" key="delete">
+            <DeleteOutlined onClick={onDelete} />
+          </Tooltip>,
+        ]}
+      >
+        <Meta
+          className="flex items-center"
+          avatar={<IconComponent size={24} />}
+          title={<span>{iconName}</span>}
+        />
+      </Card>
+    );
+  };
+
+  const handleDelete = (id) => {
+    setIcons(icons.filter((icon) => icon.id !== id));
+    console.log("Deleted icon", id);
+  };
 
   const handleColorChange = (color) => {
     switch (selectedText) {
@@ -93,7 +126,7 @@ const EditBoard = ({
         default:
           return {};
       }
-    })(); // 确保调用 currentFontStyle 函数
+    })();
 
     return (
       <>
@@ -217,6 +250,17 @@ const EditBoard = ({
       {editingType === "icon" ? (
         <>
           <h2 className="mb-4 text-xl">Icons</h2>
+          <h2 className="text-lg">Current Icons</h2>
+          {icons.map((icon) => (
+            <IconCard
+              key={icon.id}
+              icon={icon.icon}
+              iconName={icon.name}
+              onEdit={() => handleEdit(icon.name)}
+              onDelete={() => handleDelete(icon.id)}
+            />
+          ))}
+          <h2 className="my-2 text-lg">Add Icons</h2>
           <Select
             style={{ width: "100%" }}
             placeholder="Select an icon"
@@ -243,7 +287,7 @@ const EditBoard = ({
   );
 
   return (
-    <section className="fixed right-0 min-h-full w-[450px] flex-[3] flex-col border-2 border-solid border-neutral-300 bg-slate-100">
+    <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
       <NavBar />
       <div className="flex flex-col p-4">
         {editingType === "text" ? renderTextEditor() : renderIconList()}
