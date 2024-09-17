@@ -142,6 +142,7 @@ const CardEditor = () => {
         icons={icons}
         setIcons={setIcons}
         editingType={editingType}
+        iconList={ICON_LIST}
       />
     </section>
   );

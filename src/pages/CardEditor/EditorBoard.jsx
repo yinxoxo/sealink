@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import NavBar from "./NavBar";
 import { SketchPicker } from "react-color";
 import { fontOptions } from "../../CardTemplate/cardContent/fontOptions";
+import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
+import { Select, Button } from "antd";
+const { Option } = Select;
 
 const EditBoard = ({
   selectedText,
@@ -18,10 +21,12 @@ const EditBoard = ({
   setJuiceTextStyle,
   descriptionTextStyle,
   setDescriptionTextStyle,
-
   editingType,
+  icons,
+  setIcons,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState("");
 
   const handleColorChange = (color) => {
     switch (selectedText) {
@@ -59,6 +64,23 @@ const EditBoard = ({
     }
   };
 
+  const addIcon = () => {
+    if (selectedIcon) {
+      const foundIcon = ICON_LIST.find((icon) => icon.name === selectedIcon);
+
+      if (foundIcon && foundIcon.icon) {
+        const newIcon = {
+          id: foundIcon.id,
+          name: foundIcon.name,
+          icon: foundIcon.icon,
+        };
+        setIcons([...icons, newIcon]);
+      } else {
+        console.error(`Icon ${selectedIcon} not found or invalid icon`);
+      }
+    }
+  };
+
   const renderTextEditor = () => {
     const currentFontStyle = (() => {
       switch (selectedText) {
@@ -71,7 +93,7 @@ const EditBoard = ({
         default:
           return {};
       }
-    })();
+    })(); // 确保调用 currentFontStyle 函数
 
     return (
       <>
@@ -195,6 +217,26 @@ const EditBoard = ({
       {editingType === "icon" ? (
         <>
           <h2 className="mb-4 text-xl">Icons</h2>
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Select an icon"
+            onChange={(value) => setSelectedIcon(value)}
+          >
+            {ICON_LIST.map((icon) => {
+              const IconComponent = icon.icon;
+              return (
+                <Option key={icon.name} value={icon.name}>
+                  <div className="flex items-center">
+                    <IconComponent size={20} className="mr-2" />
+                    <span>{icon.name}</span>
+                  </div>
+                </Option>
+              );
+            })}
+          </Select>
+          <Button className="mt-4" type="default" onClick={addIcon}>
+            Add Icon
+          </Button>
         </>
       ) : null}
     </>
@@ -239,7 +281,14 @@ EditBoard.propTypes = {
     fontFamily: PropTypes.string,
   }).isRequired,
   setDescriptionTextStyle: PropTypes.func.isRequired,
-
+  icons: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      icon: PropTypes.elementType.isRequired,
+    }),
+  ).isRequired,
+  setIcons: PropTypes.func.isRequired,
   editingType: PropTypes.string,
 };
 
