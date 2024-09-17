@@ -6,9 +6,19 @@ import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
 import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent";
+import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
 
 const CardEditor = () => {
   const { template } = useParams();
+  const [editingType, setEditingType] = useState(null);
+
+  const handleIconClick = () => {
+    setEditingType("icon");
+  };
+
+  const handleTextClick = () => {
+    setEditingType("text");
+  };
 
   const [hydraText, setHydraText] = useState(
     initialSimpleCardContent.title.text,
@@ -19,6 +29,7 @@ const CardEditor = () => {
   const [descriptionText, setDescriptionText] = useState(
     initialSimpleCardContent.description.text,
   );
+  const [icons, setIcons] = useState(ICON_LIST.slice(0, 3));
 
   const [selectedText, setSelectedText] = useState(null);
 
@@ -57,6 +68,9 @@ const CardEditor = () => {
             hydraTextStyle={hydraTextStyle}
             juiceTextStyle={juiceTextStyle}
             descriptionTextStyle={descriptionTextStyle}
+            icons={icons}
+            onIconsClick={handleIconClick}
+            onTextClick={handleTextClick}
           />
         );
       case "ArtCard":
@@ -125,6 +139,9 @@ const CardEditor = () => {
         setJuiceTextStyle={setJuiceTextStyle}
         descriptionTextStyle={descriptionTextStyle}
         setDescriptionTextStyle={setDescriptionTextStyle}
+        icons={icons}
+        setIcons={setIcons}
+        editingType={editingType}
       />
     </section>
   );
