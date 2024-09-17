@@ -1,34 +1,7 @@
 import { useState } from "react";
-import { FaFacebook, FaGithub, FaInstagram } from "react-icons/fa6";
+import { ICON_LIST, ICON_STYLE } from "../CardTemplate/cardContent/iconList";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-
-const ItemType = "ITEM";
-
-const DraggableItem = ({ id, content, index, moveItem }) => {
-  const [, ref] = useDrag({
-    type: ItemType,
-    item: { id, index },
-  });
-
-  const [, drop] = useDrop({
-    accept: ItemType,
-    hover: (draggedItem) => {
-      if (draggedItem.index !== index) {
-        moveItem(draggedItem.index, index);
-        draggedItem.index = index;
-      }
-    },
-  });
-
-  return (
-    <div ref={(node) => ref(drop(node))} className="my-2 w-full">
-      {content}
-    </div>
-  );
-};
 
 const SimpleCard = ({
   hydraText,
@@ -38,8 +11,11 @@ const SimpleCard = ({
   hydraTextStyle = {},
   juiceTextStyle = {},
   descriptionTextStyle = {},
+  icons,
+  onIconsClick,
+  onTextClick,
 }) => {
-  const [items, setItems] = useState([
+  const [items] = useState([
     {
       id: uuidv4(),
       content: (
@@ -64,101 +40,103 @@ const SimpleCard = ({
         </button>
       ),
     },
-    {
-      id: uuidv4(),
-      content: (
-        <div className="mt-6 flex justify-center space-x-4">
-          <a href="#" className="text-gray-500 hover:text-gray-700">
-            <FaFacebook size={30} color="#fff" />
-          </a>
-          <a href="#" className="text-gray-500 hover:text-gray-700">
-            <FaGithub size={30} color="#fff" />
-          </a>
-          <a href="#" className="text-gray-500 hover:text-gray-700">
-            <FaInstagram size={30} color="#fff" />
-          </a>
-        </div>
-      ),
-    },
   ]);
 
-  const moveItem = (fromIndex, toIndex) => {
-    const updatedItems = [...items];
-    const [movedItem] = updatedItems.splice(fromIndex, 1);
-    updatedItems.splice(toIndex, 0, movedItem);
-    setItems(updatedItems);
-  };
+  const iconStyle = ICON_STYLE.SimpleCard;
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="card-container bg-white p-6 text-center">
+    <div className="card-container bg-white p-6 text-center">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: SimpleCard.backgroundSettings.backgroundImage,
+          opacity: 0.6,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="relative z-10">
         <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: SimpleCard.backgroundSettings.backgroundImage,
-            opacity: 0.6,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
+          className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-green-800"
+          onClick={() => {
+            setSelectedText("hydraText");
+            onTextClick();
           }}
-        />
-        <div className="relative z-10">
-          <div
-            className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-green-800"
-            onClick={() => setSelectedText("hydraText")}
-          >
-            <h1
-              className="cursor-pointer"
-              style={{
-                fontSize: `${hydraTextStyle.fontSize}px`,
-                fontWeight: hydraTextStyle.fontWeight,
-                color: hydraTextStyle.color,
-                fontFamily: hydraTextStyle.fontFamily,
-              }}
-            >
-              {hydraText}
-            </h1>
-          </div>
-
-          <h2
-            className="mt-4 cursor-pointer"
-            onClick={() => setSelectedText("juiceText")}
+        >
+          <h1
+            className="cursor-pointer"
             style={{
-              fontSize: `${juiceTextStyle.fontSize}px`,
-              fontWeight: juiceTextStyle.fontWeight,
-              color: juiceTextStyle.color,
-              fontFamily: juiceTextStyle.fontFamily,
+              fontSize: `${hydraTextStyle.fontSize}px`,
+              fontWeight: hydraTextStyle.fontWeight,
+              color: hydraTextStyle.color,
+              fontFamily: hydraTextStyle.fontFamily,
             }}
           >
-            {juiceText}
-          </h2>
+            {hydraText}
+          </h1>
+        </div>
 
-          <p
-            className="mb-8 cursor-pointer text-gray-500"
-            onClick={() => setSelectedText("descriptionText")}
-            style={{
-              fontSize: `${descriptionTextStyle.fontSize}px`,
-              fontWeight: descriptionTextStyle.fontWeight,
-              color: descriptionTextStyle.color,
-              fontFamily: descriptionTextStyle.fontFamily,
-            }}
-          >
-            {descriptionText}
-          </p>
+        <h2
+          className="mt-4 cursor-pointer"
+          onClick={() => {
+            setSelectedText("juiceText");
+            onTextClick();
+          }}
+          style={{
+            fontSize: `${juiceTextStyle.fontSize}px`,
+            fontWeight: juiceTextStyle.fontWeight,
+            color: juiceTextStyle.color,
+            fontFamily: juiceTextStyle.fontFamily,
+          }}
+        >
+          {juiceText}
+        </h2>
 
-          <div>
-            {items.map((item, index) => (
-              <DraggableItem
-                key={item.id}
-                id={item.id}
-                index={index}
-                content={item.content}
-                moveItem={moveItem}
-              />
-            ))}
-          </div>
+        <p
+          className="mb-4 cursor-pointer text-gray-500"
+          onClick={() => {
+            setSelectedText("descriptionText");
+            onTextClick();
+          }}
+          style={{
+            fontSize: `${descriptionTextStyle.fontSize}px`,
+            fontWeight: descriptionTextStyle.fontWeight,
+            color: descriptionTextStyle.color,
+            fontFamily: descriptionTextStyle.fontFamily,
+          }}
+        >
+          {descriptionText}
+        </p>
+
+        <div
+          className="mb-7 mt-3 flex justify-center space-x-4"
+          onClick={() => onIconsClick(icons)}
+        >
+          {ICON_LIST.slice(0, 3).map((icon) => {
+            const IconComponent = icon.icon;
+            return (
+              <a
+                key={icon.id}
+                href="#"
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <IconComponent size={iconStyle.size} color={iconStyle.color} />
+              </a>
+            );
+          })}
+        </div>
+
+        <div>
+          {items.map((item) =>
+            item && item.id ? (
+              <div key={item.id} className="my-2 w-full">
+                {item.content}
+              </div>
+            ) : null,
+          )}
         </div>
       </div>
-    </DndProvider>
+    </div>
   );
 };
 
@@ -189,4 +167,13 @@ SimpleCard.propTypes = {
     fontWeight: PropTypes.string,
     color: PropTypes.string,
   }),
+  icons: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      icon: PropTypes.elementType.isRequired,
+    }),
+  ).isRequired,
+  onIconsClick: PropTypes.func.isRequired,
+  onTextClick: PropTypes.func.isRequired,
 };
