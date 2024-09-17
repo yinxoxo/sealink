@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ICON_LIST, ICON_STYLE } from "../CardTemplate/cardContent/iconList";
+import { ICON_STYLE } from "../CardTemplate/cardContent/iconList";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
@@ -112,7 +112,7 @@ const SimpleCard = ({
           className="mb-7 mt-3 flex justify-center space-x-4"
           onClick={() => onIconsClick(icons)}
         >
-          {ICON_LIST.slice(0, 3).map((icon) => {
+          {icons.map((icon) => {
             const IconComponent = icon.icon;
             return (
               <a
