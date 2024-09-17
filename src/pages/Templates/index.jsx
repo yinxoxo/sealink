@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import ArtCard from "../../CardTemplate/ArtCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
+import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent"; // 引入 initialSimpleCardContent
 
 const Template = () => {
   const navigate = useNavigate();
@@ -19,7 +20,30 @@ const Template = () => {
         onClick={() => handleTemplateClick("SimpleCard")}
       >
         <div className="template-card-size">
-          <SimpleCard />
+          <SimpleCard
+            hydraText={initialSimpleCardContent.title.text}
+            juiceText={initialSimpleCardContent.subtitle.text}
+            descriptionText={initialSimpleCardContent.description.text}
+            icons={initialSimpleCardContent.icons}
+            hydraTextStyle={{
+              fontSize: parseInt(initialSimpleCardContent.title.fontSize),
+              fontWeight: initialSimpleCardContent.title.fontWeight,
+              color: initialSimpleCardContent.title.color,
+              fontFamily: initialSimpleCardContent.title.fontFamily,
+            }}
+            juiceTextStyle={{
+              fontSize: parseInt(initialSimpleCardContent.subtitle.fontSize),
+              fontWeight: initialSimpleCardContent.subtitle.fontWeight,
+              color: initialSimpleCardContent.subtitle.color,
+              fontFamily: initialSimpleCardContent.subtitle.fontFamily,
+            }}
+            descriptionTextStyle={{
+              fontSize: parseInt(initialSimpleCardContent.description.fontSize),
+              fontWeight: initialSimpleCardContent.description.fontWeight,
+              color: initialSimpleCardContent.description.color,
+              fontFamily: initialSimpleCardContent.description.fontFamily,
+            }}
+          />
         </div>
       </div>
 
