@@ -6,11 +6,13 @@ import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
 import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent";
-import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
+import { ICON_LIST, ICON_STYLE } from "../../CardTemplate/cardContent/iconList";
 
 const CardEditor = () => {
   const { template } = useParams();
   const [editingType, setEditingType] = useState(null);
+  const [iconColor, setIconColor] = useState(ICON_STYLE.SimpleCard.color);
+  const [iconSize, setIconSize] = useState(ICON_STYLE.SimpleCard.size);
 
   const handleIconClick = () => {
     setEditingType("icon");
@@ -71,6 +73,7 @@ const CardEditor = () => {
             icons={icons}
             onIconsClick={handleIconClick}
             onTextClick={handleTextClick}
+            iconStyle={{ ...ICON_STYLE.SimpleCard, color: iconColor }}
           />
         );
       case "ArtCard":
@@ -143,6 +146,11 @@ const CardEditor = () => {
         setIcons={setIcons}
         editingType={editingType}
         iconList={ICON_LIST}
+        iconStyle={{ color: iconColor, size: iconSize }}
+        setIconStyle={({ color, size }) => {
+          setIconColor(color);
+          setIconSize(size);
+        }}
       />
     </section>
   );

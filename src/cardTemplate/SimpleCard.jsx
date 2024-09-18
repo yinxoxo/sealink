@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ICON_STYLE } from "../CardTemplate/cardContent/iconList";
+
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
@@ -14,6 +14,7 @@ const SimpleCard = ({
   icons,
   onIconsClick,
   onTextClick,
+  iconStyle,
 }) => {
   const [items] = useState([
     {
@@ -41,8 +42,6 @@ const SimpleCard = ({
       ),
     },
   ]);
-
-  const iconStyle = ICON_STYLE.SimpleCard;
 
   return (
     <div className="card-container bg-white p-6 text-center">
@@ -117,7 +116,7 @@ const SimpleCard = ({
             return (
               <a
                 key={icon.id}
-                href="#"
+                href={icon.href}
                 className="text-gray-500 hover:text-gray-700"
               >
                 <IconComponent size={iconStyle.size} color={iconStyle.color} />
@@ -176,4 +175,8 @@ SimpleCard.propTypes = {
   ).isRequired,
   onIconsClick: PropTypes.func.isRequired,
   onTextClick: PropTypes.func.isRequired,
+  iconStyle: PropTypes.shape({
+    color: PropTypes.string,
+    size: PropTypes.number,
+  }).isRequired,
 };

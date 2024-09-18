@@ -4,9 +4,7 @@ import NavBar from "./NavBar";
 import { SketchPicker } from "react-color";
 import { fontOptions } from "../../CardTemplate/cardContent/fontOptions";
 import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
-import { Select, Button } from "antd";
-
-import { Card, Tooltip } from "antd";
+import { Select, Button, Card, Tooltip, Modal, Input } from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const { Meta } = Card;
@@ -29,9 +27,28 @@ const EditBoard = ({
   editingType,
   icons,
   setIcons,
+  iconStyle,
+  setIconStyle,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editIconData, setEditIconData] = useState(null);
+
+  const handleEdit = (icon) => {
+    setEditIconData(icon);
+    setIsModalVisible(true);
+  };
+
+  const handleSaveEdit = () => {
+    const updatedIcons = icons.map((icon) =>
+      icon.id === editIconData.id ? editIconData : icon,
+    );
+    setIcons(updatedIcons);
+    setIconStyle({ ...iconStyle, color: editIconData.color });
+    console.log(iconStyle);
+    setIsModalVisible(false);
+  };
 
   const IconCard = ({ icon: IconComponent, iconName, onEdit, onDelete }) => {
     return (
@@ -283,6 +300,33 @@ const EditBoard = ({
           </Button>
         </>
       ) : null}
+      {editIconData && (
+        <Modal
+          title="Edit Icon"
+          open={isModalVisible}
+          onOk={handleSaveEdit}
+          onCancel={() => setIsModalVisible(false)}
+        >
+          <div>
+            <label>Icon Color</label>
+            <SketchPicker
+              color={editIconData.color}
+              onChangeComplete={(color) =>
+                setEditIconData({ ...editIconData, color: color.hex })
+              }
+            />
+          </div>
+          <div className="mt-4">
+            <label>Icon Link (Href)</label>
+            <Input
+              value={editIconData.href}
+              onChange={(e) =>
+                setEditIconData({ ...editIconData, href: e.target.value })
+              }
+            />
+          </div>
+        </Modal>
+      )}
     </>
   );
 
