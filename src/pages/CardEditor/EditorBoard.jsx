@@ -76,9 +76,6 @@ const EditBoard = ({
     );
   };
 
-  // const handleiConSizeChange = (value) => {
-  //   setIconStyle({ ...iconStyle, size: value });
-  // };
   const handleIconDelete = (id) => {
     setIcons(icons.filter((icon) => icon.id !== id));
     console.log("Deleted icon", id);
@@ -298,6 +295,23 @@ const EditBoard = ({
                 />
               </div>
             )}
+          </div>
+          <div className="my-4 flex flex-col">
+            <label>Icon Size</label>
+            <input
+              type="range"
+              min="10"
+              max="100"
+              value={iconStyle.size}
+              onChange={(e) =>
+                setIconStyle({
+                  ...iconStyle,
+                  size: parseInt(e.target.value, 10),
+                })
+              }
+              className="slider"
+            />
+            <span>{iconStyle.size}px</span>
           </div>
 
           {icons.map((icon) => (
