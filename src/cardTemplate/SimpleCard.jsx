@@ -265,3 +265,10 @@ SimpleCard.propTypes = {
     size: PropTypes.number,
   }).isRequired,
 };
+
+DraggableItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  content: PropTypes.node.isRequired,
+  index: PropTypes.number.isRequired,
+  moveItem: PropTypes.func.isRequired,
+};
