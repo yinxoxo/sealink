@@ -175,7 +175,7 @@ const EditBoard = ({
             max="100"
             value={currentFontStyle.fontSize}
             onChange={(e) => {
-              const newSize = e.target.value;
+              const newSize = parseInt(e.target.value, 10);
               if (selectedText === "hydraText") {
                 setHydraTextStyle({ ...hydraTextStyle, fontSize: newSize });
               } else if (selectedText === "juiceText") {
