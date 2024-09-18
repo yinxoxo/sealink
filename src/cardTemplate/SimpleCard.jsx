@@ -44,7 +44,7 @@ const SimpleCard = ({
   onTextClick,
   onButtonClick,
   iconStyle,
-  simpleCardButtons,
+  simpleCardButtons = { texts: [], style: {} },
 }) => {
   const [items, setItems] = useState([
     {
@@ -76,14 +76,26 @@ const SimpleCard = ({
 
   useEffect(() => {
     setItems((prevItems) => {
-      return prevItems.map((item) => {
+      return prevItems.map((item, index) => {
         if (item.type === "hydra") return { ...item, content: hydraText };
         if (item.type === "h2") return { ...item, content: juiceText };
         if (item.type === "p") return { ...item, content: descriptionText };
+        if (item.type === "button") {
+          const buttonItems = prevItems.filter(
+            (item) => item.type === "button",
+          );
+          const buttonIndex = buttonItems.findIndex(
+            (buttonItem) => buttonItem.id === item.id,
+          );
+          return {
+            ...item,
+            content: simpleCardButtons.texts[buttonIndex],
+          };
+        }
         return item;
       });
     });
-  }, [hydraText, juiceText, descriptionText]);
+  }, [hydraText, juiceText, descriptionText, simpleCardButtons.texts]);
 
   const moveItem = (fromIndex, toIndex) => {
     const updatedItems = [...items];

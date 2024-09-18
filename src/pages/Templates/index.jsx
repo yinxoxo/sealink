@@ -44,6 +44,7 @@ const Template = () => {
               color: initialSimpleCardContent.description.color,
               fontFamily: initialSimpleCardContent.description.fontFamily,
             }}
+            simpleCardButtons={initialSimpleCardContent.buttons}
           />
         </div>
       </div>

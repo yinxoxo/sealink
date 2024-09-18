@@ -32,10 +32,13 @@ const EditBoard = ({
   simpleCardButtons,
   setSimpleCardButtons,
 }) => {
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  // const [showColorPicker, setShowColorPicker] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIconData, setEditIconData] = useState(null);
+  const [showBackgroundColorPicker, setShowBackgroundColorPicker] =
+    useState(false);
+  const [showFontColorPicker, setShowFontColorPicker] = useState(false);
 
   const handleEdit = (iconName) => {
     const iconToEdit = icons.find((icon) => icon.name === iconName);
@@ -253,7 +256,7 @@ const EditBoard = ({
         </div>
         <div className="mt-4">
           <label>Font Color</label>
-          <div onClick={() => setShowColorPicker(!showColorPicker)}>
+          <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
             <div
               style={{
                 backgroundColor: currentFontStyle.color,
@@ -264,7 +267,7 @@ const EditBoard = ({
               }}
             />
           </div>
-          {showColorPicker && (
+          {showFontColorPicker && (
             <div style={{ position: "absolute", zIndex: 2 }}>
               <SketchPicker
                 color={currentFontStyle.color}
@@ -277,157 +280,35 @@ const EditBoard = ({
     );
   };
 
-  const renderIconList = () => (
-    <>
-      {editingType === "icon" ? (
-        <>
-          <h2 className="mb-4 text-xl">Icons</h2>
-          <h2 className="text-lg">Current Icons</h2>
-          <div className="my-4">
-            <label>Icon Color</label>
-            <div onClick={() => setShowColorPicker(!showColorPicker)}>
-              <div
-                style={{
-                  backgroundColor: iconStyle.color || "#000",
-                  width: "40px",
-                  height: "40px",
-                  cursor: "pointer",
-                  borderRadius: "5px",
-                }}
-              />
-            </div>
-            {showColorPicker && (
-              <div style={{ position: "absolute", zIndex: 2 }}>
-                <SketchPicker
-                  color={editIconData?.color}
-                  onChangeComplete={(color) => {
-                    setEditIconData({ ...editIconData, color: color.hex });
-                    setIconStyle({ ...iconStyle, color: color.hex });
-                  }}
-                />
-              </div>
-            )}
-          </div>
-          <div className="my-4 flex flex-col">
-            <label>Icon Size</label>
-            <input
-              type="range"
-              min="10"
-              max="100"
-              value={iconStyle.size}
-              onChange={(e) =>
-                setIconStyle({
-                  ...iconStyle,
-                  size: parseInt(e.target.value, 10),
-                })
-              }
-              className="slider"
-            />
-            <span>{iconStyle.size}px</span>
-          </div>
-
-          {icons.map((icon) => (
-            <IconCard
-              key={icon.id}
-              icon={icon.icon}
-              iconName={icon.name}
-              onEdit={() => handleEdit(icon.name)}
-              onDelete={() => handleIconDelete(icon.id)}
-            />
-          ))}
-          <h2 className="my-2 text-lg">Add Icons</h2>
-          <Select
-            style={{ width: "100%" }}
-            placeholder="Select an icon"
-            onChange={(value) => setSelectedIcon(value)}
-          >
-            {ICON_LIST.map((icon) => {
-              const IconComponent = icon.icon;
-              return (
-                <Option key={icon.name} value={icon.name}>
-                  <div className="flex items-center">
-                    <IconComponent size={20} className="mr-2" />
-                    <span>{icon.name}</span>
-                  </div>
-                </Option>
-              );
-            })}
-          </Select>
-          <Button className="mt-4" type="default" onClick={addIcon}>
-            Add Icon
-          </Button>
-        </>
-      ) : null}
-      {editIconData && (
-        <Modal
-          title="Edit Icon"
-          open={isModalVisible}
-          onOk={handleSaveEdit}
-          onCancel={() => setIsModalVisible(false)}
-        >
-          <div>
-            <label>Icon Type</label>
-
-            <Select
-              value={editIconData.name}
-              style={{ width: "100%" }}
-              onChange={(value) => {
-                const selectedIcon = ICON_LIST.find(
-                  (icon) => icon.name === value,
-                );
-                if (selectedIcon) {
-                  setEditIconData({
-                    ...editIconData,
-                    name: value,
-                    icon: selectedIcon.icon,
-                  });
-                }
-              }}
-            >
-              {ICON_LIST.map((icon) => (
-                <Option key={icon.name} value={icon.name}>
-                  <div className="flex items-center">
-                    <icon.icon size={20} className="mr-2" />
-                    <span>{icon.name}</span>
-                  </div>
-                </Option>
-              ))}
-            </Select>
-          </div>
-
-          <div className="mt-4">
-            <label>Icon Link (Href)</label>
-            <Input
-              value={editIconData.href}
-              onChange={(e) =>
-                setEditIconData({ ...editIconData, href: e.target.value })
-              }
-            />
-          </div>
-        </Modal>
-      )}
-    </>
-  );
-
+  const handleButtonTextChange = (index, newText) => {
+    const updatedTexts = [...simpleCardButtons.texts];
+    updatedTexts[index] = newText;
+    setSimpleCardButtons({
+      ...simpleCardButtons,
+      texts: updatedTexts,
+    });
+  };
   const renderButtonEditor = () => {
-    const { style } = simpleCardButtons;
+    const { style, texts } = simpleCardButtons;
 
     return (
       <>
         <div className="mt-4">
           <label>Background Color</label>
-          <div onClick={() => setShowColorPicker(!showColorPicker)}>
-            <div
-              style={{
-                backgroundColor: style.backgroundColor,
-                width: "40px",
-                height: "40px",
-                cursor: "pointer",
-                borderRadius: "5px",
-              }}
-            />
-          </div>
-          {showColorPicker && (
+          <div
+            style={{
+              backgroundColor: style.backgroundColor,
+              width: "40px",
+              height: "40px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={() => {
+              setShowBackgroundColorPicker(!showBackgroundColorPicker);
+              setShowFontColorPicker(false);
+            }}
+          />
+          {showBackgroundColorPicker && (
             <div style={{ position: "absolute", zIndex: 2 }}>
               <SketchPicker
                 color={style.backgroundColor}
@@ -440,63 +321,114 @@ const EditBoard = ({
         </div>
 
         <div className="mt-4">
+          {texts.map((text, index) => (
+            <div key={index} className="mb-4">
+              <label>Button {index + 1} Text</label>
+              <Input
+                type="text"
+                value={text}
+                onChange={(e) => handleButtonTextChange(index, e.target.value)}
+              />
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4">
           <label>Width</label>
-          <Input
-            type="text"
-            value={style.width}
-            onChange={(e) => handleButtonStyleChange("width", e.target.value)}
+          <input
+            type="range"
+            min="50"
+            max="100"
+            value={parseInt(style.width, 10) || 70}
+            onChange={(e) =>
+              handleButtonStyleChange("width", `${e.target.value}%`)
+            }
           />
+          <span>{style.width}</span>
         </div>
 
         <div className="mt-4">
           <label>Text Color</label>
-          <Input
-            type="text"
-            value={style.color}
-            onChange={(e) => handleButtonStyleChange("color", e.target.value)}
+          <div
+            style={{
+              backgroundColor: style.color,
+              width: "40px",
+              height: "40px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={() => {
+              setShowFontColorPicker(!showFontColorPicker);
+              setShowBackgroundColorPicker(false);
+            }}
           />
+          {showFontColorPicker && (
+            <div style={{ position: "absolute", zIndex: 2 }}>
+              <SketchPicker
+                color={style.color}
+                onChangeComplete={(color) =>
+                  handleButtonStyleChange("color", color.hex)
+                }
+              />
+            </div>
+          )}
         </div>
 
         <div className="mt-4">
           <label>Border Radius</label>
-          <Input
-            type="text"
-            value={style.borderRadius}
+          <input
+            type="range"
+            min="0"
+            max="50"
+            value={parseInt(style.borderRadius, 10) || 20}
             onChange={(e) =>
-              handleButtonStyleChange("borderRadius", e.target.value)
+              handleButtonStyleChange("borderRadius", `${e.target.value}px`)
             }
           />
+          <span>{style.borderRadius}</span>
         </div>
 
         <div className="mt-4">
           <label>Padding</label>
-          <Input
-            type="text"
-            value={style.padding}
-            onChange={(e) => handleButtonStyleChange("padding", e.target.value)}
+          <input
+            type="range"
+            min="0"
+            max="50"
+            value={parseInt(style.padding, 10) || 20}
+            onChange={(e) =>
+              handleButtonStyleChange("padding", `${e.target.value}px`)
+            }
           />
+          <span>{style.padding}</span>
         </div>
 
         <div className="mt-4">
           <label>Font Size</label>
-          <Input
-            type="text"
-            value={style.fontSize}
+          <input
+            type="range"
+            min="10"
+            max="50"
+            value={parseInt(style.fontSize, 10) || 18}
             onChange={(e) =>
-              handleButtonStyleChange("fontSize", e.target.value)
+              handleButtonStyleChange("fontSize", `${e.target.value}px`)
             }
           />
+          <span>{style.fontSize}</span>
         </div>
 
         <div className="mt-4">
           <label>Font Weight</label>
-          <Input
-            type="text"
-            value={style.fontWeight}
+          <input
+            type="range"
+            min="100"
+            max="900"
+            step="100"
+            value={parseInt(style.fontWeight, 10) || 400}
             onChange={(e) =>
               handleButtonStyleChange("fontWeight", e.target.value)
             }
           />
+          <span>{style.fontWeight}</span>
         </div>
 
         <div className="mt-4">
