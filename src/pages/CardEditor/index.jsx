@@ -61,6 +61,7 @@ const CardEditor = () => {
   const renderTemplate = () => {
     switch (template) {
       case "SimpleCard":
+        console.log(iconSize);
         return (
           <SimpleCard
             hydraText={hydraText}
@@ -73,7 +74,11 @@ const CardEditor = () => {
             icons={icons}
             onIconsClick={handleIconClick}
             onTextClick={handleTextClick}
-            iconStyle={{ ...ICON_STYLE.SimpleCard, color: iconColor }}
+            iconStyle={{
+              ...ICON_STYLE.SimpleCard,
+              color: iconColor,
+              size: iconSize,
+            }}
           />
         );
       case "ArtCard":

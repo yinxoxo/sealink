@@ -35,9 +35,12 @@ const EditBoard = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIconData, setEditIconData] = useState(null);
 
-  const handleEdit = (icon) => {
-    setEditIconData(icon);
-    setIsModalVisible(true);
+  const handleEdit = (iconName) => {
+    const iconToEdit = icons.find((icon) => icon.name === iconName);
+    if (iconToEdit) {
+      setEditIconData(iconToEdit);
+      setIsModalVisible(true);
+    }
   };
 
   const handleSaveEdit = () => {
@@ -66,14 +69,17 @@ const EditBoard = ({
       >
         <Meta
           className="flex items-center"
-          avatar={<IconComponent size={24} />}
+          avatar={<IconComponent size={24} color="#000" />}
           title={<span>{iconName}</span>}
         />
       </Card>
     );
   };
 
-  const handleDelete = (id) => {
+  // const handleiConSizeChange = (value) => {
+  //   setIconStyle({ ...iconStyle, size: value });
+  // };
+  const handleIconDelete = (id) => {
     setIcons(icons.filter((icon) => icon.id !== id));
     console.log("Deleted icon", id);
   };
@@ -268,13 +274,39 @@ const EditBoard = ({
         <>
           <h2 className="mb-4 text-xl">Icons</h2>
           <h2 className="text-lg">Current Icons</h2>
+          <div className="my-4">
+            <label>Icon Color</label>
+            <div onClick={() => setShowColorPicker(!showColorPicker)}>
+              <div
+                style={{
+                  backgroundColor: iconStyle.color || "#000",
+                  width: "40px",
+                  height: "40px",
+                  cursor: "pointer",
+                  borderRadius: "5px",
+                }}
+              />
+            </div>
+            {showColorPicker && (
+              <div style={{ position: "absolute", zIndex: 2 }}>
+                <SketchPicker
+                  color={editIconData?.color}
+                  onChangeComplete={(color) => {
+                    setEditIconData({ ...editIconData, color: color.hex });
+                    setIconStyle({ ...iconStyle, color: color.hex });
+                  }}
+                />
+              </div>
+            )}
+          </div>
+
           {icons.map((icon) => (
             <IconCard
               key={icon.id}
               icon={icon.icon}
               iconName={icon.name}
               onEdit={() => handleEdit(icon.name)}
-              onDelete={() => handleDelete(icon.id)}
+              onDelete={() => handleIconDelete(icon.id)}
             />
           ))}
           <h2 className="my-2 text-lg">Add Icons</h2>
@@ -308,14 +340,35 @@ const EditBoard = ({
           onCancel={() => setIsModalVisible(false)}
         >
           <div>
-            <label>Icon Color</label>
-            <SketchPicker
-              color={editIconData.color}
-              onChangeComplete={(color) =>
-                setEditIconData({ ...editIconData, color: color.hex })
-              }
-            />
+            <label>Icon Type</label>
+
+            <Select
+              value={editIconData.name}
+              style={{ width: "100%" }}
+              onChange={(value) => {
+                const selectedIcon = ICON_LIST.find(
+                  (icon) => icon.name === value,
+                );
+                if (selectedIcon) {
+                  setEditIconData({
+                    ...editIconData,
+                    name: value,
+                    icon: selectedIcon.icon,
+                  });
+                }
+              }}
+            >
+              {ICON_LIST.map((icon) => (
+                <Option key={icon.name} value={icon.name}>
+                  <div className="flex items-center">
+                    <icon.icon size={20} className="mr-2" />
+                    <span>{icon.name}</span>
+                  </div>
+                </Option>
+              ))}
+            </Select>
           </div>
+
           <div className="mt-4">
             <label>Icon Link (Href)</label>
             <Input
@@ -329,7 +382,6 @@ const EditBoard = ({
       )}
     </>
   );
-
   return (
     <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
       <NavBar />

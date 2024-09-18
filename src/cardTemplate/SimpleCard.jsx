@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import { useDrag, useDrop } from "react-dnd";
-// import { HTML5Backend } from "react-dnd-html5-backend";
 
 const ItemType = "ITEM";
 
