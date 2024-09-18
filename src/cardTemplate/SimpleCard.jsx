@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
@@ -81,6 +81,17 @@ const SimpleCard = ({
       content: "Wellbeing",
     },
   ]);
+
+  useEffect(() => {
+    setItems((prevItems) => {
+      return prevItems.map((item) => {
+        if (item.type === "hydra") return { ...item, content: hydraText };
+        if (item.type === "h2") return { ...item, content: juiceText };
+        if (item.type === "p") return { ...item, content: descriptionText };
+        return item;
+      });
+    });
+  }, [hydraText, juiceText, descriptionText]);
 
   const moveItem = (fromIndex, toIndex) => {
     const updatedItems = [...items];
@@ -226,7 +237,7 @@ SimpleCard.propTypes = {
   hydraText: PropTypes.string.isRequired,
   juiceText: PropTypes.string.isRequired,
   descriptionText: PropTypes.string.isRequired,
-  setSelectedText: PropTypes.func.isRequired,
+  setSelectedText: PropTypes.func,
   hydraTextStyle: PropTypes.shape({
     fontSize: PropTypes.number,
     fontWeight: PropTypes.string,
@@ -249,8 +260,8 @@ SimpleCard.propTypes = {
       icon: PropTypes.elementType.isRequired,
     }),
   ).isRequired,
-  onIconsClick: PropTypes.func.isRequired,
-  onTextClick: PropTypes.func.isRequired,
+  onIconsClick: PropTypes.func,
+  onTextClick: PropTypes.func,
   iconStyle: PropTypes.shape({
     color: PropTypes.string,
     size: PropTypes.number,
