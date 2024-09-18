@@ -12,28 +12,59 @@ import {
   FaLinkedin,
 } from "react-icons/fa6";
 
-// 這個列表包含網站所有可用的圖標
 const ICON_LIST = [
-  { id: "x", name: "X", icon: FaTwitter },
-  { id: "instagram", name: "Instagram", icon: FaInstagram },
-  { id: "threads", name: "Threads", icon: FaThreads },
-  { id: "facebook", name: "Facebook", icon: FaFacebook },
-  { id: "email", name: "Email", icon: FaEnvelope },
-  { id: "youtube", name: "Youtube", icon: FaYoutube },
-  { id: "snapchat", name: "Snapchat", icon: FaSnapchat },
-  { id: "portrait", name: "Portrait", icon: FaImagePortrait },
-  { id: "dev", name: "Dev", icon: FaDev },
-  { id: "linkedin", name: "Linkedin", icon: FaLinkedin },
+  { id: "x", name: "X", icon: FaTwitter, href: "https://twitter.com" },
+  {
+    id: "instagram",
+    name: "Instagram",
+    icon: FaInstagram,
+    href: "https://instagram.com",
+  },
+  {
+    id: "threads",
+    name: "Threads",
+    icon: FaThreads,
+    href: "https://threads.net",
+  },
+  {
+    id: "facebook",
+    name: "Facebook",
+    icon: FaFacebook,
+    href: "https://facebook.com",
+  },
+  {
+    id: "email",
+    name: "Email",
+    icon: FaEnvelope,
+    href: "mailto:someone@example.com",
+  },
+  {
+    id: "youtube",
+    name: "Youtube",
+    icon: FaYoutube,
+    href: "https://youtube.com",
+  },
+  {
+    id: "snapchat",
+    name: "Snapchat",
+    icon: FaSnapchat,
+    href: "https://snapchat.com",
+  },
+  { id: "portrait", name: "Portrait", icon: FaImagePortrait, href: "#" },
+  { id: "dev", name: "Dev", icon: FaDev, href: "https://dev.to" },
+  {
+    id: "linkedin",
+    name: "Linkedin",
+    icon: FaLinkedin,
+    href: "https://linkedin.com",
+  },
 ];
 
-// 為 SimpleCard 保存 icon 樣式設定
 const ICON_STYLE = {
   SimpleCard: {
     color: "#ffffff",
     size: 30,
   },
-  // 可以為其他卡片模板繼續添加樣式設置
 };
 
-// 將 ICON_LIST 和 ICON_STYLE 一起導出
 export { ICON_LIST, ICON_STYLE };
