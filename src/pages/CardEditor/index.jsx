@@ -22,6 +22,10 @@ const CardEditor = () => {
     setEditingType("text");
   };
 
+  const handleButtonClick = () => {
+    setEditingType("button");
+  };
+
   const [hydraText, setHydraText] = useState(
     initialSimpleCardContent.title.text,
   );
@@ -56,12 +60,16 @@ const CardEditor = () => {
     fontFamily: initialSimpleCardContent.description.fontFamily,
   });
 
+  const [simpleCardButtons, setSimpleCardButtons] = useState({
+    texts: [...initialSimpleCardContent.buttons.texts],
+    style: { ...initialSimpleCardContent.buttons.style },
+  });
+
   const [backgroundStyle, setBackgroundStyle] = useState({});
 
   const renderTemplate = () => {
     switch (template) {
       case "SimpleCard":
-        console.log(iconSize);
         return (
           <SimpleCard
             hydraText={hydraText}
@@ -74,11 +82,13 @@ const CardEditor = () => {
             icons={icons}
             onIconsClick={handleIconClick}
             onTextClick={handleTextClick}
+            onButtonClick={handleButtonClick}
             iconStyle={{
               ...ICON_STYLE.SimpleCard,
               color: iconColor,
               size: iconSize,
             }}
+            simpleCardButtons={simpleCardButtons}
           />
         );
       case "ArtCard":
@@ -156,6 +166,8 @@ const CardEditor = () => {
           setIconColor(color);
           setIconSize(size);
         }}
+        simpleCardButtons={simpleCardButtons}
+        setSimpleCardButtons={setSimpleCardButtons}
       />
     </section>
   );

@@ -20,4 +20,17 @@ export const initialSimpleCardContent = {
     fontSize: "14px",
     fontFamily: "Arial, sans-serif",
   },
+  buttons: {
+    texts: ["Our drinks", "Find us", "Wellbeing"],
+    style: {
+      backgroundColor: "#F0F0F0",
+      width: "70%",
+      color: "#000000",
+      borderRadius: "20px",
+      padding: " 20px",
+      fontSize: "18px",
+      fontWeight: "normal",
+      fontFamily: "Arial, sans-serif",
+    },
+  },
 };

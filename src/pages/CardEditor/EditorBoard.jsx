@@ -29,6 +29,8 @@ const EditBoard = ({
   setIcons,
   iconStyle,
   setIconStyle,
+  simpleCardButtons,
+  setSimpleCardButtons,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [selectedIcon, setSelectedIcon] = useState("");
@@ -132,6 +134,16 @@ const EditBoard = ({
         console.error(`Icon ${selectedIcon} not found or invalid icon`);
       }
     }
+  };
+
+  const handleButtonStyleChange = (styleProp, value) => {
+    setSimpleCardButtons((prev) => ({
+      ...prev,
+      style: {
+        ...prev.style,
+        [styleProp]: value,
+      },
+    }));
   };
 
   const renderTextEditor = () => {
@@ -396,11 +408,126 @@ const EditBoard = ({
       )}
     </>
   );
+
+  const renderButtonEditor = () => {
+    const { style } = simpleCardButtons;
+
+    return (
+      <>
+        <div className="mt-4">
+          <label>Background Color</label>
+          <div onClick={() => setShowColorPicker(!showColorPicker)}>
+            <div
+              style={{
+                backgroundColor: style.backgroundColor,
+                width: "40px",
+                height: "40px",
+                cursor: "pointer",
+                borderRadius: "5px",
+              }}
+            />
+          </div>
+          {showColorPicker && (
+            <div style={{ position: "absolute", zIndex: 2 }}>
+              <SketchPicker
+                color={style.backgroundColor}
+                onChangeComplete={(color) =>
+                  handleButtonStyleChange("backgroundColor", color.hex)
+                }
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="mt-4">
+          <label>Width</label>
+          <Input
+            type="text"
+            value={style.width}
+            onChange={(e) => handleButtonStyleChange("width", e.target.value)}
+          />
+        </div>
+
+        <div className="mt-4">
+          <label>Text Color</label>
+          <Input
+            type="text"
+            value={style.color}
+            onChange={(e) => handleButtonStyleChange("color", e.target.value)}
+          />
+        </div>
+
+        <div className="mt-4">
+          <label>Border Radius</label>
+          <Input
+            type="text"
+            value={style.borderRadius}
+            onChange={(e) =>
+              handleButtonStyleChange("borderRadius", e.target.value)
+            }
+          />
+        </div>
+
+        <div className="mt-4">
+          <label>Padding</label>
+          <Input
+            type="text"
+            value={style.padding}
+            onChange={(e) => handleButtonStyleChange("padding", e.target.value)}
+          />
+        </div>
+
+        <div className="mt-4">
+          <label>Font Size</label>
+          <Input
+            type="text"
+            value={style.fontSize}
+            onChange={(e) =>
+              handleButtonStyleChange("fontSize", e.target.value)
+            }
+          />
+        </div>
+
+        <div className="mt-4">
+          <label>Font Weight</label>
+          <Input
+            type="text"
+            value={style.fontWeight}
+            onChange={(e) =>
+              handleButtonStyleChange("fontWeight", e.target.value)
+            }
+          />
+        </div>
+
+        <div className="mt-4">
+          <label>Font Family</label>
+          <Select
+            value={style.fontFamily}
+            onChange={(value) => handleButtonStyleChange("fontFamily", value)}
+            className="rounded border p-2"
+          >
+            {fontOptions.map((font) => (
+              <Option key={font.value} value={font.value}>
+                {font.label}
+              </Option>
+            ))}
+          </Select>
+        </div>
+      </>
+    );
+  };
+
   return (
     <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
       <NavBar />
       <div className="flex flex-col p-4">
-        {editingType === "text" ? renderTextEditor() : renderIconList()}
+        {editingType === "text"
+          ? renderTextEditor()
+          : editingType === "icon"
+            ? renderIconList()
+            : editingType === "button"
+              ? renderButtonEditor()
+              : null}
       </div>
     </section>
   );

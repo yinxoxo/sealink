@@ -42,7 +42,9 @@ const SimpleCard = ({
   icons,
   onIconsClick,
   onTextClick,
+  onButtonClick,
   iconStyle,
+  simpleCardButtons,
 }) => {
   const [items, setItems] = useState([
     {
@@ -64,21 +66,12 @@ const SimpleCard = ({
       id: uuidv4(),
       type: "icons",
     },
-    {
+
+    ...simpleCardButtons.texts.map((text) => ({
       id: uuidv4(),
       type: "button",
-      content: "Our drinks",
-    },
-    {
-      id: uuidv4(),
-      type: "button",
-      content: "Find us",
-    },
-    {
-      id: uuidv4(),
-      type: "button",
-      content: "Wellbeing",
-    },
+      content: text,
+    })),
   ]);
 
   useEffect(() => {
@@ -130,7 +123,16 @@ const SimpleCard = ({
           cursor: "pointer",
         };
       case "button":
-        return "w-full rounded-full bg-gray-200 py-4";
+        return {
+          backgroundColor: simpleCardButtons.style.backgroundColor,
+          width: simpleCardButtons.style.width,
+          color: simpleCardButtons.style.color,
+          borderRadius: simpleCardButtons.style.borderRadius,
+          padding: simpleCardButtons.style.padding,
+          fontSize: simpleCardButtons.style.fontSize,
+          fontWeight: simpleCardButtons.style.fontWeight,
+          fontFamily: simpleCardButtons.style.fontFamily,
+        };
       case "icons":
         return "flex justify-center space-x-4";
       default:
@@ -175,7 +177,10 @@ const SimpleCard = ({
                     </h1>
                   </div>
                 ) : item.type === "button" ? (
-                  <button className={getItemStyle(item.type)}>
+                  <button
+                    style={getItemStyle(item.type)}
+                    onClick={() => onButtonClick()}
+                  >
                     {item.content}
                   </button>
                 ) : item.type === "icons" ? (
