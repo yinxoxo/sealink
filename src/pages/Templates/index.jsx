@@ -3,7 +3,7 @@ import SimpleCard from "../../CardTemplate/SimpleCard";
 import ArtCard from "../../CardTemplate/ArtCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent";
-import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
+import { ICON_LIST, ICON_STYLE } from "../../CardTemplate/cardContent/iconList";
 const Template = () => {
   const navigate = useNavigate();
 
@@ -25,6 +25,7 @@ const Template = () => {
             juiceText={initialSimpleCardContent.subtitle.text}
             descriptionText={initialSimpleCardContent.description.text}
             icons={ICON_LIST.slice(0, 3)}
+            iconStyle={{ ...ICON_STYLE.SimpleCard }}
             hydraTextStyle={{
               fontSize: parseInt(initialSimpleCardContent.title.fontSize),
               fontWeight: initialSimpleCardContent.title.fontWeight,
