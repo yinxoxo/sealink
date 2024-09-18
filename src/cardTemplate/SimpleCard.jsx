@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrag, useDrop } from "react-dnd";
+// import { HTML5Backend } from "react-dnd-html5-backend";
 
 const ItemType = "ITEM";
 
@@ -140,89 +140,88 @@ const SimpleCard = ({
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="card-container relative bg-white p-6 text-center">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: SimpleCard.backgroundSettings.backgroundImage,
-            opacity: 0.6,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-        <div className="relative z-10">
-          {items.map((item, index) =>
-            item && item.id ? (
-              <DraggableItem
-                key={item.id}
-                id={item.id}
-                content={
-                  item.type === "hydra" ? (
-                    <div className={getItemStyle(item.type).wrapper}>
-                      <div
-                        className={getItemStyle(item.type).circle}
-                        style={{ zIndex: 1 }}
-                        onClick={() => {
-                          setSelectedText("hydraText");
-                          onTextClick();
-                        }}
-                      />
-
-                      <h1
-                        className="relative z-10 cursor-pointer"
-                        style={getItemStyle(item.type).text}
-                      >
-                        {item.content}
-                      </h1>
-                    </div>
-                  ) : item.type === "button" ? (
-                    <button className={getItemStyle(item.type)}>
-                      {item.content}
-                    </button>
-                  ) : item.type === "icons" ? (
+    <div className="card-container relative bg-white p-6 text-center">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: SimpleCard.backgroundSettings.backgroundImage,
+          opacity: 0.6,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="relative z-10">
+        {items.map((item, index) =>
+          item && item.id ? (
+            <DraggableItem
+              key={item.id}
+              id={item.id}
+              content={
+                item.type === "hydra" ? (
+                  <div className={getItemStyle(item.type).wrapper}>
                     <div
-                      className={getItemStyle(item.type)}
-                      onClick={() => onIconsClick(icons)}
-                    >
-                      {icons.map((icon) => {
-                        const IconComponent = icon.icon;
-                        return (
-                          <a
-                            key={icon.id}
-                            href={icon.href}
-                            className="text-gray-500 hover:text-gray-700"
-                          >
-                            <IconComponent
-                              size={iconStyle.size}
-                              color={iconStyle.color}
-                            />
-                          </a>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div
-                      style={getItemStyle(item.type)}
+                      className={getItemStyle(item.type).circle}
+                      style={{ zIndex: 1 }}
                       onClick={() => {
-                        if (item.type === "h2") setSelectedText("juiceText");
-                        if (item.type === "p")
-                          setSelectedText("descriptionText");
+                        setSelectedText("hydraText");
                         onTextClick();
                       }}
+                    />
+
+                    <h1
+                      className="relative z-10 cursor-pointer"
+                      style={getItemStyle(item.type).text}
                     >
                       {item.content}
-                    </div>
-                  )
-                }
-                index={index}
-                moveItem={moveItem}
-              />
-            ) : null,
-          )}
-        </div>
+                    </h1>
+                  </div>
+                ) : item.type === "button" ? (
+                  <button className={getItemStyle(item.type)}>
+                    {item.content}
+                  </button>
+                ) : item.type === "icons" ? (
+                  <div
+                    className={getItemStyle(item.type)}
+                    onClick={() => onIconsClick(icons)}
+                  >
+                    {icons.map((icon) => {
+                      const IconComponent = icon.icon;
+                      return (
+                        <a
+                          key={icon.id}
+                          href={icon.href}
+                          className="text-gray-500 hover:text-gray-700"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <IconComponent
+                            size={iconStyle.size}
+                            color={iconStyle.color}
+                          />
+                        </a>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div
+                    style={getItemStyle(item.type)}
+                    onClick={() => {
+                      if (item.type === "h2") setSelectedText("juiceText");
+                      if (item.type === "p") setSelectedText("descriptionText");
+                      onTextClick();
+                    }}
+                  >
+                    {item.content}
+                  </div>
+                )
+              }
+              index={index}
+              moveItem={moveItem}
+            />
+          ) : null,
+        )}
       </div>
-    </DndProvider>
+    </div>
   );
 };
 

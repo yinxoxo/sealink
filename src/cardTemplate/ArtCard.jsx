@@ -1,7 +1,7 @@
 import { FaFacebook, FaGithub } from "react-icons/fa";
 import { useState, useCallback } from "react";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { useDrag, useDrop } from "react-dnd";
+
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 
@@ -103,48 +103,46 @@ const ArtCard = () => {
   }, []);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div
-        className="card-container p-4"
-        style={{ backgroundColor: ArtCard.backgroundSettings.backgroundColor }}
-      >
-        <div className="flex items-center justify-center bg-transparent p-4">
-          <h1 className="font-serif text-4xl text-[#8d4925]">SHEILA</h1>
-        </div>
+    <div
+      className="card-container p-4"
+      style={{ backgroundColor: ArtCard.backgroundSettings.backgroundColor }}
+    >
+      <div className="flex items-center justify-center bg-transparent p-4">
+        <h1 className="font-serif text-4xl text-[#8d4925]">SHEILA</h1>
+      </div>
 
-        <div className="relative bg-transparent p-6">
-          <div className="flex flex-row items-center">
-            <div className="flex h-full w-1/2 items-center justify-center bg-[#d1c3a1] p-4">
-              <div>
-                <h2 className="text-4xl font-bold text-[#8d4925]">HI!</h2>
-                <p className="mt-2 font-bold text-[#554f46]">I AM SHEILA</p>
-              </div>
-            </div>
-
-            <div className="relative h-full w-1/2 overflow-hidden rounded-br-[50%] bg-[#d04d37]">
-              <img
-                className="h-full w-full object-cover"
-                src="https://images.unsplash.com/photo-1720048171419-b515a96a73b8?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                alt="profile"
-              />
+      <div className="relative bg-transparent p-6">
+        <div className="flex flex-row items-center">
+          <div className="flex h-full w-1/2 items-center justify-center bg-[#d1c3a1] p-4">
+            <div>
+              <h2 className="text-4xl font-bold text-[#8d4925]">HI!</h2>
+              <p className="mt-2 font-bold text-[#554f46]">I AM SHEILA</p>
             </div>
           </div>
-        </div>
 
-        <div className="bg-transparent p-6">
-          {items.map((item, index) => (
-            <DraggableItem
-              key={item.id}
-              id={item.id}
-              index={index}
-              moveItem={moveItem}
-            >
-              {item.content}
-            </DraggableItem>
-          ))}
+          <div className="relative h-full w-1/2 overflow-hidden rounded-br-[50%] bg-[#d04d37]">
+            <img
+              className="h-full w-full object-cover"
+              src="https://images.unsplash.com/photo-1720048171419-b515a96a73b8?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="profile"
+            />
+          </div>
         </div>
       </div>
-    </DndProvider>
+
+      <div className="bg-transparent p-6">
+        {items.map((item, index) => (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            index={index}
+            moveItem={moveItem}
+          >
+            {item.content}
+          </DraggableItem>
+        ))}
+      </div>
+    </div>
   );
 };
 ArtCard.backgroundSettings = {
