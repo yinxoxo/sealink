@@ -36,15 +36,15 @@ const SimpleCard = ({
   juiceText,
   descriptionText,
   setSelectedText,
-  hydraTextStyle = {},
-  juiceTextStyle = {},
-  descriptionTextStyle = {},
+  hydraTextStyle,
+  juiceTextStyle,
+  descriptionTextStyle,
   icons,
   onIconsClick,
   onTextClick,
   onButtonClick,
   iconStyle,
-  simpleCardButtons = { buttons: { buttonList: [] } },
+  simpleCardButtons,
 }) => {
   const [items, setItems] = useState([
     {
@@ -74,16 +74,45 @@ const SimpleCard = ({
     })),
   ]);
   useEffect(() => {
-    setItems((prevItems) => [
-      ...prevItems.filter((item) => item.type !== "button"),
-      ...simpleCardButtons.buttons.map((button) => ({
-        id: uuidv4(),
-        type: "button",
-        content: button.text,
-        url: button.url,
-      })),
-    ]);
-  }, [simpleCardButtons.buttons, hydraText, juiceText, descriptionText]);
+    setItems((prevItems) => {
+      const updatedItems = prevItems.map((item) => {
+        if (item.type === "hydra") {
+          return {
+            ...item,
+            content: hydraText,
+          };
+        }
+        if (item.type === "h2") {
+          return {
+            ...item,
+            content: juiceText,
+          };
+        }
+        if (item.type === "p") {
+          return {
+            ...item,
+            content: descriptionText,
+          };
+        }
+        return item;
+      });
+
+      const buttonItems =
+        simpleCardButtons && Array.isArray(simpleCardButtons.buttons)
+          ? simpleCardButtons.buttons.map((button) => ({
+              id: uuidv4(),
+              type: "button",
+              content: button.text,
+              url: button.url,
+            }))
+          : [];
+
+      return [
+        ...updatedItems.filter((item) => item.type !== "button"),
+        ...buttonItems,
+      ];
+    });
+  }, [simpleCardButtons, hydraText, juiceText, descriptionText]);
 
   const handleButtonClick = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
