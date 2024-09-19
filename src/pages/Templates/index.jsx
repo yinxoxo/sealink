@@ -6,13 +6,8 @@ import { initialSimpleCardContent } from "../../cardTemplate/cardContent/initial
 import { ICON_LIST, ICON_STYLE } from "../../CardTemplate/cardContent/iconList";
 const Template = () => {
   const navigate = useNavigate();
-  console.log(
-    "initialSimpleCardContent.buttons:",
-    initialSimpleCardContent.buttons,
-  );
 
   const handleTemplateClick = (template) => {
-    console.log("click", template);
     navigate(`/dashboard/card-editor/${template}`);
   };
 
@@ -52,6 +47,7 @@ const Template = () => {
               buttons: initialSimpleCardContent.buttons.buttonList,
               style: { ...initialSimpleCardContent.buttons.style },
             }}
+            backgroundSettings={initialSimpleCardContent.backgroundSettings}
           />
         </div>
       </div>

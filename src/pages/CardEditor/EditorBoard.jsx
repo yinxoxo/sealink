@@ -4,7 +4,16 @@ import NavBar from "./NavBar";
 import { SketchPicker } from "react-color";
 import { fontOptions } from "../../CardTemplate/cardContent/fontOptions";
 import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
-import { Select, Button, Card, Tooltip, Modal, Input } from "antd";
+import {
+  Select,
+  Button,
+  Card,
+  Tooltip,
+  Modal,
+  Input,
+  Slider,
+  Switch,
+} from "antd";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const { Meta } = Card;
@@ -31,6 +40,9 @@ const EditBoard = ({
   setIconStyle,
   simpleCardButtons,
   setSimpleCardButtons,
+  backgroundSettings,
+  setBackgroundSettings,
+  onBackgroundClick,
 }) => {
   // const [showColorPicker, setShowColorPicker] = useState(false);
 
@@ -42,6 +54,19 @@ const EditBoard = ({
   const [showFontColorPicker, setShowFontColorPicker] = useState(false);
   const [isButtonModalVisible, setIsButtonModalVisible] = useState(false);
   const [editButtonData, setEditButtonData] = useState(null);
+
+  const [useBackgroundImage, setUseBackgroundImage] = useState(
+    !!backgroundSettings.backgroundImage,
+  );
+  const [tempBackgroundImage, setTempBackgroundImage] = useState(
+    backgroundSettings.backgroundImage,
+  );
+  const [tempBackgroundColor, setTempBackgroundColor] = useState(
+    backgroundSettings.backgroundColor || "#ffffff",
+  );
+  const [tempOpacity, setTempOpacity] = useState(
+    backgroundSettings.opacity || 0.6,
+  );
 
   const handleEdit = (iconName) => {
     const iconToEdit = icons.find((icon) => icon.name === iconName);
@@ -197,17 +222,14 @@ const EditBoard = ({
     }));
   };
 
-  const handleButtonUrlChange = (index, newUrl) => {
-    const updatedButtons = simpleCardButtons.buttons.map((button, i) =>
-      i === index ? { ...button, url: newUrl } : button,
-    );
-
-    setSimpleCardButtons({
-      ...simpleCardButtons,
-      buttons: updatedButtons,
+  const handleSaveBackgroundSettings = () => {
+    setBackgroundSettings({
+      ...backgroundSettings,
+      backgroundImage: useBackgroundImage ? tempBackgroundImage : null,
+      backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
+      opacity: tempOpacity,
     });
   };
-
   const renderIconList = () => (
     <>
       {editingType === "icon" ? (
@@ -701,10 +723,80 @@ const EditBoard = ({
       </>
     );
   };
+  const renderBackgroundEditor = () => (
+    <div>
+      <h2 className="mb-4">Edit Background</h2>
+
+      {/* 用於選擇使用背景圖片還是背景顏色 */}
+      <div className="my-4">
+        <label>Use Background Image</label>
+        <Switch
+          checked={useBackgroundImage}
+          onChange={(checked) => setUseBackgroundImage(checked)}
+        />
+      </div>
+
+      {useBackgroundImage ? (
+        <div>
+          {/* 背景圖片的輸入框 */}
+          <label>Background Image URL</label>
+          <Input
+            value={tempBackgroundImage}
+            onChange={(e) => setTempBackgroundImage(e.target.value)}
+          />
+        </div>
+      ) : (
+        <div className="my-4">
+          {/* 背景顏色選擇器 */}
+          <label>Background Color</label>
+          <div
+            onClick={() =>
+              setShowBackgroundColorPicker(!showBackgroundColorPicker)
+            }
+          >
+            <div
+              style={{
+                backgroundColor: tempBackgroundColor,
+                width: "40px",
+                height: "40px",
+                cursor: "pointer",
+                borderRadius: "5px",
+              }}
+            />
+          </div>
+          {showBackgroundColorPicker && (
+            <div style={{ position: "absolute", zIndex: 2 }}>
+              <SketchPicker
+                color={tempBackgroundColor}
+                onChangeComplete={(color) => setTempBackgroundColor(color.hex)}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 背景透明度的滑塊 */}
+      <div className="my-4">
+        <label>Background Opacity</label>
+        <Slider
+          min={0.1}
+          max={1}
+          step={0.1}
+          value={tempOpacity}
+          onChange={(value) => setTempOpacity(value)}
+        />
+        <span>{tempOpacity}</span>
+      </div>
+
+      <Button type="primary" onClick={handleSaveBackgroundSettings}>
+        Save Background Settings
+      </Button>
+    </div>
+  );
 
   return (
     <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
-      <NavBar />
+      <NavBar onBackgroundClick={onBackgroundClick} />
       <div className="flex flex-col p-4">
         {editingType === "text"
           ? renderTextEditor()
@@ -712,7 +804,9 @@ const EditBoard = ({
             ? renderIconList()
             : editingType === "button"
               ? renderButtonEditor()
-              : null}
+              : editingType === "background"
+                ? renderBackgroundEditor()
+                : null}
       </div>
     </section>
   );

@@ -45,6 +45,7 @@ const SimpleCard = ({
   onButtonClick,
   iconStyle,
   simpleCardButtons,
+  backgroundSettings,
 }) => {
   const [items, setItems] = useState([
     {
@@ -177,12 +178,16 @@ const SimpleCard = ({
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: SimpleCard.backgroundSettings.backgroundImage,
-          opacity: 0.6,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundImage: backgroundSettings.backgroundImage
+            ? `url(${backgroundSettings.backgroundImage})`
+            : "none",
+          backgroundColor: backgroundSettings.backgroundColor || "none",
+          opacity: backgroundSettings.opacity || 0.6,
+          backgroundSize: backgroundSettings.backgroundSize || "cover",
+          backgroundPosition: backgroundSettings.backgroundPosition || "center",
         }}
       />
+
       <div className="relative z-10">
         {items.map((item, index) =>
           item && item.id ? (
@@ -267,10 +272,10 @@ const SimpleCard = ({
   );
 };
 
-SimpleCard.backgroundSettings = {
-  backgroundImage:
-    "url('https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-};
+// SimpleCard.backgroundSettings = {
+//   backgroundImage:
+//     "url('https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+// };
 
 export default SimpleCard;
 

@@ -26,6 +26,10 @@ const CardEditor = () => {
     setEditingType("button");
   };
 
+  const handleBackgroundClick = () => {
+    setEditingType("background");
+  };
+
   const [hydraText, setHydraText] = useState(
     initialSimpleCardContent.title.text,
   );
@@ -67,6 +71,10 @@ const CardEditor = () => {
 
   const [backgroundStyle, setBackgroundStyle] = useState({});
 
+  const [backgroundSettings, setBackgroundSettings] = useState({
+    ...initialSimpleCardContent.backgroundSettings,
+  });
+
   const renderTemplate = () => {
     switch (template) {
       case "SimpleCard":
@@ -83,12 +91,14 @@ const CardEditor = () => {
             onIconsClick={handleIconClick}
             onTextClick={handleTextClick}
             onButtonClick={handleButtonClick}
+            onBackgroundClick={handleBackgroundClick}
             iconStyle={{
               ...ICON_STYLE.SimpleCard,
               color: iconColor,
               size: iconSize,
             }}
             simpleCardButtons={simpleCardButtons}
+            backgroundSettings={backgroundSettings}
           />
         );
       case "ArtCard":
@@ -101,29 +111,33 @@ const CardEditor = () => {
   };
 
   useEffect(() => {
-    let selectedCard;
+    let backgroundSettings;
+
     switch (template) {
       case "SimpleCard":
-        selectedCard = SimpleCard;
+        backgroundSettings = initialSimpleCardContent.backgroundSettings;
         break;
       case "ArtCard":
-        selectedCard = ArtCard;
+        backgroundSettings = {};
         break;
       case "BusinessCard":
-        selectedCard = BusinessCard;
+        backgroundSettings = {};
         break;
       default:
-        selectedCard = null;
+        backgroundSettings = null;
     }
 
-    if (selectedCard && selectedCard.backgroundSettings) {
+    if (backgroundSettings) {
       setBackgroundStyle({
-        backgroundColor:
-          selectedCard.backgroundSettings.backgroundColor || "white",
-        backgroundImage:
-          selectedCard.backgroundSettings.backgroundImage || "none",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundColor: backgroundSettings.backgroundColor
+          ? backgroundSettings.backgroundColor
+          : "none",
+        backgroundImage: backgroundSettings.backgroundImage
+          ? `url(${backgroundSettings.backgroundImage})`
+          : "none",
+
+        backgroundSize: backgroundSettings.backgroundSize || "cover",
+        backgroundPosition: backgroundSettings.backgroundPosition || "center",
       });
     } else {
       setBackgroundStyle({
@@ -132,6 +146,19 @@ const CardEditor = () => {
       });
     }
   }, [template]);
+
+  useEffect(() => {
+    if (backgroundSettings) {
+      setBackgroundStyle({
+        backgroundColor: backgroundSettings.backgroundColor || "white",
+        backgroundImage: backgroundSettings.backgroundImage
+          ? `url(${backgroundSettings.backgroundImage})`
+          : "none",
+        backgroundSize: backgroundSettings.backgroundSize || "cover",
+        backgroundPosition: backgroundSettings.backgroundPosition || "center",
+      });
+    }
+  }, [backgroundSettings]);
 
   return (
     <section className="ml-64 flex h-full min-h-screen w-full overflow-y-auto border-2 border-solid border-neutral-300">
@@ -168,6 +195,9 @@ const CardEditor = () => {
         }}
         simpleCardButtons={simpleCardButtons}
         setSimpleCardButtons={setSimpleCardButtons}
+        backgroundSettings={backgroundSettings}
+        setBackgroundSettings={setBackgroundSettings}
+        onBackgroundClick={handleBackgroundClick}
       />
     </section>
   );
