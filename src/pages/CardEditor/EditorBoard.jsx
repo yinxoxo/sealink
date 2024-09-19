@@ -40,6 +40,8 @@ const EditBoard = ({
   const [showBackgroundColorPicker, setShowBackgroundColorPicker] =
     useState(false);
   const [showFontColorPicker, setShowFontColorPicker] = useState(false);
+  const [isButtonModalVisible, setIsButtonModalVisible] = useState(false);
+  const [editButtonData, setEditButtonData] = useState(null);
 
   const handleEdit = (iconName) => {
     const iconToEdit = icons.find((icon) => icon.name === iconName);
@@ -80,6 +82,52 @@ const EditBoard = ({
         />
       </Card>
     );
+  };
+
+  const ButtonCard = ({ button, index, onEdit, onDelete }) => {
+    return (
+      <Card
+        className="flex h-fit w-full items-center justify-between"
+        style={{ body: { padding: "0px" } }}
+        actions={[
+          <Tooltip title="Edit" key="edit">
+            <EditOutlined onClick={onEdit} />
+          </Tooltip>,
+          <Tooltip title="Delete" key="delete">
+            <DeleteOutlined onClick={() => onDelete(index)} />
+          </Tooltip>,
+        ]}
+      >
+        <Meta title={<span>{button.text}</span>} />
+        <p>{button.url}</p>
+      </Card>
+    );
+  };
+
+  const handleButtonEdit = (button, index) => {
+    setEditButtonData({ ...button, index });
+    setIsButtonModalVisible(true);
+  };
+
+  const handleSaveButtonEdit = () => {
+    const updatedButtons = simpleCardButtons.buttons.map((button, i) =>
+      i === editButtonData.index ? { ...editButtonData } : button,
+    );
+    setSimpleCardButtons({
+      ...simpleCardButtons,
+      buttons: updatedButtons,
+    });
+    setIsButtonModalVisible(false);
+  };
+
+  const handleButtonDelete = (index) => {
+    const updatedButtons = simpleCardButtons.buttons.filter(
+      (_, i) => i !== index,
+    );
+    setSimpleCardButtons({
+      ...simpleCardButtons,
+      buttons: updatedButtons,
+    });
   };
 
   const handleIconDelete = (id) => {
@@ -147,6 +195,17 @@ const EditBoard = ({
         [styleProp]: value,
       },
     }));
+  };
+
+  const handleButtonUrlChange = (index, newUrl) => {
+    const updatedButtons = simpleCardButtons.buttons.map((button, i) =>
+      i === index ? { ...button, url: newUrl } : button,
+    );
+
+    setSimpleCardButtons({
+      ...simpleCardButtons,
+      buttons: updatedButtons,
+    });
   };
 
   const renderIconList = () => (
@@ -425,6 +484,67 @@ const EditBoard = ({
 
     return (
       <>
+        <h2>Button</h2>
+        <div className="mt-4">
+          {buttons.map((button, index) => (
+            <ButtonCard
+              key={index}
+              button={button}
+              index={index}
+              onEdit={() => handleButtonEdit(button, index)}
+              onDelete={() => handleButtonDelete(index)}
+            />
+          ))}
+        </div>
+
+        <Button
+          type="primary"
+          onClick={() => {
+            setSimpleCardButtons((prev) => {
+              const newButton = {
+                text: "New Button",
+                url: "https://example.com/new-button",
+              };
+              const updatedButtons = [...prev.buttons, newButton];
+              return {
+                ...prev,
+                buttons: updatedButtons,
+              };
+            });
+          }}
+        >
+          Add Button
+        </Button>
+
+        <Modal
+          title="Edit Button"
+          open={isButtonModalVisible}
+          onOk={handleSaveButtonEdit}
+          onCancel={() => setIsButtonModalVisible(false)}
+        >
+          <div>
+            <label>Button Text</label>
+            <Input
+              type="text"
+              value={editButtonData?.text}
+              onChange={(e) =>
+                setEditButtonData({ ...editButtonData, text: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="mt-4">
+            <label>Button URL</label>
+            <Input
+              type="text"
+              value={editButtonData?.url}
+              onChange={(e) =>
+                setEditButtonData({ ...editButtonData, url: e.target.value })
+              }
+            />
+          </div>
+        </Modal>
+
         <div className="mt-4">
           <label>Background Color</label>
           <div
@@ -451,39 +571,6 @@ const EditBoard = ({
             </div>
           )}
         </div>
-
-        <div className="mt-4">
-          {buttons.map((button, index) => (
-            <div key={index} className="mb-4">
-              <label>Button {index + 1} Text</label>
-              <Input
-                type="text"
-                value={button.text}
-                onChange={(e) => handleButtonTextChange(index, e.target.value)}
-              />
-            </div>
-          ))}
-        </div>
-        <Button
-          type="primary"
-          onClick={() => {
-            setSimpleCardButtons((prev) => {
-              const newButton = {
-                text: "New Button",
-                url: "https://example.com/new-button", //
-              };
-
-              const updatedButtons = [...prev.buttons, newButton];
-
-              return {
-                ...prev,
-                buttons: updatedButtons,
-              };
-            });
-          }}
-        >
-          Add Button
-        </Button>
 
         <div className="mt-4">
           <label>Width</label>
@@ -582,7 +669,7 @@ const EditBoard = ({
                   ? 2
                   : style.fontWeight === 600
                     ? 3
-                    : 4 // 默認到 700
+                    : 4
             }
             onChange={(e) => {
               const weightMap = {
