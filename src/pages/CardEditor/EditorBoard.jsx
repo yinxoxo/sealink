@@ -13,8 +13,18 @@ import {
   Input,
   Slider,
   Switch,
+  Upload,
+  message,
 } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import { storage } from "../../firebase/firebaseConfig";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../../utils/getCroppedImg";
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -44,8 +54,6 @@ const EditBoard = ({
   setBackgroundSettings,
   onBackgroundClick,
 }) => {
-  // const [showColorPicker, setShowColorPicker] = useState(false);
-
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIconData, setEditIconData] = useState(null);
@@ -67,6 +75,78 @@ const EditBoard = ({
   const [tempOpacity, setTempOpacity] = useState(
     backgroundSettings.opacity || 0.6,
   );
+
+  const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
+
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [isCropModalVisible, setIsCropModalVisible] = useState(false);
+
+  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  const uploadImageToFirebase = (blob, folderName = "cropped_images") => {
+    return new Promise((resolve, reject) => {
+      const storageRef = ref(storage, `${folderName}/${Date.now()}.png`);
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          message.error(`Upload failed: ${error.message}`);
+          reject(error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        },
+      );
+    });
+  };
+
+  const handleSaveCroppedImage = async () => {
+    try {
+      const { blob } = await getCroppedImg(imageUrl, croppedAreaPixels);
+
+      setUploading(true);
+
+      const downloadURL = await uploadImageToFirebase(blob, "cropped_images");
+
+      setImageUrl(downloadURL);
+      setTempBackgroundImage(downloadURL);
+      setUploading(false);
+      message.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error(error);
+      message.error("Failed to crop and upload the image.");
+      setUploading(false);
+    }
+  };
+
+  const handleUpload = (file) => {
+    setUploading(true);
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const base64URL = reader.result;
+      setImageUrl(base64URL);
+
+      const blob = new Blob([file], { type: file.type });
+
+      const downloadURL = await uploadImageToFirebase(blob, "backgroundimage");
+
+      setTempBackgroundImage(downloadURL);
+      setUploading(false);
+      setIsCropModalVisible(true);
+      message.success("Image uploaded successfully!");
+    };
+
+    reader.readAsDataURL(file);
+  };
 
   const handleEdit = (iconName) => {
     const iconToEdit = icons.find((icon) => icon.name === iconName);
@@ -480,7 +560,7 @@ const EditBoard = ({
             />
           </div>
           {showFontColorPicker && (
-            <div style={{ position: "absolute", zIndex: 2 }}>
+            <div className="absolute z-10">
               <SketchPicker
                 color={currentFontStyle.color}
                 onChangeComplete={handleColorChange}
@@ -492,15 +572,6 @@ const EditBoard = ({
     );
   };
 
-  const handleButtonTextChange = (index, newText) => {
-    const updatedButtons = simpleCardButtons.buttons.map((button, i) =>
-      i === index ? { ...button, text: newText } : button,
-    );
-    setSimpleCardButtons({
-      ...simpleCardButtons,
-      buttons: updatedButtons,
-    });
-  };
   const renderButtonEditor = () => {
     const { style, buttons } = simpleCardButtons;
 
@@ -583,7 +654,7 @@ const EditBoard = ({
             }}
           />
           {showBackgroundColorPicker && (
-            <div style={{ position: "absolute", zIndex: 2 }}>
+            <div className="absolute z-10">
               <SketchPicker
                 color={style.backgroundColor}
                 onChangeComplete={(color) =>
@@ -726,8 +797,6 @@ const EditBoard = ({
   const renderBackgroundEditor = () => (
     <div>
       <h2 className="mb-4">Edit Background</h2>
-
-      {/* 用於選擇使用背景圖片還是背景顏色 */}
       <div className="my-4">
         <label>Use Background Image</label>
         <Switch
@@ -738,16 +807,29 @@ const EditBoard = ({
 
       {useBackgroundImage ? (
         <div>
-          {/* 背景圖片的輸入框 */}
           <label>Background Image URL</label>
           <Input
             value={tempBackgroundImage}
-            onChange={(e) => setTempBackgroundImage(e.target.value)}
+            placeholder="Enter image URL or upload"
           />
+          <Upload
+            beforeUpload={(file) => {
+              handleUpload(file);
+              return false;
+            }}
+            showUploadList={false}
+          >
+            <Button
+              icon={<UploadOutlined />}
+              loading={uploading}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : "Upload Image"}
+            </Button>
+          </Upload>
         </div>
       ) : (
         <div className="my-4">
-          {/* 背景顏色選擇器 */}
           <label>Background Color</label>
           <div
             onClick={() =>
@@ -765,7 +847,7 @@ const EditBoard = ({
             />
           </div>
           {showBackgroundColorPicker && (
-            <div style={{ position: "absolute", zIndex: 2 }}>
+            <div className="absolute z-10">
               <SketchPicker
                 color={tempBackgroundColor}
                 onChangeComplete={(color) => setTempBackgroundColor(color.hex)}
@@ -775,7 +857,6 @@ const EditBoard = ({
         </div>
       )}
 
-      {/* 背景透明度的滑塊 */}
       <div className="my-4">
         <label>Background Opacity</label>
         <Slider
@@ -798,15 +879,49 @@ const EditBoard = ({
     <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
       <NavBar onBackgroundClick={onBackgroundClick} />
       <div className="flex flex-col p-4">
-        {editingType === "text"
-          ? renderTextEditor()
-          : editingType === "icon"
-            ? renderIconList()
-            : editingType === "button"
-              ? renderButtonEditor()
-              : editingType === "background"
-                ? renderBackgroundEditor()
-                : null}
+        {editingType === "text" ? (
+          renderTextEditor()
+        ) : editingType === "icon" ? (
+          renderIconList()
+        ) : editingType === "button" ? (
+          renderButtonEditor()
+        ) : editingType === "background" ? (
+          <>
+            {renderBackgroundEditor()}
+            <Modal
+              className="h-full w-full"
+              open={isCropModalVisible}
+              onCancel={() => setIsCropModalVisible(false)}
+              footer={[
+                <Button key="back" onClick={() => setIsCropModalVisible(false)}>
+                  Cancel
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  loading={uploading}
+                  onClick={handleSaveCroppedImage}
+                >
+                  Confirm and Upload
+                </Button>,
+              ]}
+            >
+              <div style={{ height: 400, width: "100%" }}>
+                {imageUrl && (
+                  <Cropper
+                    image={imageUrl}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={9 / 16}
+                    onCropChange={setCrop}
+                    onZoomChange={setZoom}
+                    onCropComplete={onCropComplete}
+                  />
+                )}
+              </div>
+            </Modal>
+          </>
+        ) : null}
       </div>
     </section>
   );
