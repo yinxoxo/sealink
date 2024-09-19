@@ -1,32 +1,20 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import NavBar from "./NavBar";
+import { Select, Button, Input, Switch, Upload, message, Slider } from "antd";
+import IconCard from "./EditorComponents/IconCard";
+import ButtonCard from "./EditorComponents/ButtonCard";
+import EditIconModal from "./EditorComponents/EditIconModal";
+import EditButtonModal from "./EditorComponents/EditButtonModal";
+import CropperModal from "./EditorComponents/CropperModal";
 import { SketchPicker } from "react-color";
 import { fontOptions } from "../../CardTemplate/cardContent/fontOptions";
-import { ICON_LIST } from "../../CardTemplate/cardContent/iconList";
-import {
-  Select,
-  Button,
-  Card,
-  Tooltip,
-  Modal,
-  Input,
-  Slider,
-  Switch,
-  Upload,
-  message,
-} from "antd";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
+import { UploadOutlined } from "@ant-design/icons";
 import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import Cropper from "react-easy-crop";
 import getCroppedImg from "../../utils/getCroppedImg";
 
-const { Meta } = Card;
 const { Option } = Select;
 
 const EditBoard = ({
@@ -166,47 +154,21 @@ const EditBoard = ({
     setIsModalVisible(false);
   };
 
-  const IconCard = ({ icon: IconComponent, iconName, onEdit, onDelete }) => {
-    return (
-      <Card
-        className="flex h-fit w-full items-center justify-between"
-        styles={{ body: { padding: "8px" } }}
-        actions={[
-          <Tooltip title="Edit" key="edit">
-            <EditOutlined onClick={onEdit} />
-          </Tooltip>,
-          <Tooltip title="Delete" key="delete">
-            <DeleteOutlined onClick={onDelete} />
-          </Tooltip>,
-        ]}
-      >
-        <Meta
-          className="flex items-center"
-          avatar={<IconComponent size={24} color="#000" />}
-          title={<span>{iconName}</span>}
-        />
-      </Card>
-    );
-  };
+  const addIcon = () => {
+    if (selectedIcon) {
+      const foundIcon = ICON_LIST.find((icon) => icon.name === selectedIcon);
 
-  const ButtonCard = ({ button, index, onEdit, onDelete }) => {
-    return (
-      <Card
-        className="flex h-fit w-full items-center justify-between"
-        style={{ body: { padding: "0px" } }}
-        actions={[
-          <Tooltip title="Edit" key="edit">
-            <EditOutlined onClick={onEdit} />
-          </Tooltip>,
-          <Tooltip title="Delete" key="delete">
-            <DeleteOutlined onClick={() => onDelete(index)} />
-          </Tooltip>,
-        ]}
-      >
-        <Meta title={<span>{button.text}</span>} />
-        <p>{button.url}</p>
-      </Card>
-    );
+      if (foundIcon && foundIcon.icon) {
+        const newIcon = {
+          id: foundIcon.id,
+          name: foundIcon.name,
+          icon: foundIcon.icon,
+        };
+        setIcons([...icons, newIcon]);
+      } else {
+        console.error(`Icon ${selectedIcon} not found or invalid icon`);
+      }
+    }
   };
 
   const handleButtonEdit = (button, index) => {
@@ -275,23 +237,6 @@ const EditBoard = ({
     }
   };
 
-  const addIcon = () => {
-    if (selectedIcon) {
-      const foundIcon = ICON_LIST.find((icon) => icon.name === selectedIcon);
-
-      if (foundIcon && foundIcon.icon) {
-        const newIcon = {
-          id: foundIcon.id,
-          name: foundIcon.name,
-          icon: foundIcon.icon,
-        };
-        setIcons([...icons, newIcon]);
-      } else {
-        console.error(`Icon ${selectedIcon} not found or invalid icon`);
-      }
-    }
-  };
-
   const handleButtonStyleChange = (styleProp, value) => {
     setSimpleCardButtons((prev) => ({
       ...prev,
@@ -310,137 +255,6 @@ const EditBoard = ({
       opacity: tempOpacity,
     });
   };
-  const renderIconList = () => (
-    <>
-      {editingType === "icon" ? (
-        <>
-          <h2 className="mb-4 text-xl">Icons</h2>
-          <h2 className="text-lg">Current Icons</h2>
-          <div className="my-4">
-            <label>Icon Color</label>
-            <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
-              <div
-                style={{
-                  backgroundColor: iconStyle.color || "#000",
-                  width: "40px",
-                  height: "40px",
-                  cursor: "pointer",
-                  borderRadius: "5px",
-                }}
-              />
-            </div>
-            {showFontColorPicker && (
-              <div style={{ position: "absolute", zIndex: 2 }}>
-                <SketchPicker
-                  color={editIconData?.color}
-                  onChangeComplete={(color) => {
-                    setEditIconData({ ...editIconData, color: color.hex });
-                    setIconStyle({ ...iconStyle, color: color.hex });
-                  }}
-                />
-              </div>
-            )}
-          </div>
-          <div className="my-4 flex flex-col">
-            <label>Icon Size</label>
-            <input
-              type="range"
-              min="10"
-              max="100"
-              value={iconStyle.size}
-              onChange={(e) =>
-                setIconStyle({
-                  ...iconStyle,
-                  size: parseInt(e.target.value, 10),
-                })
-              }
-              className="slider"
-            />
-            <span>{iconStyle.size}px</span>
-          </div>
-
-          {icons.map((icon) => (
-            <IconCard
-              key={icon.id}
-              icon={icon.icon}
-              iconName={icon.name}
-              onEdit={() => handleEdit(icon.name)}
-              onDelete={() => handleIconDelete(icon.id)}
-            />
-          ))}
-          <h2 className="my-2 text-lg">Add Icons</h2>
-          <Select
-            style={{ width: "100%" }}
-            placeholder="Select an icon"
-            onChange={(value) => setSelectedIcon(value)}
-          >
-            {ICON_LIST.map((icon) => {
-              const IconComponent = icon.icon;
-              return (
-                <Option key={icon.name} value={icon.name}>
-                  <div className="flex items-center">
-                    <IconComponent size={20} className="mr-2" />
-                    <span>{icon.name}</span>
-                  </div>
-                </Option>
-              );
-            })}
-          </Select>
-          <Button className="mt-4" type="default" onClick={addIcon}>
-            Add Icon
-          </Button>
-        </>
-      ) : null}
-      {editIconData && (
-        <Modal
-          title="Edit Icon"
-          open={isModalVisible}
-          onOk={handleSaveEdit}
-          onCancel={() => setIsModalVisible(false)}
-        >
-          <div>
-            <label>Icon Type</label>
-
-            <Select
-              value={editIconData.name}
-              style={{ width: "100%" }}
-              onChange={(value) => {
-                const selectedIcon = ICON_LIST.find(
-                  (icon) => icon.name === value,
-                );
-                if (selectedIcon) {
-                  setEditIconData({
-                    ...editIconData,
-                    name: value,
-                    icon: selectedIcon.icon,
-                  });
-                }
-              }}
-            >
-              {ICON_LIST.map((icon) => (
-                <Option key={icon.name} value={icon.name}>
-                  <div className="flex items-center">
-                    <icon.icon size={20} className="mr-2" />
-                    <span>{icon.name}</span>
-                  </div>
-                </Option>
-              ))}
-            </Select>
-          </div>
-
-          <div className="mt-4">
-            <label>Icon Link (Href)</label>
-            <Input
-              value={editIconData.href}
-              onChange={(e) =>
-                setEditIconData({ ...editIconData, href: e.target.value })
-              }
-            />
-          </div>
-        </Modal>
-      )}
-    </>
-  );
 
   const renderTextEditor = () => {
     const currentFontStyle = (() => {
@@ -572,6 +386,99 @@ const EditBoard = ({
     );
   };
 
+  const renderIconList = () => (
+    <>
+      {editingType === "icon" ? (
+        <>
+          <h2 className="mb-4 text-xl">Icons</h2>
+          <h2 className="text-lg">Current Icons</h2>
+          <div className="my-4">
+            <label>Icon Color</label>
+            <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
+              <div
+                style={{
+                  backgroundColor: iconStyle.color || "#000",
+                  width: "40px",
+                  height: "40px",
+                  cursor: "pointer",
+                  borderRadius: "5px",
+                }}
+              />
+            </div>
+            {showFontColorPicker && (
+              <div style={{ position: "absolute", zIndex: 2 }}>
+                <SketchPicker
+                  color={editIconData?.color}
+                  onChangeComplete={(color) => {
+                    setEditIconData({ ...editIconData, color: color.hex });
+                    setIconStyle({ ...iconStyle, color: color.hex });
+                  }}
+                />
+              </div>
+            )}
+          </div>
+          <div className="my-4 flex flex-col">
+            <label>Icon Size</label>
+            <input
+              type="range"
+              min="10"
+              max="100"
+              value={iconStyle.size}
+              onChange={(e) =>
+                setIconStyle({
+                  ...iconStyle,
+                  size: parseInt(e.target.value, 10),
+                })
+              }
+              className="slider"
+            />
+            <span>{iconStyle.size}px</span>
+          </div>
+
+          {icons.map((icon) => (
+            <IconCard
+              key={icon.id}
+              icon={icon.icon}
+              iconName={icon.name}
+              onEdit={() => handleEdit(icon.name)}
+              onDelete={() => handleIconDelete(icon.id)}
+            />
+          ))}
+          <h2 className="my-2 text-lg">Add Icons</h2>
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Select an icon"
+            onChange={(value) => setSelectedIcon(value)}
+          >
+            {ICON_LIST.map((icon) => {
+              const IconComponent = icon.icon;
+              return (
+                <Option key={icon.name} value={icon.name}>
+                  <div className="flex items-center">
+                    <IconComponent size={20} className="mr-2" />
+                    <span>{icon.name}</span>
+                  </div>
+                </Option>
+              );
+            })}
+          </Select>
+          <Button className="mt-4" type="default" onClick={addIcon}>
+            Add Icon
+          </Button>
+        </>
+      ) : null}
+      {editIconData && (
+        <EditIconModal
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          editIconData={editIconData}
+          setEditIconData={setEditIconData}
+          handleSaveEdit={handleSaveEdit}
+        />
+      )}
+    </>
+  );
+
   const renderButtonEditor = () => {
     const { style, buttons } = simpleCardButtons;
 
@@ -609,34 +516,15 @@ const EditBoard = ({
           Add Button
         </Button>
 
-        <Modal
-          title="Edit Button"
-          open={isButtonModalVisible}
-          onOk={handleSaveButtonEdit}
-          onCancel={() => setIsButtonModalVisible(false)}
-        >
-          <div>
-            <label>Button Text</label>
-            <Input
-              type="text"
-              value={editButtonData?.text}
-              onChange={(e) =>
-                setEditButtonData({ ...editButtonData, text: e.target.value })
-              }
-            />
-          </div>
-
-          <div className="mt-4">
-            <label>Button URL</label>
-            <Input
-              type="text"
-              value={editButtonData?.url}
-              onChange={(e) =>
-                setEditButtonData({ ...editButtonData, url: e.target.value })
-              }
-            />
-          </div>
-        </Modal>
+        {editButtonData && (
+          <EditButtonModal
+            isButtonModalVisible={isButtonModalVisible}
+            setIsButtonModalVisible={setIsButtonModalVisible}
+            editButtonData={editButtonData}
+            setEditButtonData={setEditButtonData}
+            handleSaveButtonEdit={handleSaveButtonEdit}
+          />
+        )}
 
         <div className="mt-4">
           <label>Background Color</label>
@@ -794,6 +682,7 @@ const EditBoard = ({
       </>
     );
   };
+
   const renderBackgroundEditor = () => (
     <div>
       <h2 className="mb-4">Edit Background</h2>
@@ -888,38 +777,18 @@ const EditBoard = ({
         ) : editingType === "background" ? (
           <>
             {renderBackgroundEditor()}
-            <Modal
-              className="h-full w-full"
-              open={isCropModalVisible}
-              onCancel={() => setIsCropModalVisible(false)}
-              footer={[
-                <Button key="back" onClick={() => setIsCropModalVisible(false)}>
-                  Cancel
-                </Button>,
-                <Button
-                  key="submit"
-                  type="primary"
-                  loading={uploading}
-                  onClick={handleSaveCroppedImage}
-                >
-                  Confirm and Upload
-                </Button>,
-              ]}
-            >
-              <div style={{ height: 400, width: "100%" }}>
-                {imageUrl && (
-                  <Cropper
-                    image={imageUrl}
-                    crop={crop}
-                    zoom={zoom}
-                    aspect={9 / 16}
-                    onCropChange={setCrop}
-                    onZoomChange={setZoom}
-                    onCropComplete={onCropComplete}
-                  />
-                )}
-              </div>
-            </Modal>
+            <CropperModal
+              isCropModalVisible={isCropModalVisible}
+              setIsCropModalVisible={setIsCropModalVisible}
+              imageUrl={imageUrl}
+              crop={crop}
+              setCrop={setCrop}
+              zoom={zoom}
+              setZoom={setZoom}
+              onCropComplete={onCropComplete}
+              handleSaveCroppedImage={handleSaveCroppedImage}
+              uploading={uploading}
+            />
           </>
         ) : null}
       </div>
