@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import PropTypes from "prop-types";
 import { useDrag, useDrop } from "react-dnd";
-
+import { useCardEditorContext } from "../contexts/CardEditorContext";
+import PropTypes from "prop-types";
 const ItemType = "ITEM";
 
 const DraggableItem = ({ id, content, index, moveItem }) => {
@@ -31,22 +31,24 @@ const DraggableItem = ({ id, content, index, moveItem }) => {
   );
 };
 
-const SimpleCard = ({
-  hydraText,
-  juiceText,
-  descriptionText,
-  setSelectedText,
-  hydraTextStyle,
-  juiceTextStyle,
-  descriptionTextStyle,
-  icons,
-  onIconsClick,
-  onTextClick,
-  onButtonClick,
-  iconStyle,
-  simpleCardButtons,
-  backgroundSettings,
-}) => {
+const SimpleCard = () => {
+  // 使用 useCardEditorContext 來取得所有狀態和操作方法
+  const {
+    hydraText,
+    juiceText,
+    descriptionText,
+    setSelectedText,
+    hydraTextStyle,
+    juiceTextStyle,
+    descriptionTextStyle,
+    icons,
+    simpleCardButtons,
+    backgroundSettings,
+    setEditingType,
+    iconColor,
+    iconSize,
+  } = useCardEditorContext();
+  console.log("backgroundSettings in SimpleCard:", backgroundSettings);
   const [items, setItems] = useState([
     {
       id: uuidv4(),
@@ -74,22 +76,23 @@ const SimpleCard = ({
       url: button.url,
     })),
   ]);
+
   useEffect(() => {
     setItems((prevItems) => {
       const updatedItems = prevItems.map((item) => {
-        if (item.type === "hydra") {
+        if (item.type === "hydra" && item.content !== hydraText) {
           return {
             ...item,
             content: hydraText,
           };
         }
-        if (item.type === "h2") {
+        if (item.type === "h2" && item.content !== juiceText) {
           return {
             ...item,
             content: juiceText,
           };
         }
-        if (item.type === "p") {
+        if (item.type === "p" && item.content !== descriptionText) {
           return {
             ...item,
             content: descriptionText,
@@ -99,26 +102,35 @@ const SimpleCard = ({
       });
 
       const buttonItems =
-        simpleCardButtons && Array.isArray(simpleCardButtons.buttons)
-          ? simpleCardButtons.buttons.map((button) => ({
-              id: uuidv4(),
-              type: "button",
-              content: button.text,
-              url: button.url,
-            }))
-          : [];
+        simpleCardButtons?.buttons?.map((button, index) => ({
+          id:
+            prevItems.find(
+              (item) => item.type === "button" && item.url === button.url,
+            )?.id || uuidv4(),
+          type: "button",
+          content: button.text,
+          url: button.url,
+        })) || [];
 
-      return [
+      const newItems = [
         ...updatedItems.filter((item) => item.type !== "button"),
         ...buttonItems,
       ];
+
+      if (JSON.stringify(newItems) !== JSON.stringify(prevItems)) {
+        return newItems;
+      }
+
+      return prevItems;
     });
   }, [simpleCardButtons, hydraText, juiceText, descriptionText]);
 
   const handleButtonClick = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
   };
+
   const moveItem = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex) return;
     const updatedItems = [...items];
     const [movedItem] = updatedItems.splice(fromIndex, 1);
     updatedItems.splice(toIndex, 0, movedItem);
@@ -179,9 +191,11 @@ const SimpleCard = ({
         className="absolute inset-0"
         style={{
           backgroundImage: backgroundSettings.backgroundImage
-            ? `url(${backgroundSettings.backgroundImage})`
+            ? `${backgroundSettings.backgroundImage}`
             : "none",
-          backgroundColor: backgroundSettings.backgroundColor || "none",
+          backgroundColor: backgroundSettings.backgroundImage
+            ? "transparent"
+            : backgroundSettings.backgroundColor || "none",
           opacity: backgroundSettings.opacity || 0.6,
           backgroundSize: backgroundSettings.backgroundSize || "cover",
           backgroundPosition: backgroundSettings.backgroundPosition || "center",
@@ -200,7 +214,7 @@ const SimpleCard = ({
                     className={getItemStyle(item.type).wrapper}
                     onClick={() => {
                       setSelectedText("hydraText");
-                      onTextClick();
+                      setEditingType("text");
                     }}
                   >
                     <div
@@ -216,7 +230,10 @@ const SimpleCard = ({
                     </h1>
                   </div>
                 ) : item.type === "button" ? (
-                  <div className="w-full" onClick={() => onButtonClick()}>
+                  <div
+                    className="w-full"
+                    onClick={() => setEditingType("button")}
+                  >
                     <button
                       style={getItemStyle(item.type)}
                       onClick={() => {
@@ -229,10 +246,16 @@ const SimpleCard = ({
                 ) : item.type === "icons" ? (
                   <div
                     className={getItemStyle(item.type)}
-                    onClick={() => onIconsClick(icons)}
+                    onClick={() => setEditingType("icon")}
                   >
                     {icons.map((icon) => {
                       const IconComponent = icon.icon;
+
+                      if (typeof IconComponent !== "function") {
+                        console.error("Invalid icon component", IconComponent);
+                        return null;
+                      }
+
                       return (
                         <a
                           key={icon.id}
@@ -242,8 +265,8 @@ const SimpleCard = ({
                           rel="noopener noreferrer"
                         >
                           <IconComponent
-                            size={iconStyle.size}
-                            color={iconStyle.color}
+                            size={iconSize.size}
+                            color={iconColor}
                           />
                         </a>
                       );
@@ -255,7 +278,7 @@ const SimpleCard = ({
                     onClick={() => {
                       if (item.type === "h2") setSelectedText("juiceText");
                       if (item.type === "p") setSelectedText("descriptionText");
-                      onTextClick();
+                      setEditingType("text");
                     }}
                   >
                     {item.content}
@@ -272,47 +295,7 @@ const SimpleCard = ({
   );
 };
 
-// SimpleCard.backgroundSettings = {
-//   backgroundImage:
-//     "url('https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-// };
-
 export default SimpleCard;
-
-SimpleCard.propTypes = {
-  hydraText: PropTypes.string.isRequired,
-  juiceText: PropTypes.string.isRequired,
-  descriptionText: PropTypes.string.isRequired,
-  setSelectedText: PropTypes.func,
-  hydraTextStyle: PropTypes.shape({
-    fontSize: PropTypes.number,
-    fontWeight: PropTypes.number,
-    color: PropTypes.string,
-  }),
-  juiceTextStyle: PropTypes.shape({
-    fontSize: PropTypes.number,
-    fontWeight: PropTypes.number,
-    color: PropTypes.string,
-  }),
-  descriptionTextStyle: PropTypes.shape({
-    fontSize: PropTypes.number,
-    fontWeight: PropTypes.number,
-    color: PropTypes.string,
-  }),
-  icons: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      icon: PropTypes.elementType.isRequired,
-    }),
-  ).isRequired,
-  onIconsClick: PropTypes.func,
-  onTextClick: PropTypes.func,
-  iconStyle: PropTypes.shape({
-    color: PropTypes.string,
-    size: PropTypes.number,
-  }).isRequired,
-};
 
 DraggableItem.propTypes = {
   id: PropTypes.string.isRequired,

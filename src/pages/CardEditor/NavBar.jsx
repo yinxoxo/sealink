@@ -7,8 +7,11 @@ import {
   FaRocket,
   FaBars,
 } from "react-icons/fa6";
+import { useCardEditorContext } from "../../contexts/CardEditorContext"; // 確保路徑正確
 
-const NavBar = ({ onBackgroundClick }) => {
+const NavBar = () => {
+  const { editingType, setEditingType } = useCardEditorContext();
+
   return (
     <div className="flex items-center justify-between border-2 border-solid border-neutral-300 p-4 text-white">
       <FaPlus size={20} className="cursor-pointer" />
@@ -20,7 +23,9 @@ const NavBar = ({ onBackgroundClick }) => {
       <FaBars
         size={20}
         className="cursor-pointer"
-        onClick={() => onBackgroundClick()}
+        onClick={() => {
+          setEditingType("background");
+        }}
       />
     </div>
   );

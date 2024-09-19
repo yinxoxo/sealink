@@ -14,25 +14,28 @@ import LayoutWithHeaderFooter from "./layouts/LayoutWithHeaderFooter";
 import LayoutWithSidebar from "./layouts/LayoutWithSidebar";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { CardEditorProvider } from "./contexts/CardEditorContext";
 
 function App() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LayoutWithHeaderFooter />}>
-            <Route index element={<Home />} />
-            <Route path="templates" element={<Templates />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard" element={<LayoutWithSidebar />}>
-            <Route index element={<Dashboard />} />
-            <Route path="card-editor/:template" element={<CardEditor />} />
-            <Route path="analytics" element={<Analytics />} />
-          </Route>
-        </Routes>
-      </Router>
+      <CardEditorProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LayoutWithHeaderFooter />}>
+              <Route index element={<Home />} />
+              <Route path="templates" element={<Templates />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/dashboard" element={<LayoutWithSidebar />}>
+              <Route index element={<Dashboard />} />
+              <Route path="card-editor/:template" element={<CardEditor />} />
+              <Route path="analytics" element={<Analytics />} />
+            </Route>
+          </Routes>
+        </Router>
+      </CardEditorProvider>
     </DndProvider>
   );
 }

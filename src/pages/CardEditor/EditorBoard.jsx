@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import NavBar from "./NavBar";
 import { Select, Button, Input, Switch, Upload, message, Slider } from "antd";
@@ -14,34 +14,43 @@ import { UploadOutlined } from "@ant-design/icons";
 import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import getCroppedImg from "../../utils/getCroppedImg";
+import { useCardEditorContext } from "../../contexts/CardEditorContext";
 
 const { Option } = Select;
 
-const EditBoard = ({
-  selectedText,
-  setHydraText,
-  setJuiceText,
-  setDescriptionText,
-  hydraText,
-  juiceText,
-  descriptionText,
-  hydraTextStyle,
-  setHydraTextStyle,
-  juiceTextStyle,
-  setJuiceTextStyle,
-  descriptionTextStyle,
-  setDescriptionTextStyle,
-  editingType,
-  icons,
-  setIcons,
-  iconStyle,
-  setIconStyle,
-  simpleCardButtons,
-  setSimpleCardButtons,
-  backgroundSettings,
-  setBackgroundSettings,
-  onBackgroundClick,
-}) => {
+const EditBoard = () => {
+  const {
+    selectedText,
+    setHydraText,
+    setJuiceText,
+    setDescriptionText,
+    hydraText,
+    juiceText,
+    descriptionText,
+    hydraTextStyle,
+    setHydraTextStyle,
+    juiceTextStyle,
+    setJuiceTextStyle,
+    descriptionTextStyle,
+    setDescriptionTextStyle,
+    editingType,
+    icons,
+    setIcons,
+
+    simpleCardButtons,
+    setSimpleCardButtons,
+    backgroundSettings,
+    setBackgroundSettings,
+    iconColor,
+    setIconColor,
+    iconSize,
+    setIconSize,
+  } = useCardEditorContext();
+
+  useEffect(() => {
+    console.log("初始 backgroundSettings:", backgroundSettings);
+  }, [backgroundSettings]);
+
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIconData, setEditIconData] = useState(null);
@@ -149,7 +158,7 @@ const EditBoard = ({
       icon.id === editIconData.id ? editIconData : icon,
     );
     setIcons(updatedIcons);
-    setIconStyle({ ...iconStyle, color: editIconData.color });
+    setIconColor({ ...iconColor, color: editIconData.color });
 
     setIsModalVisible(false);
   };
@@ -248,12 +257,29 @@ const EditBoard = ({
   };
 
   const handleSaveBackgroundSettings = () => {
-    setBackgroundSettings({
-      ...backgroundSettings,
-      backgroundImage: useBackgroundImage ? tempBackgroundImage : null,
-      backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
-      opacity: tempOpacity,
+    if (useBackgroundImage && !tempBackgroundImage) {
+      console.error(
+        "Error: No background image available while useBackgroundImage is true",
+      );
+      return;
+    }
+
+    setBackgroundSettings((prevSettings) => {
+      const newSettings = {
+        ...prevSettings,
+        backgroundImage: useBackgroundImage
+          ? `url(${tempBackgroundImage})`
+          : null,
+        backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
+        opacity: tempOpacity,
+      };
+
+      console.log("更新的 backgroundSettings:", newSettings);
+
+      return newSettings;
     });
+
+    message.success("Background settings saved successfully!");
   };
 
   const renderTextEditor = () => {
@@ -397,7 +423,7 @@ const EditBoard = ({
             <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
               <div
                 style={{
-                  backgroundColor: iconStyle.color || "#000",
+                  backgroundColor: iconColor.color || "#000",
                   width: "40px",
                   height: "40px",
                   cursor: "pointer",
@@ -411,7 +437,7 @@ const EditBoard = ({
                   color={editIconData?.color}
                   onChangeComplete={(color) => {
                     setEditIconData({ ...editIconData, color: color.hex });
-                    setIconStyle({ ...iconStyle, color: color.hex });
+                    setIconColor({ ...iconColor, color: color.hex });
                   }}
                 />
               </div>
@@ -423,16 +449,16 @@ const EditBoard = ({
               type="range"
               min="10"
               max="100"
-              value={iconStyle.size}
+              value={iconSize.size}
               onChange={(e) =>
-                setIconStyle({
-                  ...iconStyle,
+                setIconSize({
+                  ...iconSize,
                   size: parseInt(e.target.value, 10),
                 })
               }
               className="slider"
             />
-            <span>{iconStyle.size}px</span>
+            <span>{iconSize.size}px</span>
           </div>
 
           {icons.map((icon) => (
@@ -766,7 +792,7 @@ const EditBoard = ({
 
   return (
     <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
-      <NavBar onBackgroundClick={onBackgroundClick} />
+      <NavBar />
       <div className="flex flex-col p-4">
         {editingType === "text" ? (
           renderTextEditor()
@@ -796,44 +822,44 @@ const EditBoard = ({
   );
 };
 
-EditBoard.propTypes = {
-  selectedText: PropTypes.string,
-  setHydraText: PropTypes.func.isRequired,
-  setJuiceText: PropTypes.func.isRequired,
-  setDescriptionText: PropTypes.func.isRequired,
-  hydraText: PropTypes.string.isRequired,
-  juiceText: PropTypes.string.isRequired,
-  descriptionText: PropTypes.string.isRequired,
-  hydraTextStyle: PropTypes.shape({
-    fontSize: PropTypes.number,
-    fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    color: PropTypes.string,
-    fontFamily: PropTypes.string,
-  }).isRequired,
-  setHydraTextStyle: PropTypes.func.isRequired,
-  juiceTextStyle: PropTypes.shape({
-    fontSize: PropTypes.number,
-    fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    color: PropTypes.string,
-    fontFamily: PropTypes.string,
-  }).isRequired,
-  setJuiceTextStyle: PropTypes.func.isRequired,
-  descriptionTextStyle: PropTypes.shape({
-    fontSize: PropTypes.number,
-    fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    color: PropTypes.string,
-    fontFamily: PropTypes.string,
-  }).isRequired,
-  setDescriptionTextStyle: PropTypes.func.isRequired,
-  icons: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      icon: PropTypes.elementType.isRequired,
-    }),
-  ).isRequired,
-  setIcons: PropTypes.func.isRequired,
-  editingType: PropTypes.string,
-};
+// EditBoard.propTypes = {
+//   selectedText: PropTypes.string,
+//   setHydraText: PropTypes.func.isRequired,
+//   setJuiceText: PropTypes.func.isRequired,
+//   setDescriptionText: PropTypes.func.isRequired,
+//   hydraText: PropTypes.string.isRequired,
+//   juiceText: PropTypes.string.isRequired,
+//   descriptionText: PropTypes.string.isRequired,
+//   hydraTextStyle: PropTypes.shape({
+//     fontSize: PropTypes.number,
+//     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+//     color: PropTypes.string,
+//     fontFamily: PropTypes.string,
+//   }).isRequired,
+//   setHydraTextStyle: PropTypes.func.isRequired,
+//   juiceTextStyle: PropTypes.shape({
+//     fontSize: PropTypes.number,
+//     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+//     color: PropTypes.string,
+//     fontFamily: PropTypes.string,
+//   }).isRequired,
+//   setJuiceTextStyle: PropTypes.func.isRequired,
+//   descriptionTextStyle: PropTypes.shape({
+//     fontSize: PropTypes.number,
+//     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+//     color: PropTypes.string,
+//     fontFamily: PropTypes.string,
+//   }).isRequired,
+//   setDescriptionTextStyle: PropTypes.func.isRequired,
+//   icons: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       id: PropTypes.string.isRequired,
+//       name: PropTypes.string.isRequired,
+//       icon: PropTypes.elementType.isRequired,
+//     }),
+//   ).isRequired,
+//   setIcons: PropTypes.func.isRequired,
+//   editingType: PropTypes.string,
+// };
 
 export default EditBoard;
