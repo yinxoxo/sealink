@@ -5,7 +5,7 @@ import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
-import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent";
+import { initialSimpleCardContent } from "../../cardTemplate/cardContent/initialSimpleCardContent";
 import { ICON_LIST, ICON_STYLE } from "../../CardTemplate/cardContent/iconList";
 
 const CardEditor = () => {

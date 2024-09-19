@@ -2,10 +2,14 @@ import { useNavigate } from "react-router-dom";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import ArtCard from "../../CardTemplate/ArtCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
-import { initialSimpleCardContent } from "../../CardTemplate/cardContent/simpleCardContent";
+import { initialSimpleCardContent } from "../../cardTemplate/cardContent/initialSimpleCardContent";
 import { ICON_LIST, ICON_STYLE } from "../../CardTemplate/cardContent/iconList";
 const Template = () => {
   const navigate = useNavigate();
+  console.log(
+    "initialSimpleCardContent.buttons:",
+    initialSimpleCardContent.buttons,
+  );
 
   const handleTemplateClick = (template) => {
     console.log("click", template);
@@ -44,7 +48,10 @@ const Template = () => {
               color: initialSimpleCardContent.description.color,
               fontFamily: initialSimpleCardContent.description.fontFamily,
             }}
-            simpleCardButtons={initialSimpleCardContent.buttons}
+            simpleCardButtons={{
+              buttons: initialSimpleCardContent.buttons.buttonList,
+              style: { ...initialSimpleCardContent.buttons.style },
+            }}
           />
         </div>
       </div>
