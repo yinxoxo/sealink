@@ -44,7 +44,7 @@ const SimpleCard = ({
   onTextClick,
   onButtonClick,
   iconStyle,
-  simpleCardButtons = { texts: [], style: {} },
+  simpleCardButtons = { buttons: { buttonList: [] } },
 }) => {
   const [items, setItems] = useState([
     {
@@ -66,37 +66,29 @@ const SimpleCard = ({
       id: uuidv4(),
       type: "icons",
     },
-
-    ...simpleCardButtons.texts.map((text) => ({
+    ...(simpleCardButtons.buttons || []).map((button) => ({
       id: uuidv4(),
       type: "button",
-      content: text,
+      content: button.text,
+      url: button.url,
     })),
   ]);
-
   useEffect(() => {
-    setItems((prevItems) => {
-      return prevItems.map((item, index) => {
-        if (item.type === "hydra") return { ...item, content: hydraText };
-        if (item.type === "h2") return { ...item, content: juiceText };
-        if (item.type === "p") return { ...item, content: descriptionText };
-        if (item.type === "button") {
-          const buttonItems = prevItems.filter(
-            (item) => item.type === "button",
-          );
-          const buttonIndex = buttonItems.findIndex(
-            (buttonItem) => buttonItem.id === item.id,
-          );
-          return {
-            ...item,
-            content: simpleCardButtons.texts[buttonIndex],
-          };
-        }
-        return item;
-      });
-    });
-  }, [hydraText, juiceText, descriptionText, simpleCardButtons.texts]);
+    // 直接使用 simpleCardButtons.buttons，而不是 simpleCardButtons.buttons.buttonList
+    setItems((prevItems) => [
+      ...prevItems.filter((item) => item.type !== "button"),
+      ...simpleCardButtons.buttons.map((button) => ({
+        id: uuidv4(),
+        type: "button",
+        content: button.text,
+        url: button.url,
+      })),
+    ]);
+  }, [simpleCardButtons.buttons, hydraText, juiceText, descriptionText]);
 
+  const handleButtonClick = (url) => {
+    window.open(url, "_blank");
+  };
   const moveItem = (fromIndex, toIndex) => {
     const updatedItems = [...items];
     const [movedItem] = updatedItems.splice(fromIndex, 1);
@@ -191,7 +183,10 @@ const SimpleCard = ({
                 ) : item.type === "button" ? (
                   <button
                     style={getItemStyle(item.type)}
-                    onClick={() => onButtonClick()}
+                    onClick={() => {
+                      onButtonClick();
+                      handleButtonClick(item.url);
+                    }}
                   >
                     {item.content}
                   </button>
@@ -255,17 +250,17 @@ SimpleCard.propTypes = {
   setSelectedText: PropTypes.func,
   hydraTextStyle: PropTypes.shape({
     fontSize: PropTypes.number,
-    fontWeight: PropTypes.string,
+    fontWeight: PropTypes.number,
     color: PropTypes.string,
   }),
   juiceTextStyle: PropTypes.shape({
     fontSize: PropTypes.number,
-    fontWeight: PropTypes.string,
+    fontWeight: PropTypes.number,
     color: PropTypes.string,
   }),
   descriptionTextStyle: PropTypes.shape({
     fontSize: PropTypes.number,
-    fontWeight: PropTypes.string,
+    fontWeight: PropTypes.number,
     color: PropTypes.string,
   }),
   icons: PropTypes.arrayOf(

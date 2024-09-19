@@ -61,7 +61,7 @@ const CardEditor = () => {
   });
 
   const [simpleCardButtons, setSimpleCardButtons] = useState({
-    texts: [...initialSimpleCardContent.buttons.texts],
+    buttons: [...initialSimpleCardContent.buttons.buttonList],
     style: { ...initialSimpleCardContent.buttons.style },
   });
 

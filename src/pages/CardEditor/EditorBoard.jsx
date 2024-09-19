@@ -33,6 +33,7 @@ const EditBoard = ({
   setSimpleCardButtons,
 }) => {
   // const [showColorPicker, setShowColorPicker] = useState(false);
+
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIconData, setEditIconData] = useState(null);
@@ -54,7 +55,7 @@ const EditBoard = ({
     );
     setIcons(updatedIcons);
     setIconStyle({ ...iconStyle, color: editIconData.color });
-    console.log(iconStyle);
+
     setIsModalVisible(false);
   };
 
@@ -83,7 +84,6 @@ const EditBoard = ({
 
   const handleIconDelete = (id) => {
     setIcons(icons.filter((icon) => icon.id !== id));
-    console.log("Deleted icon", id);
   };
 
   const handleColorChange = (color) => {
@@ -149,6 +149,138 @@ const EditBoard = ({
     }));
   };
 
+  const renderIconList = () => (
+    <>
+      {editingType === "icon" ? (
+        <>
+          <h2 className="mb-4 text-xl">Icons</h2>
+          <h2 className="text-lg">Current Icons</h2>
+          <div className="my-4">
+            <label>Icon Color</label>
+            <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
+              <div
+                style={{
+                  backgroundColor: iconStyle.color || "#000",
+                  width: "40px",
+                  height: "40px",
+                  cursor: "pointer",
+                  borderRadius: "5px",
+                }}
+              />
+            </div>
+            {showFontColorPicker && (
+              <div style={{ position: "absolute", zIndex: 2 }}>
+                <SketchPicker
+                  color={editIconData?.color}
+                  onChangeComplete={(color) => {
+                    setEditIconData({ ...editIconData, color: color.hex });
+                    setIconStyle({ ...iconStyle, color: color.hex });
+                  }}
+                />
+              </div>
+            )}
+          </div>
+          <div className="my-4 flex flex-col">
+            <label>Icon Size</label>
+            <input
+              type="range"
+              min="10"
+              max="100"
+              value={iconStyle.size}
+              onChange={(e) =>
+                setIconStyle({
+                  ...iconStyle,
+                  size: parseInt(e.target.value, 10),
+                })
+              }
+              className="slider"
+            />
+            <span>{iconStyle.size}px</span>
+          </div>
+
+          {icons.map((icon) => (
+            <IconCard
+              key={icon.id}
+              icon={icon.icon}
+              iconName={icon.name}
+              onEdit={() => handleEdit(icon.name)}
+              onDelete={() => handleIconDelete(icon.id)}
+            />
+          ))}
+          <h2 className="my-2 text-lg">Add Icons</h2>
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Select an icon"
+            onChange={(value) => setSelectedIcon(value)}
+          >
+            {ICON_LIST.map((icon) => {
+              const IconComponent = icon.icon;
+              return (
+                <Option key={icon.name} value={icon.name}>
+                  <div className="flex items-center">
+                    <IconComponent size={20} className="mr-2" />
+                    <span>{icon.name}</span>
+                  </div>
+                </Option>
+              );
+            })}
+          </Select>
+          <Button className="mt-4" type="default" onClick={addIcon}>
+            Add Icon
+          </Button>
+        </>
+      ) : null}
+      {editIconData && (
+        <Modal
+          title="Edit Icon"
+          open={isModalVisible}
+          onOk={handleSaveEdit}
+          onCancel={() => setIsModalVisible(false)}
+        >
+          <div>
+            <label>Icon Type</label>
+
+            <Select
+              value={editIconData.name}
+              style={{ width: "100%" }}
+              onChange={(value) => {
+                const selectedIcon = ICON_LIST.find(
+                  (icon) => icon.name === value,
+                );
+                if (selectedIcon) {
+                  setEditIconData({
+                    ...editIconData,
+                    name: value,
+                    icon: selectedIcon.icon,
+                  });
+                }
+              }}
+            >
+              {ICON_LIST.map((icon) => (
+                <Option key={icon.name} value={icon.name}>
+                  <div className="flex items-center">
+                    <icon.icon size={20} className="mr-2" />
+                    <span>{icon.name}</span>
+                  </div>
+                </Option>
+              ))}
+            </Select>
+          </div>
+
+          <div className="mt-4">
+            <label>Icon Link (Href)</label>
+            <Input
+              value={editIconData.href}
+              onChange={(e) =>
+                setEditIconData({ ...editIconData, href: e.target.value })
+              }
+            />
+          </div>
+        </Modal>
+      )}
+    </>
+  );
+
   const renderTextEditor = () => {
     const currentFontStyle = (() => {
       switch (selectedText) {
@@ -213,12 +345,12 @@ const EditBoard = ({
           <label>Font Weight</label>
           <input
             type="range"
-            min="100"
-            max="900"
+            min="300"
+            max="700"
             step="100"
             value={currentFontStyle.fontWeight}
             onChange={(e) => {
-              const newWeight = e.target.value;
+              const newWeight = parseInt(e.target.value, 10);
               if (selectedText === "hydraText") {
                 setHydraTextStyle({
                   ...hydraTextStyle,
@@ -236,7 +368,6 @@ const EditBoard = ({
                 });
               }
             }}
-            className="slider"
           />
           <span>{currentFontStyle.fontWeight}</span>
         </div>
@@ -281,15 +412,16 @@ const EditBoard = ({
   };
 
   const handleButtonTextChange = (index, newText) => {
-    const updatedTexts = [...simpleCardButtons.texts];
-    updatedTexts[index] = newText;
+    const updatedButtons = simpleCardButtons.buttons.map((button, i) =>
+      i === index ? { ...button, text: newText } : button,
+    );
     setSimpleCardButtons({
       ...simpleCardButtons,
-      texts: updatedTexts,
+      buttons: updatedButtons,
     });
   };
   const renderButtonEditor = () => {
-    const { style, texts } = simpleCardButtons;
+    const { style, buttons } = simpleCardButtons;
 
     return (
       <>
@@ -321,17 +453,37 @@ const EditBoard = ({
         </div>
 
         <div className="mt-4">
-          {texts.map((text, index) => (
+          {buttons.map((button, index) => (
             <div key={index} className="mb-4">
               <label>Button {index + 1} Text</label>
               <Input
                 type="text"
-                value={text}
+                value={button.text}
                 onChange={(e) => handleButtonTextChange(index, e.target.value)}
               />
             </div>
           ))}
         </div>
+        <Button
+          type="primary"
+          onClick={() => {
+            setSimpleCardButtons((prev) => {
+              const newButton = {
+                text: "New Button",
+                url: "https://example.com/new-button", //
+              };
+
+              const updatedButtons = [...prev.buttons, newButton];
+
+              return {
+                ...prev,
+                buttons: updatedButtons,
+              };
+            });
+          }}
+        >
+          Add Button
+        </Button>
 
         <div className="mt-4">
           <label>Width</label>
@@ -378,7 +530,7 @@ const EditBoard = ({
           <label>Border Radius</label>
           <input
             type="range"
-            min="0"
+            min="1"
             max="50"
             value={parseInt(style.borderRadius, 10) || 20}
             onChange={(e) =>
@@ -392,7 +544,7 @@ const EditBoard = ({
           <label>Padding</label>
           <input
             type="range"
-            min="0"
+            min="1"
             max="50"
             value={parseInt(style.padding, 10) || 20}
             onChange={(e) =>
@@ -420,13 +572,27 @@ const EditBoard = ({
           <label>Font Weight</label>
           <input
             type="range"
-            min="100"
-            max="900"
-            step="100"
-            value={parseInt(style.fontWeight, 10) || 400}
-            onChange={(e) =>
-              handleButtonStyleChange("fontWeight", e.target.value)
+            min="1"
+            max="4"
+            step="1"
+            value={
+              style.fontWeight === 300
+                ? 1
+                : style.fontWeight === 400
+                  ? 2
+                  : style.fontWeight === 600
+                    ? 3
+                    : 4 // 默認到 700
             }
+            onChange={(e) => {
+              const weightMap = {
+                1: 300,
+                2: 400,
+                3: 600,
+                4: 700,
+              };
+              handleButtonStyleChange("fontWeight", weightMap[e.target.value]);
+            }}
           />
           <span>{style.fontWeight}</span>
         </div>
