@@ -8,7 +8,7 @@ import {
   FaBars,
 } from "react-icons/fa6";
 
-const NavBar = () => {
+const NavBar = ({ onBackgroundClick }) => {
   return (
     <div className="flex items-center justify-between border-2 border-solid border-neutral-300 p-4 text-white">
       <FaPlus size={20} className="cursor-pointer" />
@@ -17,7 +17,11 @@ const NavBar = () => {
       <FaPlay size={20} className="cursor-pointer" />
       <FaDesktop size={20} className="cursor-pointer" />
       <FaRocket size={20} className="cursor-pointer" />
-      <FaBars size={20} className="cursor-pointer" />
+      <FaBars
+        size={20}
+        className="cursor-pointer"
+        onClick={() => onBackgroundClick()}
+      />
     </div>
   );
 };
