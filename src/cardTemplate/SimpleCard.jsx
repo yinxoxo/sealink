@@ -74,7 +74,6 @@ const SimpleCard = ({
     })),
   ]);
   useEffect(() => {
-    // 直接使用 simpleCardButtons.buttons，而不是 simpleCardButtons.buttons.buttonList
     setItems((prevItems) => [
       ...prevItems.filter((item) => item.type !== "button"),
       ...simpleCardButtons.buttons.map((button) => ({
@@ -87,7 +86,7 @@ const SimpleCard = ({
   }, [simpleCardButtons.buttons, hydraText, juiceText, descriptionText]);
 
   const handleButtonClick = (url) => {
-    window.open(url, "_blank");
+    window.open(url, "_blank", "noopener,noreferrer");
   };
   const moveItem = (fromIndex, toIndex) => {
     const updatedItems = [...items];
@@ -101,7 +100,7 @@ const SimpleCard = ({
       case "hydra":
         return {
           wrapper:
-            "relative min-h-fit w-auto flex items-center justify-center p-[48px]",
+            "relative min-h-fit w-full flex items-center justify-center p-[48px]",
           circle: "absolute h-24 w-24 rounded-full bg-green-800",
           text: {
             fontSize: `${hydraTextStyle.fontSize}px`,
@@ -163,14 +162,16 @@ const SimpleCard = ({
               id={item.id}
               content={
                 item.type === "hydra" ? (
-                  <div className={getItemStyle(item.type).wrapper}>
+                  <div
+                    className={getItemStyle(item.type).wrapper}
+                    onClick={() => {
+                      setSelectedText("hydraText");
+                      onTextClick();
+                    }}
+                  >
                     <div
                       className={getItemStyle(item.type).circle}
                       style={{ zIndex: 1 }}
-                      onClick={() => {
-                        setSelectedText("hydraText");
-                        onTextClick();
-                      }}
                     />
 
                     <h1
@@ -181,15 +182,16 @@ const SimpleCard = ({
                     </h1>
                   </div>
                 ) : item.type === "button" ? (
-                  <button
-                    style={getItemStyle(item.type)}
-                    onClick={() => {
-                      onButtonClick();
-                      handleButtonClick(item.url);
-                    }}
-                  >
-                    {item.content}
-                  </button>
+                  <div className="w-full" onClick={() => onButtonClick()}>
+                    <button
+                      style={getItemStyle(item.type)}
+                      onClick={() => {
+                        handleButtonClick(item.url);
+                      }}
+                    >
+                      {item.content}
+                    </button>
+                  </div>
                 ) : item.type === "icons" ? (
                   <div
                     className={getItemStyle(item.type)}
