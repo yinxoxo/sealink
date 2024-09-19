@@ -51,7 +51,7 @@ export const initialSimpleCardContent = {
       "https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 
     opacity: 0.6,
-    backgroundColor: "none",
+    backgroundColor: "#fff",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
