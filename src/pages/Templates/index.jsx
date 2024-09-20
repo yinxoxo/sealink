@@ -2,9 +2,25 @@ import { useNavigate } from "react-router-dom";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import ArtCard from "../../CardTemplate/ArtCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
-import { initialSimpleCardContent } from "../../cardTemplate/cardContent/initialSimpleCardContent";
-import { ICON_LIST, ICON_STYLE } from "../../CardTemplate/cardContent/iconList";
+import { useCardEditorContext } from "../../contexts/CardEditorContext";
+
 const Template = () => {
+  const {
+    hydraText,
+    juiceText,
+    descriptionText,
+    hydraTextStyle,
+    juiceTextStyle,
+    descriptionTextStyle,
+    icons,
+    simpleCardButtons,
+    backgroundSettings,
+    iconColor,
+    iconSize,
+  } = useCardEditorContext();
+
+  console.log("backgroundSet in template", backgroundSettings);
+
   const navigate = useNavigate();
 
   const handleTemplateClick = (template) => {
@@ -20,38 +36,20 @@ const Template = () => {
       >
         <div className="template-card-size">
           <SimpleCard
-            hydraText={initialSimpleCardContent.title.text}
-            juiceText={initialSimpleCardContent.subtitle.text}
-            descriptionText={initialSimpleCardContent.description.text}
-            icons={ICON_LIST.slice(0, 3)}
-            iconStyle={{ ...ICON_STYLE.SimpleCard }}
-            hydraTextStyle={{
-              fontSize: parseInt(initialSimpleCardContent.title.fontSize),
-              fontWeight: initialSimpleCardContent.title.fontWeight,
-              color: initialSimpleCardContent.title.color,
-              fontFamily: initialSimpleCardContent.title.fontFamily,
-            }}
-            juiceTextStyle={{
-              fontSize: parseInt(initialSimpleCardContent.subtitle.fontSize),
-              fontWeight: initialSimpleCardContent.subtitle.fontWeight,
-              color: initialSimpleCardContent.subtitle.color,
-              fontFamily: initialSimpleCardContent.subtitle.fontFamily,
-            }}
-            descriptionTextStyle={{
-              fontSize: parseInt(initialSimpleCardContent.description.fontSize),
-              fontWeight: initialSimpleCardContent.description.fontWeight,
-              color: initialSimpleCardContent.description.color,
-              fontFamily: initialSimpleCardContent.description.fontFamily,
-            }}
-            simpleCardButtons={{
-              buttons: initialSimpleCardContent.buttons.buttonList,
-              style: { ...initialSimpleCardContent.buttons.style },
-            }}
-            backgroundSettings={initialSimpleCardContent.backgroundSettings}
+            hydraText={hydraText}
+            juiceText={juiceText}
+            descriptionText={descriptionText}
+            icons={icons}
+            iconColor={iconColor}
+            iconSize={iconSize}
+            hydraTextStyle={hydraTextStyle}
+            juiceTextStyle={juiceTextStyle}
+            descriptionTextStyle={descriptionTextStyle}
+            simpleCardButtons={simpleCardButtons}
+            backgroundSettings={backgroundSettings}
           />
         </div>
       </div>
-
       <div
         className="template-card"
         style={{ width: "300px", height: "650px" }}
