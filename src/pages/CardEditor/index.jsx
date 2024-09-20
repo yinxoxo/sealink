@@ -42,14 +42,10 @@ const CardEditor = () => {
 
     if (backgroundConfig) {
       setBackgroundSettings((prevSettings) => {
-        if (backgroundConfig.backgroundImage) {
-          console.log("背景圖片 URL:", backgroundConfig.backgroundImage);
-        }
-
         const newSettings = {
           backgroundColor: backgroundConfig.backgroundColor || "none",
           backgroundImage: backgroundConfig.backgroundImage
-            ? `url(${backgroundConfig.backgroundImage})`
+            ? backgroundConfig.backgroundImage
             : "none",
           backgroundSize: backgroundConfig.backgroundSize || "cover",
           backgroundPosition: backgroundConfig.backgroundPosition || "center",
@@ -78,7 +74,7 @@ const CardEditor = () => {
           {renderTemplate()}
         </div>
       </div>
-      <EditBoard /> {/* EditBoard 直接修改 context 中的狀態 */}
+      <EditBoard />
     </section>
   );
 };

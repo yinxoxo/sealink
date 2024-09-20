@@ -32,7 +32,6 @@ const DraggableItem = ({ id, content, index, moveItem }) => {
 };
 
 const SimpleCard = () => {
-  // 使用 useCardEditorContext 來取得所有狀態和操作方法
   const {
     hydraText,
     juiceText,
@@ -43,12 +42,13 @@ const SimpleCard = () => {
     descriptionTextStyle,
     icons,
     simpleCardButtons,
-    backgroundSettings,
     setEditingType,
     iconColor,
     iconSize,
+    backgroundSettings,
   } = useCardEditorContext();
-  console.log("backgroundSettings in SimpleCard:", backgroundSettings);
+  console.log("iconSize", iconSize);
+  const actualIconSize = iconSize;
   const [items, setItems] = useState([
     {
       id: uuidv4(),
@@ -185,13 +185,15 @@ const SimpleCard = () => {
     }
   };
 
+  console.log(backgroundSettings);
+
   return (
     <div className="card-container relative bg-white p-6 text-center">
       <div
         className="absolute inset-0"
         style={{
           backgroundImage: backgroundSettings.backgroundImage
-            ? `${backgroundSettings.backgroundImage}`
+            ? backgroundSettings.backgroundImage
             : "none",
           backgroundColor: backgroundSettings.backgroundImage
             ? "transparent"
@@ -265,7 +267,7 @@ const SimpleCard = () => {
                           rel="noopener noreferrer"
                         >
                           <IconComponent
-                            size={iconSize.size}
+                            size={actualIconSize}
                             color={iconColor}
                           />
                         </a>
