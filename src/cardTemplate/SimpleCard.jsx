@@ -33,38 +33,24 @@ const DraggableItem = ({ id, content, index, moveItem }) => {
 
 const SimpleCard = () => {
   const {
-    hydraText,
-    juiceText,
-    descriptionText,
-    setSelectedText,
-    hydraTextStyle,
-    juiceTextStyle,
-    descriptionTextStyle,
+    texts,
     icons,
     simpleCardButtons,
     setEditingType,
+    setSelectedText,
     iconColor,
     iconSize,
     backgroundSettings,
   } = useCardEditorContext();
-  console.log("iconSize", iconSize);
-  const actualIconSize = iconSize;
+
+  console.log(texts);
   const [items, setItems] = useState([
-    {
+    ...texts.map((text, index) => ({
       id: uuidv4(),
-      type: "hydra",
-      content: hydraText,
-    },
-    {
-      id: uuidv4(),
-      type: "h2",
-      content: juiceText,
-    },
-    {
-      id: uuidv4(),
-      type: "p",
-      content: descriptionText,
-    },
+      type: "text",
+      content: text.text,
+      index,
+    })),
     {
       id: uuidv4(),
       type: "icons",
@@ -80,22 +66,10 @@ const SimpleCard = () => {
   useEffect(() => {
     setItems((prevItems) => {
       const updatedItems = prevItems.map((item) => {
-        if (item.type === "hydra" && item.content !== hydraText) {
+        if (item.type === "text" && item.content !== texts[item.index]?.text) {
           return {
             ...item,
-            content: hydraText,
-          };
-        }
-        if (item.type === "h2" && item.content !== juiceText) {
-          return {
-            ...item,
-            content: juiceText,
-          };
-        }
-        if (item.type === "p" && item.content !== descriptionText) {
-          return {
-            ...item,
-            content: descriptionText,
+            content: texts[item.index]?.text,
           };
         }
         return item;
@@ -123,7 +97,7 @@ const SimpleCard = () => {
 
       return prevItems;
     });
-  }, [simpleCardButtons, hydraText, juiceText, descriptionText]);
+  }, [simpleCardButtons, texts]);
 
   const handleButtonClick = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
@@ -137,34 +111,14 @@ const SimpleCard = () => {
     setItems(updatedItems);
   };
 
-  const getItemStyle = (type) => {
+  const getItemStyle = (type, item = {}) => {
     switch (type) {
-      case "hydra":
+      case "text":
         return {
-          wrapper:
-            "relative min-h-fit w-full flex items-center justify-center p-[48px]",
-          circle: "absolute h-24 w-24 rounded-full bg-green-800",
-          text: {
-            fontSize: `${hydraTextStyle.fontSize}px`,
-            fontWeight: hydraTextStyle.fontWeight,
-            color: hydraTextStyle.color,
-            fontFamily: hydraTextStyle.fontFamily,
-          },
-        };
-      case "h2":
-        return {
-          fontSize: `${juiceTextStyle.fontSize}px`,
-          fontWeight: juiceTextStyle.fontWeight,
-          color: juiceTextStyle.color,
-          fontFamily: juiceTextStyle.fontFamily,
-          cursor: "pointer",
-        };
-      case "p":
-        return {
-          fontSize: `${descriptionTextStyle.fontSize}px`,
-          fontWeight: descriptionTextStyle.fontWeight,
-          color: descriptionTextStyle.color,
-          fontFamily: descriptionTextStyle.fontFamily,
+          fontSize: item.style?.fontSize,
+          fontWeight: item.style?.fontWeight,
+          color: item.style?.color,
+          fontFamily: item.style?.fontFamily,
           cursor: "pointer",
         };
       case "button":
@@ -184,8 +138,6 @@ const SimpleCard = () => {
         return "";
     }
   };
-
-  console.log(backgroundSettings);
 
   return (
     <div className="card-container relative bg-white p-6 text-center">
@@ -211,25 +163,15 @@ const SimpleCard = () => {
               key={item.id}
               id={item.id}
               content={
-                item.type === "hydra" ? (
+                item.type === "text" ? (
                   <div
-                    className={getItemStyle(item.type).wrapper}
+                    style={getItemStyle(item.type, texts[item.index])}
                     onClick={() => {
-                      setSelectedText("hydraText");
+                      setSelectedText(item.index);
                       setEditingType("text");
                     }}
                   >
-                    <div
-                      className={getItemStyle(item.type).circle}
-                      style={{ zIndex: 1 }}
-                    />
-
-                    <h1
-                      className="relative z-10 cursor-pointer"
-                      style={getItemStyle(item.type).text}
-                    >
-                      {item.content}
-                    </h1>
+                    {item.content}
                   </div>
                 ) : item.type === "button" ? (
                   <div
@@ -266,26 +208,12 @@ const SimpleCard = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <IconComponent
-                            size={actualIconSize}
-                            color={iconColor}
-                          />
+                          <IconComponent size={iconSize} color={iconColor} />
                         </a>
                       );
                     })}
                   </div>
-                ) : (
-                  <div
-                    style={getItemStyle(item.type)}
-                    onClick={() => {
-                      if (item.type === "h2") setSelectedText("juiceText");
-                      if (item.type === "p") setSelectedText("descriptionText");
-                      setEditingType("text");
-                    }}
-                  >
-                    {item.content}
-                  </div>
-                )
+                ) : null // 確保其他類型不會渲染出錯
               }
               index={index}
               moveItem={moveItem}

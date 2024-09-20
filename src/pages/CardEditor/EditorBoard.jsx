@@ -21,22 +21,13 @@ const { Option } = Select;
 const EditBoard = () => {
   const {
     selectedText,
-    setHydraText,
-    setJuiceText,
-    setDescriptionText,
-    hydraText,
-    juiceText,
-    descriptionText,
-    hydraTextStyle,
-    setHydraTextStyle,
-    juiceTextStyle,
-    setJuiceTextStyle,
-    descriptionTextStyle,
-    setDescriptionTextStyle,
+    setSelectedText,
+    texts,
+    setTexts,
     editingType,
+    setEditingType,
     icons,
     setIcons,
-
     simpleCardButtons,
     setSimpleCardButtons,
     backgroundSettings,
@@ -207,39 +198,26 @@ const EditBoard = () => {
   };
 
   const handleColorChange = (color) => {
-    switch (selectedText) {
-      case "hydraText":
-        setHydraTextStyle({ ...hydraTextStyle, color: color.hex });
-        break;
-      case "juiceText":
-        setJuiceTextStyle({ ...juiceTextStyle, color: color.hex });
-        break;
-      case "descriptionText":
-        setDescriptionTextStyle({ ...descriptionTextStyle, color: color.hex });
-        break;
-      default:
-        break;
-    }
+    // 根據 selectedText 對應更新 texts 陣列中的 style
+    setTexts(
+      texts.map((item, idx) =>
+        idx === selectedText
+          ? { ...item, style: { ...item.style, color: color.hex } }
+          : item,
+      ),
+    );
   };
 
   const handleFontChange = (e) => {
     const selectedFont = e.target.value;
-    switch (selectedText) {
-      case "hydraText":
-        setHydraTextStyle({ ...hydraTextStyle, fontFamily: selectedFont });
-        break;
-      case "juiceText":
-        setJuiceTextStyle({ ...juiceTextStyle, fontFamily: selectedFont });
-        break;
-      case "descriptionText":
-        setDescriptionTextStyle({
-          ...descriptionTextStyle,
-          fontFamily: selectedFont,
-        });
-        break;
-      default:
-        break;
-    }
+    // 根據 selectedText 更新選中文字的 fontFamily
+    setTexts(
+      texts.map((item, idx) =>
+        idx === selectedText
+          ? { ...item, style: { ...item.style, fontFamily: selectedFont } }
+          : item,
+      ),
+    );
   };
 
   const handleButtonStyleChange = (styleProp, value) => {
@@ -277,115 +255,100 @@ const EditBoard = () => {
   };
 
   const renderTextEditor = () => {
-    const currentFontStyle = (() => {
-      switch (selectedText) {
-        case "hydraText":
-          return hydraTextStyle;
-        case "juiceText":
-          return juiceTextStyle;
-        case "descriptionText":
-          return descriptionTextStyle;
-        default:
-          return {};
-      }
-    })();
+    const currentFontStyle = texts[selectedText]?.style || {}; // 使用 texts[selectedText] 的樣式
 
     return (
       <>
-        <input
+        {/* 渲染 texts 中的所有文本項 */}
+        <div className="content">
+          {texts.map((item, index) => (
+            <div
+              key={index}
+              style={item.style}
+              onClick={() => {
+                setSelectedText(index);
+                setEditingType("text");
+              }}
+            >
+              {item.text}
+            </div>
+          ))}
+        </div>
+        <Input
           type="text"
-          value={
-            selectedText === "hydraText"
-              ? hydraText
-              : selectedText === "juiceText"
-                ? juiceText
-                : descriptionText
-          }
+          value={texts[selectedText]?.text || ""}
           onChange={(e) => {
-            if (selectedText === "hydraText") {
-              setHydraText(e.target.value);
-            } else if (selectedText === "juiceText") {
-              setJuiceText(e.target.value);
-            } else {
-              setDescriptionText(e.target.value);
-            }
+            const updatedTexts = texts.map((item, idx) =>
+              idx === selectedText ? { ...item, text: e.target.value } : item,
+            );
+            setTexts(updatedTexts); // 修改 texts 中對應文本
           }}
           className="rounded border p-2"
         />
         <div className="mt-4">
           <label>Font Size</label>
-          <input
-            type="range"
-            min="10"
-            max="100"
-            value={currentFontStyle.fontSize}
-            onChange={(e) => {
-              const newSize = parseInt(e.target.value, 10);
-              if (selectedText === "hydraText") {
-                setHydraTextStyle({ ...hydraTextStyle, fontSize: newSize });
-              } else if (selectedText === "juiceText") {
-                setJuiceTextStyle({ ...juiceTextStyle, fontSize: newSize });
-              } else {
-                setDescriptionTextStyle({
-                  ...descriptionTextStyle,
-                  fontSize: newSize,
-                });
-              }
-            }}
-            className="slider"
+          <Slider
+            min={10}
+            max={100}
+            value={currentFontStyle.fontSize || 16} // 默認值為 16
+            onChange={(value) =>
+              setTexts(
+                texts.map((item, idx) =>
+                  idx === selectedText
+                    ? { ...item, style: { ...item.style, fontSize: value } }
+                    : item,
+                ),
+              )
+            }
           />
-          <span>{currentFontStyle.fontSize}px</span>
+          <span>{currentFontStyle.fontSize || 16}px</span>
         </div>
         <div className="mt-4">
           <label>Font Weight</label>
-          <input
-            type="range"
-            min="300"
-            max="700"
-            step="100"
-            value={currentFontStyle.fontWeight}
-            onChange={(e) => {
-              const newWeight = parseInt(e.target.value, 10);
-              if (selectedText === "hydraText") {
-                setHydraTextStyle({
-                  ...hydraTextStyle,
-                  fontWeight: newWeight,
-                });
-              } else if (selectedText === "juiceText") {
-                setJuiceTextStyle({
-                  ...juiceTextStyle,
-                  fontWeight: newWeight,
-                });
-              } else {
-                setDescriptionTextStyle({
-                  ...descriptionTextStyle,
-                  fontWeight: newWeight,
-                });
-              }
-            }}
+          <Slider
+            min={300}
+            max={700}
+            step={100}
+            value={currentFontStyle.fontWeight || 400} // 默認值為 400
+            onChange={(value) =>
+              setTexts(
+                texts.map((item, idx) =>
+                  idx === selectedText
+                    ? { ...item, style: { ...item.style, fontWeight: value } }
+                    : item,
+                ),
+              )
+            }
           />
-          <span>{currentFontStyle.fontWeight}</span>
+          <span>{currentFontStyle.fontWeight || 400}</span>
         </div>
         <div className="mt-4">
           <label>Font Family</label>
-          <select
-            value={currentFontStyle.fontFamily}
-            onChange={handleFontChange}
-            className="rounded border p-2"
+          <Select
+            value={currentFontStyle.fontFamily || "Arial, sans-serif"} // 默認字體
+            onChange={(value) =>
+              setTexts(
+                texts.map((item, idx) =>
+                  idx === selectedText
+                    ? { ...item, style: { ...item.style, fontFamily: value } }
+                    : item,
+                ),
+              )
+            }
           >
             {fontOptions.map((font) => (
-              <option key={font.value} value={font.value}>
+              <Option key={font.value} value={font.value}>
                 {font.label}
-              </option>
+              </Option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className="mt-4">
           <label>Font Color</label>
           <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
             <div
               style={{
-                backgroundColor: currentFontStyle.color,
+                backgroundColor: currentFontStyle.color || "#000",
                 width: "40px",
                 height: "40px",
                 cursor: "pointer",
@@ -396,8 +359,19 @@ const EditBoard = () => {
           {showFontColorPicker && (
             <div className="absolute z-10">
               <SketchPicker
-                color={currentFontStyle.color}
-                onChangeComplete={handleColorChange}
+                color={currentFontStyle.color || "#000000"}
+                onChangeComplete={(color) =>
+                  setTexts(
+                    texts.map((item, idx) =>
+                      idx === selectedText
+                        ? {
+                            ...item,
+                            style: { ...item.style, color: color.hex },
+                          }
+                        : item,
+                    ),
+                  )
+                }
               />
             </div>
           )}
@@ -810,45 +784,5 @@ const EditBoard = () => {
     </section>
   );
 };
-
-// EditBoard.propTypes = {
-//   selectedText: PropTypes.string,
-//   setHydraText: PropTypes.func.isRequired,
-//   setJuiceText: PropTypes.func.isRequired,
-//   setDescriptionText: PropTypes.func.isRequired,
-//   hydraText: PropTypes.string.isRequired,
-//   juiceText: PropTypes.string.isRequired,
-//   descriptionText: PropTypes.string.isRequired,
-//   hydraTextStyle: PropTypes.shape({
-//     fontSize: PropTypes.number,
-//     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-//     color: PropTypes.string,
-//     fontFamily: PropTypes.string,
-//   }).isRequired,
-//   setHydraTextStyle: PropTypes.func.isRequired,
-//   juiceTextStyle: PropTypes.shape({
-//     fontSize: PropTypes.number,
-//     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-//     color: PropTypes.string,
-//     fontFamily: PropTypes.string,
-//   }).isRequired,
-//   setJuiceTextStyle: PropTypes.func.isRequired,
-//   descriptionTextStyle: PropTypes.shape({
-//     fontSize: PropTypes.number,
-//     fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-//     color: PropTypes.string,
-//     fontFamily: PropTypes.string,
-//   }).isRequired,
-//   setDescriptionTextStyle: PropTypes.func.isRequired,
-//   icons: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.string.isRequired,
-//       name: PropTypes.string.isRequired,
-//       icon: PropTypes.elementType.isRequired,
-//     }),
-//   ).isRequired,
-//   setIcons: PropTypes.func.isRequired,
-//   editingType: PropTypes.string,
-// };
 
 export default EditBoard;
