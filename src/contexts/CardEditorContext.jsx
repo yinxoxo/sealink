@@ -9,7 +9,7 @@ export const useCardEditorContext = () => useContext(CardEditorContext);
 export const CardEditorProvider = ({ children }) => {
   const [editingType, setEditingType] = useState(null);
   const [iconColor, setIconColor] = useState(ICON_STYLE.SimpleCard.color);
-  const [iconSize, setIconSize] = useState(ICON_STYLE.SimpleCard.size);
+  const [iconSize, setIconSize] = useState(ICON_STYLE.SimpleCard.size || 30);
   const [hydraText, setHydraText] = useState(
     initialSimpleCardContent.title.text,
   );
