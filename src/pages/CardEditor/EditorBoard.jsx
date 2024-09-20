@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import NavBar from "./NavBar";
 import { Select, Button, Input, Switch, Upload, message, Slider } from "antd";
+
 import IconCard from "./EditorComponents/IconCard";
+import TextCard from "./EditorComponents/TextCard";
 import ButtonCard from "./EditorComponents/ButtonCard";
+import EditTextModal from "./EditorComponents/EditTextModal";
 import EditIconModal from "./EditorComponents/EditIconModal";
 import EditButtonModal from "./EditorComponents/EditButtonModal";
 import CropperModal from "./EditorComponents/CropperModal";
@@ -25,7 +28,6 @@ const EditBoard = () => {
     texts,
     setTexts,
     editingType,
-    setEditingType,
     icons,
     setIcons,
     simpleCardButtons,
@@ -46,7 +48,6 @@ const EditBoard = () => {
   const [showFontColorPicker, setShowFontColorPicker] = useState(false);
   const [isButtonModalVisible, setIsButtonModalVisible] = useState(false);
   const [editButtonData, setEditButtonData] = useState(null);
-
   const [useBackgroundImage, setUseBackgroundImage] = useState(
     !!backgroundSettings.backgroundImage,
   );
@@ -59,14 +60,13 @@ const EditBoard = () => {
   const [tempOpacity, setTempOpacity] = useState(
     backgroundSettings.opacity || 0.6,
   );
-
   const [uploading, setUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropModalVisible, setIsCropModalVisible] = useState(false);
+  const [editableTextItem, setEditableTextItem] = useState(null);
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -132,7 +132,7 @@ const EditBoard = () => {
     reader.readAsDataURL(file);
   };
 
-  const handleEdit = (iconName) => {
+  const handleIconEdit = (iconName) => {
     const iconToEdit = icons.find((icon) => icon.name === iconName);
     if (iconToEdit) {
       setEditIconData(iconToEdit);
@@ -140,7 +140,7 @@ const EditBoard = () => {
     }
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveIconEdit = () => {
     const updatedIcons = icons.map((icon) =>
       icon.id === editIconData.id ? editIconData : icon,
     );
@@ -198,7 +198,6 @@ const EditBoard = () => {
   };
 
   const handleColorChange = (color) => {
-    // 根據 selectedText 對應更新 texts 陣列中的 style
     setTexts(
       texts.map((item, idx) =>
         idx === selectedText
@@ -210,7 +209,7 @@ const EditBoard = () => {
 
   const handleFontChange = (e) => {
     const selectedFont = e.target.value;
-    // 根據 selectedText 更新選中文字的 fontFamily
+
     setTexts(
       texts.map((item, idx) =>
         idx === selectedText
@@ -255,127 +254,62 @@ const EditBoard = () => {
   };
 
   const renderTextEditor = () => {
-    const currentFontStyle = texts[selectedText]?.style || {}; // 使用 texts[selectedText] 的樣式
-
+    const currentFontStyle = texts[selectedText]?.style || {};
     return (
       <>
-        {/* 渲染 texts 中的所有文本項 */}
-        <div className="content">
-          {texts.map((item, index) => (
-            <div
-              key={index}
-              style={item.style}
-              onClick={() => {
-                setSelectedText(index);
-                setEditingType("text");
-              }}
-            >
-              {item.text}
-            </div>
-          ))}
-        </div>
-        <Input
-          type="text"
-          value={texts[selectedText]?.text || ""}
-          onChange={(e) => {
-            const updatedTexts = texts.map((item, idx) =>
-              idx === selectedText ? { ...item, text: e.target.value } : item,
-            );
-            setTexts(updatedTexts); // 修改 texts 中對應文本
+        <h1 className="text-xl">Texts</h1>
+        {texts.map((item, index) => (
+          <TextCard
+            key={index}
+            textItem={item}
+            index={index}
+            onEdit={() => {
+              setSelectedText(index);
+              setEditableTextItem(item);
+              setIsModalVisible(true);
+            }}
+            onDelete={() => {
+              const updatedTexts = texts.filter((_, idx) => idx !== index);
+              setTexts(updatedTexts);
+            }}
+            onUpdate={(index, updatedItem) => {
+              const updatedTexts = texts.map((item, idx) =>
+                idx === index ? updatedItem : item,
+              );
+              setTexts(updatedTexts);
+            }}
+          />
+        ))}
+        <button
+          className="mb-4 rounded bg-blue-500 px-4 py-2 text-white"
+          onClick={() => {
+            const newTextItem = {
+              text: "New Text",
+              style: {
+                fontSize: "16px",
+                fontWeight: 400,
+                color: "#000000",
+                fontFamily: "Arial",
+              },
+            };
+            setTexts([...texts, newTextItem]);
           }}
-          className="rounded border p-2"
+        >
+          Add New Text
+        </button>
+        <EditTextModal
+          isTextModalVisible={isModalVisible}
+          setIsTextModalVisible={setIsModalVisible}
+          editTextData={editableTextItem}
+          setEditTextData={setEditableTextItem}
+          handleSaveTextEdit={() => {
+            const updatedTexts = texts.map((item, idx) =>
+              idx === selectedText ? editableTextItem : item,
+            );
+            setTexts(updatedTexts);
+            setIsModalVisible(false);
+          }}
         />
-        <div className="mt-4">
-          <label>Font Size</label>
-          <Slider
-            min={10}
-            max={100}
-            value={currentFontStyle.fontSize || 16} // 默認值為 16
-            onChange={(value) =>
-              setTexts(
-                texts.map((item, idx) =>
-                  idx === selectedText
-                    ? { ...item, style: { ...item.style, fontSize: value } }
-                    : item,
-                ),
-              )
-            }
-          />
-          <span>{currentFontStyle.fontSize || 16}px</span>
-        </div>
-        <div className="mt-4">
-          <label>Font Weight</label>
-          <Slider
-            min={300}
-            max={700}
-            step={100}
-            value={currentFontStyle.fontWeight || 400} // 默認值為 400
-            onChange={(value) =>
-              setTexts(
-                texts.map((item, idx) =>
-                  idx === selectedText
-                    ? { ...item, style: { ...item.style, fontWeight: value } }
-                    : item,
-                ),
-              )
-            }
-          />
-          <span>{currentFontStyle.fontWeight || 400}</span>
-        </div>
-        <div className="mt-4">
-          <label>Font Family</label>
-          <Select
-            value={currentFontStyle.fontFamily || "Arial, sans-serif"} // 默認字體
-            onChange={(value) =>
-              setTexts(
-                texts.map((item, idx) =>
-                  idx === selectedText
-                    ? { ...item, style: { ...item.style, fontFamily: value } }
-                    : item,
-                ),
-              )
-            }
-          >
-            {fontOptions.map((font) => (
-              <Option key={font.value} value={font.value}>
-                {font.label}
-              </Option>
-            ))}
-          </Select>
-        </div>
-        <div className="mt-4">
-          <label>Font Color</label>
-          <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
-            <div
-              style={{
-                backgroundColor: currentFontStyle.color || "#000",
-                width: "40px",
-                height: "40px",
-                cursor: "pointer",
-                borderRadius: "5px",
-              }}
-            />
-          </div>
-          {showFontColorPicker && (
-            <div className="absolute z-10">
-              <SketchPicker
-                color={currentFontStyle.color || "#000000"}
-                onChangeComplete={(color) =>
-                  setTexts(
-                    texts.map((item, idx) =>
-                      idx === selectedText
-                        ? {
-                            ...item,
-                            style: { ...item.style, color: color.hex },
-                          }
-                        : item,
-                    ),
-                  )
-                }
-              />
-            </div>
-          )}
-        </div>
       </>
     );
   };
@@ -386,6 +320,15 @@ const EditBoard = () => {
         <>
           <h2 className="mb-4 text-xl">Icons</h2>
           <h2 className="text-lg">Current Icons</h2>
+          {icons.map((icon) => (
+            <IconCard
+              key={icon.id}
+              icon={icon.icon}
+              iconName={icon.name}
+              onEdit={() => handleIconEdit(icon.name)}
+              onDelete={() => handleIconDelete(icon.id)}
+            />
+          ))}
           <div className="my-4">
             <label>Icon Color</label>
             <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
@@ -424,15 +367,6 @@ const EditBoard = () => {
             <span>{iconSize.size}px</span>
           </div>
 
-          {icons.map((icon) => (
-            <IconCard
-              key={icon.id}
-              icon={icon.icon}
-              iconName={icon.name}
-              onEdit={() => handleEdit(icon.name)}
-              onDelete={() => handleIconDelete(icon.id)}
-            />
-          ))}
           <h2 className="my-2 text-lg">Add Icons</h2>
           <Select
             style={{ width: "100%" }}
@@ -462,7 +396,7 @@ const EditBoard = () => {
           setIsModalVisible={setIsModalVisible}
           editIconData={editIconData}
           setEditIconData={setEditIconData}
-          handleSaveEdit={handleSaveEdit}
+          handleSaveEdit={handleSaveIconEdit}
         />
       )}
     </>
@@ -473,7 +407,7 @@ const EditBoard = () => {
 
     return (
       <>
-        <h2>Button</h2>
+        <h1 className="text-xl">Button</h1>
         <div className="mt-4">
           {buttons.map((button, index) => (
             <ButtonCard

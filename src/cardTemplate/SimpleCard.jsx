@@ -25,7 +25,7 @@ const DraggableItem = ({ id, content, index, moveItem }) => {
   });
 
   return (
-    <div ref={(node) => ref(drop(node))} className="my-2 w-full">
+    <div ref={(node) => ref(drop(node))} className="fade-in-up my-2 w-full">
       {content}
     </div>
   );
@@ -43,7 +43,7 @@ const SimpleCard = () => {
     backgroundSettings,
   } = useCardEditorContext();
 
-  console.log(texts);
+  console.log("texts in simple", texts);
   const [items, setItems] = useState([
     ...texts.map((text, index) => ({
       id: uuidv4(),
@@ -65,39 +65,33 @@ const SimpleCard = () => {
 
   useEffect(() => {
     setItems((prevItems) => {
-      const updatedItems = prevItems.map((item) => {
-        if (item.type === "text" && item.content !== texts[item.index]?.text) {
-          return {
-            ...item,
-            content: texts[item.index]?.text,
-          };
-        }
-        return item;
-      });
+      const updatedTextItems = texts.map((text, index) => ({
+        id:
+          prevItems.find((item) => item.type === "text" && item.index === index)
+            ?.id || uuidv4(),
+        type: "text",
+        content: text.text,
+        index,
+      }));
 
-      const buttonItems =
-        simpleCardButtons?.buttons?.map((button, index) => ({
-          id:
-            prevItems.find(
-              (item) => item.type === "button" && item.url === button.url,
-            )?.id || uuidv4(),
-          type: "button",
-          content: button.text,
-          url: button.url,
-        })) || [];
+      const updatedButtonItems = simpleCardButtons.buttons.map((button) => ({
+        id:
+          prevItems.find(
+            (item) => item.type === "button" && item.url === button.url,
+          )?.id || uuidv4(),
+        type: "button",
+        content: button.text,
+        url: button.url,
+      }));
 
-      const newItems = [
-        ...updatedItems.filter((item) => item.type !== "button"),
-        ...buttonItems,
-      ];
+      const iconItem = {
+        id: prevItems.find((item) => item.type === "icons")?.id || uuidv4(),
+        type: "icons",
+      };
 
-      if (JSON.stringify(newItems) !== JSON.stringify(prevItems)) {
-        return newItems;
-      }
-
-      return prevItems;
+      return [...updatedTextItems, iconItem, ...updatedButtonItems];
     });
-  }, [simpleCardButtons, texts]);
+  }, [texts, simpleCardButtons]);
 
   const handleButtonClick = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
@@ -213,7 +207,7 @@ const SimpleCard = () => {
                       );
                     })}
                   </div>
-                ) : null // 確保其他類型不會渲染出錯
+                ) : null
               }
               index={index}
               moveItem={moveItem}
