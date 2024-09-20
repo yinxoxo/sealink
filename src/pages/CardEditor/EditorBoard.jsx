@@ -47,10 +47,6 @@ const EditBoard = () => {
     setIconSize,
   } = useCardEditorContext();
 
-  useEffect(() => {
-    console.log("初始 backgroundSettings:", backgroundSettings);
-  }, [backgroundSettings]);
-
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIconData, setEditIconData] = useState(null);
@@ -158,7 +154,7 @@ const EditBoard = () => {
       icon.id === editIconData.id ? editIconData : icon,
     );
     setIcons(updatedIcons);
-    setIconColor({ ...iconColor, color: editIconData.color });
+    setIconColor(editIconData.color);
 
     setIsModalVisible(false);
   };
@@ -273,8 +269,6 @@ const EditBoard = () => {
         backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
         opacity: tempOpacity,
       };
-
-      console.log("更新的 backgroundSettings:", newSettings);
 
       return newSettings;
     });
@@ -423,7 +417,7 @@ const EditBoard = () => {
             <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
               <div
                 style={{
-                  backgroundColor: iconColor.color || "#000",
+                  backgroundColor: iconColor,
                   width: "40px",
                   height: "40px",
                   cursor: "pointer",
@@ -437,7 +431,7 @@ const EditBoard = () => {
                   color={editIconData?.color}
                   onChangeComplete={(color) => {
                     setEditIconData({ ...editIconData, color: color.hex });
-                    setIconColor({ ...iconColor, color: color.hex });
+                    setIconColor(color.hex);
                   }}
                 />
               </div>
@@ -450,12 +444,7 @@ const EditBoard = () => {
               min="10"
               max="100"
               value={iconSize.size}
-              onChange={(e) =>
-                setIconSize({
-                  ...iconSize,
-                  size: parseInt(e.target.value, 10),
-                })
-              }
+              onChange={(e) => setIconSize(parseInt(e.target.value, 10))}
               className="slider"
             />
             <span>{iconSize.size}px</span>
