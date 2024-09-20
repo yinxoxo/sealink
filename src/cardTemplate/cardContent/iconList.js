@@ -33,6 +33,12 @@ const ICON_LIST = [
     href: "https://facebook.com",
   },
   {
+    id: "github",
+    name: "github",
+    icon: FaGithub,
+    href: "https://github.com",
+  },
+  {
     id: "email",
     name: "Email",
     icon: FaEnvelope,
