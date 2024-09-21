@@ -105,7 +105,9 @@ const SignUp = () => {
       const user = await loginWithGoogle();
       login(user);
       console.log("Google Sign-in successful");
-      const redirectTo = location.state?.from || "/dashboard";
+      const redirectTo = location.state?.from
+        ? `/${location.state.from}`
+        : "/dashboard";
       navigate(redirectTo);
     } catch (error) {
       console.error("Google Sign-in failed:", error.message);
