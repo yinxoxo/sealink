@@ -6,13 +6,13 @@ const PrivateRoute = ({ element }) => {
   const location = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>; // 在loading完成前，顯示加載狀態
+    return <div>Loading...</div>;
   }
 
   return user ? (
     element
   ) : (
-    <Navigate to="/signup" state={{ from: location }} replace />
+    <Navigate to="/" state={{ from: location }} replace />
   );
 };
 
