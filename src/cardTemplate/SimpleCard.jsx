@@ -43,7 +43,6 @@ const SimpleCard = () => {
     backgroundSettings,
   } = useCardEditorContext();
 
-  console.log("texts in simple", texts);
   const [items, setItems] = useState([
     ...texts.map((text, index) => ({
       id: uuidv4(),
