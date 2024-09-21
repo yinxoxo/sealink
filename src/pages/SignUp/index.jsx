@@ -81,7 +81,7 @@ const SignUp = () => {
       await user.reload();
       const updatedUser = user;
 
-      login({
+      await login({
         uid: updatedUser.uid,
         email: updatedUser.email,
         displayName: updatedUser.displayName,
@@ -113,7 +113,6 @@ const SignUp = () => {
     }
   };
 
-  console.log("Location state:", location.state);
   return (
     <div className="flex min-h-screen bg-gray-100">
       <div className="flex flex-1 items-center justify-center bg-white p-10">
