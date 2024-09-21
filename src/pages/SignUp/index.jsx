@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   loginWithGoogle,
   loginWithEmail,
@@ -12,6 +12,7 @@ import { useAuth } from "../../contexts/AuthContext";
 const SignUp = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -77,26 +78,42 @@ const SignUp = () => {
       const userCredential = await loginWithEmail(email, password);
       const user = userCredential.user;
 
-      login(user);
+      await user.reload();
+      const updatedUser = user;
+
+      login({
+        uid: updatedUser.uid,
+        email: updatedUser.email,
+        displayName: updatedUser.displayName,
+      });
+
       console.log("Login successful!");
-      navigate("/dashboard");
+
+      const redirectTo = location.state?.from
+        ? `/${location.state.from}`
+        : "/dashboard";
+      console.log("Redirect to:", redirectTo);
+      navigate(redirectTo);
     } catch (error) {
       console.error("Login failed:", error.message);
       alert("Login failed: " + error.message);
     }
   };
+
   const handleGoogleLogin = async () => {
     try {
       const user = await loginWithGoogle();
       login(user);
       console.log("Google Sign-in successful");
-      navigate("/dashboard");
+      const redirectTo = location.state?.from || "/dashboard";
+      navigate(redirectTo);
     } catch (error) {
       console.error("Google Sign-in failed:", error.message);
       alert("Google Sign-in failed: " + error.message);
     }
   };
 
+  console.log("Location state:", location.state);
   return (
     <div className="flex min-h-screen bg-gray-100">
       <div className="flex flex-1 items-center justify-center bg-white p-10">
@@ -145,7 +162,13 @@ const SignUp = () => {
                     type="email"
                     placeholder="Email"
                     autoComplete="current-password"
-                    {...register("email", { required: "Email is required" })}
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                        message: "Invalid email format",
+                      },
+                    })}
                     className="w-full rounded-lg border border-gray-300 p-3"
                   />
                   {errors.email && (
@@ -159,6 +182,10 @@ const SignUp = () => {
                     autoComplete="current-password"
                     {...register("password", {
                       required: "Password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters",
+                      },
                     })}
                     className="w-full rounded-lg border border-gray-300 p-3"
                   />
