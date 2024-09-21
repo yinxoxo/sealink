@@ -1,27 +1,22 @@
 import { Link } from "react-router-dom";
-import sealinkLogo from "../../images/sealink.png";
+import sealinkLogo from "../../images/logo.png";
 import { useAuth } from "../../contexts/AuthContext";
 
 const Header = () => {
   const { user, logout } = useAuth();
+  console.log(user);
 
   return (
     <header>
-      <div className="flex w-full items-center justify-between rounded-full bg-white p-4 shadow-md">
+      <div className="flex w-full items-center justify-between rounded-full bg-white p-3 shadow-md">
         <div className="relative flex items-center">
           <Link to="/">
-            <span className="font-semibold">SeaLink</span>
-
-            <img
-              src={sealinkLogo}
-              alt="Logo"
-              className="absolute left-[55px] top-[-15px] h-7 w-7"
-            />
+            <img src={sealinkLogo} alt="Logo" className="logo" />
           </Link>
           <Link to="/templates">
-            <span className="mx-7 text-gray-600 hover:text-black">
+            <div className="mx-7 rounded-3xl p-3 text-gray-600 hover:bg-gray-100">
               Templates
-            </span>
+            </div>
           </Link>
         </div>
 
@@ -40,7 +35,7 @@ const Header = () => {
             </>
           ) : (
             <Link to="/signup">
-              <button className="mr-1 rounded-full bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
+              <button className="mr-1 mr-2 bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
                 Log in
               </button>
 
