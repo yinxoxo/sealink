@@ -10,7 +10,7 @@
 
 @layer components {
   .template-card {
-    @apply m-4 flex cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-gray-300;
+    @apply m-4 flex h-[540px] w-[300px] cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-gray-300;
   }
 
   .template-card-size {

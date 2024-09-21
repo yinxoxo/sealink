@@ -31,7 +31,6 @@ const Template = () => {
     <section className="flex flex-wrap justify-center">
       <div
         className="template-card"
-        style={{ width: "300px", height: "650px" }}
         onClick={() => handleTemplateClick("SimpleCard")}
       >
         <div className="template-card-size">
@@ -52,7 +51,6 @@ const Template = () => {
       </div>
       <div
         className="template-card"
-        style={{ width: "300px", height: "650px" }}
         onClick={() => handleTemplateClick("ArtCard")}
       >
         <div className="template-card-size">
@@ -61,7 +59,6 @@ const Template = () => {
       </div>
       <div
         className="template-card"
-        style={{ width: "300px", height: "650px" }}
         onClick={() => handleTemplateClick("BusinessCard")}
       >
         <div className="template-card-size">

@@ -68,7 +68,7 @@ const BusinessCard = () => {
     buttons.map((button) => ({
       id: button.id,
       content: (
-        <button className="my-2 w-full rounded-full bg-[#A89F94] py-4 text-white transition hover:bg-[#8e867c]">
+        <button className="my-1 w-full rounded-full bg-[#A89F94] py-2 text-white transition hover:bg-[#8e867c]">
           {button.text}
         </button>
       ),
@@ -88,21 +88,21 @@ const BusinessCard = () => {
 
   return (
     <div
-      className="card-container"
+      className="card-container relative"
       style={{
         backgroundColor: BusinessCard.backgroundSettings.backgroundColor,
       }}
     >
       <div className="relative w-full rounded-lg">
         <div
-          className="absolute inset-0 top-0 h-[200px] bg-cover"
+          className="absolute inset-0 top-0 h-1/5 bg-cover"
           style={{
             backgroundImage:
               "url('https://images.unsplash.com/photo-1725714354686-0a8b522037bd?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
           }}
         />
 
-        <div className="relative z-10 flex justify-center pt-[140px]">
+        <div className="relative z-10 flex justify-center pt-[10%]">
           <img
             src="https://plus.unsplash.com/premium_photo-1673757121102-0ca51260861f?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="profile"
@@ -110,7 +110,7 @@ const BusinessCard = () => {
           />
         </div>
 
-        <div className="mt-4 text-center">
+        <div className="mt-1 text-center">
           <h2 className="font-serif text-2xl font-semibold text-gray-800">
             YOUR NAME
           </h2>
@@ -119,7 +119,7 @@ const BusinessCard = () => {
           </p>
         </div>
 
-        <div className="mt-6 text-center text-gray-600">
+        <div className="mt-1 text-center text-gray-600">
           <p className="text-sm">+46 123456789</p>
           <p className="text-sm">hello@domain.com</p>
           <p className="text-sm">Street name 65, 123 45, City</p>
@@ -137,18 +137,17 @@ const BusinessCard = () => {
             </DraggableItem>
           ))}
         </div>
-
-        <div className="mt-6 flex w-full justify-center space-x-6 bg-[#A89F94] p-2">
-          {icons.map((icon) => (
-            <a
-              key={icon.id}
-              href={icon.link}
-              className="text-gray-100 hover:text-gray-700"
-            >
-              {icon.icon}
-            </a>
-          ))}
-        </div>
+      </div>
+      <div className="absolute bottom-0 flex w-full justify-center space-x-6 bg-[#A89F94] p-2">
+        {icons.map((icon) => (
+          <a
+            key={icon.id}
+            href={icon.link}
+            className="text-gray-100 hover:text-gray-700"
+          >
+            {icon.icon}
+          </a>
+        ))}
       </div>
     </div>
   );

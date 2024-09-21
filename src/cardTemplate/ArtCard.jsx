@@ -53,8 +53,6 @@ const ArtCard = () => {
   const buttons = [
     { id: uuidv4(), text: "VISIT MY WEBSITE" },
     { id: uuidv4(), text: "MY SERVICES" },
-    { id: uuidv4(), text: "READ MY BLOG" },
-    { id: uuidv4(), text: "CONNECT WITH ME" },
   ];
 
   const icons = [
