@@ -3,14 +3,47 @@
 @tailwind utilities;
 
 @layer components {
+  .logo {
+    @apply h-16 w-auto;
+  }
+
   .card-container {
     @apply relative mx-auto min-h-full w-full rounded-3xl shadow-lg;
   }
-}
 
-@layer components {
   .template-card {
-    @apply m-4 flex h-[540px] w-[300px] cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-gray-300;
+    @apply relative m-4 flex h-[540px] w-[300px] cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-gray-300;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    perspective: 1000px;
+  }
+
+  .card-inner {
+    @apply relative h-full w-full;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+
+  .template-card:hover .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .card-front,
+  .card-back {
+    @apply absolute inset-0 h-full w-full;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-in-out;
+  }
+
+  .card-front {
+    z-index: 2;
+    transform: rotateY(0deg);
+  }
+
+  .card-back {
+    @apply z-10 bg-white bg-opacity-5;
+    transform: rotateY(180deg);
   }
 
   .template-card-size {
