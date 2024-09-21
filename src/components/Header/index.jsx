@@ -28,7 +28,6 @@ const Header = () => {
               Log in
             </button>
 
-            <Link to="/signup"></Link>
             <button className="rounded-full bg-black px-4 py-2 text-white hover:bg-gray-900">
               Sign up free
             </button>

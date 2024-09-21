@@ -1,10 +1,83 @@
 import { useState } from "react";
-import { loginWithGoogle, loginWithEmail, registerWithEmail } from "./auth";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import {
+  loginWithGoogle,
+  loginWithEmail,
+  registerWithEmail,
+  saveUserToFirestore,
+} from "./auth";
 
 const SignUp = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [isLogin, setIsLogin] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
+  const [userId, setUserId] = useState(null);
+
+  const handleRegister = async (data) => {
+    const { email, password } = data;
+    try {
+      const userCredential = await registerWithEmail(email, password);
+      const user = userCredential.user;
+
+      await saveUserToFirestore({
+        uid: user.uid,
+        email: user.email,
+        authProvider: user.providerData
+          ? user.providerData[0]?.providerId
+          : "email",
+      });
+
+      setUserId(user.uid);
+      setIsNewUser(true);
+      console.log("User registered successfully with UID:", user.uid);
+    } catch (error) {
+      console.error("Registration failed:", error.message);
+      alert("Registration failed: " + error.message);
+    }
+  };
+
+  // 保存显示名称
+  const handleSaveDisplayName = async (data) => {
+    const { displayName } = data;
+
+    if (!userId) {
+      console.error("User ID is undefined. Cannot save display name.");
+      alert("User ID is not defined. Please register or log in first.");
+      return;
+    }
+
+    try {
+      await saveUserToFirestore({
+        uid: userId,
+        displayName: displayName,
+      });
+
+      setIsNewUser(false);
+      console.log("Display name saved successfully");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error saving display name:", error.message);
+      alert("Error saving display name: " + error.message);
+    }
+  };
+
+  const handleLogin = async (data) => {
+    const { email, password } = data;
+    try {
+      await loginWithEmail(email, password);
+      console.log("Login successful!");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      alert("Login failed: " + error.message);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -12,106 +85,104 @@ const SignUp = () => {
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
             <h1 className="text-3xl font-bold">
-              {isLogin ? "Welcome back!" : "Create your account"}
+              {isNewUser
+                ? "Please Enter User Name"
+                : isLogin
+                  ? "Welcome back!"
+                  : "Create your account"}
             </h1>
           </div>
-          <form className="mt-8 space-y-6">
-            <div className="rounded-md shadow-sm">
-              <div className="mb-4">
+
+          {isNewUser ? (
+            <form
+              onSubmit={handleSubmit(handleSaveDisplayName)}
+              className="mt-8 space-y-6"
+            >
+              <div className="rounded-md shadow-sm">
                 <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  placeholder="Enter your display name"
+                  {...register("displayName", { required: true })}
                   className="w-full rounded-lg border border-gray-300 p-3"
                 />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-3"
-                />
-              </div>
-              <div>
-                {isLogin ? (
-                  <button
-                    type="button"
-                    onClick={() => loginWithEmail(email, password)}
-                    className="w-full rounded-lg bg-slate-300 py-3 text-white hover:bg-slate-500"
-                  >
-                    Log in
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => registerWithEmail(email, password)}
-                    className="w-full rounded-lg bg-gray-300 py-3 text-white hover:bg-gray-500"
-                  >
-                    Sign up
-                  </button>
+                {errors.displayName && (
+                  <p className="text-red-500">User name is required</p>
                 )}
               </div>
-            </div>
-          </form>
-
-          <div className="space-y-4">
-            <button
-              type="button"
-              onClick={loginWithGoogle}
-              className="flex w-full justify-center rounded-lg border border-gray-300 bg-gray-100 py-3 hover:bg-gray-200"
+              <button
+                type="submit"
+                className="w-full rounded-lg bg-gray-300 py-3 text-white"
+              >
+                Save User Name
+              </button>
+            </form>
+          ) : (
+            <form
+              onSubmit={handleSubmit(isLogin ? handleLogin : handleRegister)} // 根据当前状态处理登录或注册
+              className="mt-8 space-y-6"
             >
-              {isLogin ? "Continue with Google" : "Sign up with Google"}
-            </button>
-          </div>
+              <div className="rounded-md shadow-sm">
+                <div className="mb-4">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    autoComplete="current-password"
+                    {...register("email", { required: "Email is required" })}
+                    className="w-full rounded-lg border border-gray-300 p-3"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500">{errors.email.message}</p>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    autoComplete="current-password"
+                    {...register("password", {
+                      required: "Password is required",
+                    })}
+                    className="w-full rounded-lg border border-gray-300 p-3"
+                  />
+                  {errors.password && (
+                    <p className="text-red-500">{errors.password.message}</p>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full rounded-lg bg-gray-300 py-3 text-white hover:bg-gray-500"
+                >
+                  {isLogin ? "Log in" : "Sign up"}
+                </button>
+              </div>
+              {!isLogin && (
+                <div className="space-y-4">
+                  <button
+                    type="button"
+                    onClick={loginWithGoogle}
+                    className="flex w-full justify-center rounded-lg border border-gray-300 bg-gray-100 py-3 hover:bg-gray-200"
+                  >
+                    Sign up with Google
+                  </button>
+                </div>
+              )}
+            </form>
+          )}
 
           <div className="mt-4 text-center">
-            {isLogin ? (
-              <>
-                <div className="mt-4">
-                  <span className="text-sm text-gray-600">
-                    Don't have an account?
-                    <button
-                      className="text-blue-600 hover:underline"
-                      onClick={() => setIsLogin(false)}
-                    >
-                      Sign up
-                    </button>
-                  </span>
-                </div>
-              </>
-            ) : (
-              <div className="mt-4">
-                <span className="text-sm text-gray-600">
-                  Already have an account?
-                  <button
-                    className="text-blue-600 hover:underline"
-                    onClick={() => setIsLogin(true)}
-                  >
-                    Log in
-                  </button>
-                </span>
-              </div>
-            )}
+            <span className="text-sm text-gray-600">
+              {isLogin ? "Don't have an account?" : "Already have an account?"}
+              <button
+                className="ml-2 text-blue-600 hover:underline"
+                onClick={() => setIsLogin(!isLogin)}
+              >
+                {isLogin ? "Sign up" : "Log in"}
+              </button>
+            </span>
           </div>
         </div>
       </div>
-
-      {isLogin ? (
-        <div className="hidden flex-1 items-center justify-center bg-slate-300 md:flex">
-          <div className="relative flex h-full w-full items-center justify-center p-10">
-            <p className="text-2xl text-white">登入</p>
-          </div>
-        </div>
-      ) : (
-        <div className="hidden flex-1 items-center justify-center bg-gray-300 md:flex">
-          <div className="relative flex h-full w-full items-center justify-center p-10">
-            <p className="text-2xl text-white">註冊</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
