@@ -7,8 +7,10 @@ import {
   registerWithEmail,
   saveUserToFirestore,
 } from "./auth";
+import { useAuth } from "../../contexts/AuthContext";
 
 const SignUp = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const {
     register,
@@ -33,6 +35,7 @@ const SignUp = () => {
           : "email",
       });
 
+      login(user);
       setUserId(user.uid);
       setIsNewUser(true);
       console.log("User registered successfully with UID:", user.uid);
@@ -42,7 +45,6 @@ const SignUp = () => {
     }
   };
 
-  // 保存显示名称
   const handleSaveDisplayName = async (data) => {
     const { displayName } = data;
 
@@ -58,6 +60,8 @@ const SignUp = () => {
         displayName: displayName,
       });
 
+      const updatedUser = { uid: userId, displayName };
+      login(updatedUser);
       setIsNewUser(false);
       console.log("Display name saved successfully");
       navigate("/dashboard");
@@ -70,12 +74,26 @@ const SignUp = () => {
   const handleLogin = async (data) => {
     const { email, password } = data;
     try {
-      await loginWithEmail(email, password);
+      const userCredential = await loginWithEmail(email, password);
+      const user = userCredential.user;
+
+      login(user);
       console.log("Login successful!");
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error.message);
       alert("Login failed: " + error.message);
+    }
+  };
+  const handleGoogleLogin = async () => {
+    try {
+      const user = await loginWithGoogle();
+      login(user);
+      console.log("Google Sign-in successful");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Google Sign-in failed:", error.message);
+      alert("Google Sign-in failed: " + error.message);
     }
   };
 
@@ -118,7 +136,7 @@ const SignUp = () => {
             </form>
           ) : (
             <form
-              onSubmit={handleSubmit(isLogin ? handleLogin : handleRegister)} // 根据当前状态处理登录或注册
+              onSubmit={handleSubmit(isLogin ? handleLogin : handleRegister)}
               className="mt-8 space-y-6"
             >
               <div className="rounded-md shadow-sm">
@@ -156,20 +174,17 @@ const SignUp = () => {
                   {isLogin ? "Log in" : "Sign up"}
                 </button>
               </div>
-              {!isLogin && (
-                <div className="space-y-4">
-                  <button
-                    type="button"
-                    onClick={loginWithGoogle}
-                    className="flex w-full justify-center rounded-lg border border-gray-300 bg-gray-100 py-3 hover:bg-gray-200"
-                  >
-                    Sign up with Google
-                  </button>
-                </div>
-              )}
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={handleGoogleLogin}
+                  className="flex w-full justify-center rounded-lg border border-gray-300 bg-gray-100 py-3 hover:bg-gray-200"
+                >
+                  {isLogin ? "Log in with Google" : "Sign up with Google"}
+                </button>
+              </div>
             </form>
           )}
-
           <div className="mt-4 text-center">
             <span className="text-sm text-gray-600">
               {isLogin ? "Don't have an account?" : "Already have an account?"}
