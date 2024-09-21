@@ -22,14 +22,17 @@ const Header = () => {
           </Link>
         </div>
 
-        {/* Right side with buttons */}
         <div className="flex space-x-3">
-          <button className="rounded-full bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
-            Log in
-          </button>
-          <button className="rounded-full bg-black px-4 py-2 text-white hover:bg-gray-900">
-            Sign up free
-          </button>
+          <Link to="/signup">
+            <button className="mr-1 rounded-full bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
+              Log in
+            </button>
+
+            <Link to="/signup"></Link>
+            <button className="rounded-full bg-black px-4 py-2 text-white hover:bg-gray-900">
+              Sign up free
+            </button>
+          </Link>
         </div>
       </div>
     </header>
