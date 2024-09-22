@@ -25,9 +25,14 @@ const Header = () => {
               <span className="mr-2 text-gray-600">
                 Hello, {user.displayName || "User"}
               </span>
+              <Link to="/dashboard">
+                <button className="mr-1 mr-2 bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
+                  Dashboard
+                </button>
+              </Link>
               <button
                 onClick={logout}
-                className="rounded-full bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200"
+                className="rounded-full bg-black px-4 py-2 text-white hover:bg-gray-900"
               >
                 Log out
               </button>

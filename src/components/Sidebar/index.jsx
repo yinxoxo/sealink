@@ -20,15 +20,15 @@ const Sidebar = () => {
 
   return (
     <div className="relative">
-      <button
-        onClick={toggleSidebar}
-        className="absolute left-5 top-5 z-20 rounded-full bg-white p-2"
-      >
-        <FaBars />
-      </button>
       <nav
         className={`fixed flex h-full ${isOpen ? "w-64" : "w-20"} flex-col justify-between bg-white px-2 shadow-lg transition-all duration-300`}
       >
+        <button
+          onClick={toggleSidebar}
+          className="absolute left-5 top-5 z-20 rounded-full bg-white p-2"
+        >
+          <FaBars />
+        </button>
         <div className="p-5">
           <Link to="/">
             <div className="flex justify-center">
