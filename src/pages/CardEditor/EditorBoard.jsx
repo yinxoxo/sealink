@@ -1,8 +1,19 @@
 import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 import PropTypes from "prop-types";
 import NavBar from "./NavBar";
-import { Select, Button, Input, Switch, Upload, message, Slider } from "antd";
-
+import {
+  Select,
+  Button,
+  Input,
+  Switch,
+  Upload,
+  message,
+  Slider,
+  Radio,
+  Space,
+} from "antd";
 import IconCard from "./EditorComponents/IconCard";
 import TextCard from "./EditorComponents/TextCard";
 import ButtonCard from "./EditorComponents/ButtonCard";
@@ -11,13 +22,17 @@ import EditIconModal from "./EditorComponents/EditIconModal";
 import EditButtonModal from "./EditorComponents/EditButtonModal";
 import CropperModal from "./EditorComponents/CropperModal";
 import { SketchPicker } from "react-color";
-import { fontOptions } from "../../CardTemplate/cardContent/fontOptions";
+import { fontOptions } from "../../cardTemplate/cardContent/fontOptions";
 import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
 import { UploadOutlined } from "@ant-design/icons";
 import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import getCroppedImg from "../../utils/getCroppedImg";
 import { useCardEditorContext } from "../../contexts/CardEditorContext";
+import { saveProjectToFirestore } from "../../firebase/uploadUserProjects";
+import { fetchUserProjects } from "../../firebase/fetchUserProjects";
+import { useProjects } from "../../contexts/ProjectsContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const { Option } = Select;
 
@@ -39,6 +54,13 @@ const EditBoard = () => {
     iconSize,
     setIconSize,
   } = useCardEditorContext();
+
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { template } = useParams();
+  const { setProjects } = useProjects();
+
+  const { control, handleSubmit } = useForm();
 
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -67,6 +89,18 @@ const EditBoard = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [editableTextItem, setEditableTextItem] = useState(null);
+
+  const onSubmit = async (data) => {
+    const projectData = {
+      title: data.title,
+      templateId: template,
+    };
+    await saveProjectToFirestore(user.uid, projectData);
+    const updatedProjects = await fetchUserProjects(user);
+    setProjects(updatedProjects);
+
+    navigate("/dashboard");
+  };
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -687,6 +721,64 @@ const EditBoard = () => {
     </div>
   );
 
+  const renderUserProjectForm = () => {
+    return (
+      <div className="rounded-lg bg-gray-100 p-4">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Controller
+            name="title"
+            control={control}
+            rules={{ required: "Title is required" }}
+            render={({ field, fieldState: { error } }) => (
+              <div className="mb-4">
+                <label className="mb-1 block text-sm font-bold text-gray-700">
+                  Title (required)
+                </label>
+                <Input
+                  {...field}
+                  placeholder="Enter project title"
+                  className={`w-full rounded-lg border p-2 ${error ? "border-red-500" : "border-gray-300"}`}
+                />
+                {error && (
+                  <span className="text-sm text-red-500">{error.message}</span>
+                )}
+              </div>
+            )}
+          />
+
+          <Controller
+            name="action"
+            control={control}
+            rules={{ required: "Please select an action" }}
+            defaultValue="draft"
+            render={({ field, fieldState: { error } }) => (
+              <div className="mb-4">
+                <label className="mb-1 block text-sm font-bold text-gray-700">
+                  Action
+                </label>
+                <Radio.Group
+                  {...field}
+                  className={`space-y-2 ${error ? "border-red-500" : ""}`}
+                >
+                  <Space direction="vertical">
+                    <Radio value="publish">Publish to a .sealink.co URL</Radio>
+                    <Radio value="draft">Save as an offline draft</Radio>
+                  </Space>
+                </Radio.Group>
+                {error && (
+                  <span className="text-sm text-red-500">{error.message}</span>
+                )}
+              </div>
+            )}
+          />
+          <Button type="primary" htmlType="submit" className="mt-4">
+            Save
+          </Button>
+        </form>
+      </div>
+    );
+  };
+
   return (
     <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
       <NavBar />
@@ -695,6 +787,8 @@ const EditBoard = () => {
           renderTextEditor()
         ) : editingType === "icon" ? (
           renderIconList()
+        ) : editingType === "saveProject" ? (
+          renderUserProjectForm()
         ) : editingType === "button" ? (
           renderButtonEditor()
         ) : editingType === "background" ? (

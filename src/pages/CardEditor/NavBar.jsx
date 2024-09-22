@@ -1,3 +1,4 @@
+import { useCardEditorContext } from "../../contexts/CardEditorContext";
 import {
   FaPlus,
   FaAnglesLeft,
@@ -13,7 +14,6 @@ import {
   AppstoreAddOutlined,
   FileImageOutlined,
 } from "@ant-design/icons";
-import { useCardEditorContext } from "../../contexts/CardEditorContext";
 
 const NavBar = () => {
   const { setEditingType } = useCardEditorContext();
@@ -66,7 +66,13 @@ const NavBar = () => {
       <FaAnglesRight size={20} className="cursor-pointer" />
       <FaPlay size={20} className="cursor-pointer" />
       <FaDesktop size={20} className="cursor-pointer" />
-      <FaRocket size={20} className="cursor-pointer" />
+      <FaRocket
+        size={20}
+        className="cursor-pointer"
+        onClick={() => {
+          setEditingType("saveProject");
+        }}
+      />
       <FaBars
         size={20}
         className="cursor-pointer"
