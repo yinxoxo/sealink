@@ -13,6 +13,10 @@ export const saveProjectToFirestore = async (userId, projectData) => {
     const docRef = await addDoc(projectsRef, {
       title: projectData.title || "Untitled Project",
       templateId: projectData.templateId,
+      background: projectData.background,
+      socialLinks: projectData.socialLinks,
+      texts: projectData.texts,
+      buttons: projectData.buttons,
       createdTime: serverTimestamp(),
     });
 
