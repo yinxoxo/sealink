@@ -121,7 +121,7 @@ const EditTextModal = ({
 EditTextModal.propTypes = {
   isTextModalVisible: PropTypes.bool.isRequired,
   setIsTextModalVisible: PropTypes.func.isRequired,
-  editTextData: PropTypes.object.isRequired,
+  editTextData: PropTypes.object,
   setEditTextData: PropTypes.func.isRequired,
   handleSaveTextEdit: PropTypes.func.isRequired,
 };

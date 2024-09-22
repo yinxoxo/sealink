@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useProjects } from "../../contexts/ProjectsContext";
-import { Card, Avatar } from "antd";
+import { Card } from "antd";
 import { EditOutlined, SettingOutlined } from "@ant-design/icons";
-
+import dayjs from "dayjs";
 const { Meta } = Card;
 
 const Dashboard = () => {
@@ -32,12 +32,26 @@ const Dashboard = () => {
             }
             actions={[
               <SettingOutlined key="setting" />,
-              <EditOutlined key="edit" />,
+              <Link
+                key="edit"
+                to={`/dashboard/card-editor/${project.templateId}/${project.id}`}
+              >
+                <EditOutlined />
+              </Link>,
             ]}
           >
             <Meta
               title={project.title}
-              description={`Template: ${project.templateId}`}
+              description={
+                <>
+                  <div className="text-gray-500">
+                    {`Template: ${project.templateId}`}
+                  </div>
+                  <div className="mt-2 text-gray-500">
+                    {`Created: ${dayjs(project.createdTime?.toDate()).format("YYYY/MM/DD")}`}
+                  </div>
+                </>
+              }
             />
           </Card>
         ))}

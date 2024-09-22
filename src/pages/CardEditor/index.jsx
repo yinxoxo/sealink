@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ArtCard from "../../CardTemplate/ArtCard";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
@@ -10,7 +10,8 @@ import { useCardEditorContext } from "../../contexts/CardEditorContext";
 const CardEditor = () => {
   const { backgroundSettings, setBackgroundSettings } = useCardEditorContext();
 
-  const { template } = useParams();
+  const { template, projectId } = useParams();
+  console.log(projectId);
 
   const renderTemplate = () => {
     switch (template) {

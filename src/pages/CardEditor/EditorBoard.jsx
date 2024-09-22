@@ -29,7 +29,7 @@ import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import getCroppedImg from "../../utils/getCroppedImg";
 import { useCardEditorContext } from "../../contexts/CardEditorContext";
-import { saveProjectToFirestore } from "../../firebase/uploadUserProjects";
+import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
 import { fetchUserProjects } from "../../firebase/fetchUserProjects";
 import { useProjects } from "../../contexts/ProjectsContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -94,7 +94,49 @@ const EditBoard = () => {
     const projectData = {
       title: data.title,
       templateId: template,
+      background: {
+        color: tempBackgroundColor || null,
+        imageUrl: tempBackgroundImage || null,
+        opacity: tempOpacity,
+      },
+
+      socialLinks: {
+        iconList: icons.map((icon) => ({
+          platform: icon.name,
+          url: icon.href,
+        })),
+        style: {
+          color: iconColor,
+          size: iconSize,
+        },
+      },
+      texts: texts.map((text) => ({
+        content: text.text,
+        style: {
+          fontSize: text.style.fontSize,
+          fontWeight: text.style.fontWeight,
+          color: text.style.color,
+          fontFamily: text.style.fontFamily,
+        },
+      })),
+      buttons: {
+        buttonList: simpleCardButtons.buttons.map((button) => ({
+          text: button.text,
+          url: button.url,
+        })),
+        style: {
+          backgroundColor: simpleCardButtons.style.backgroundColor,
+          width: simpleCardButtons.style.width,
+          color: simpleCardButtons.style.color,
+          borderRadius: simpleCardButtons.style.borderRadius,
+          padding: simpleCardButtons.style.padding,
+          fontSize: simpleCardButtons.style.fontSize,
+          fontWeight: simpleCardButtons.style.fontWeight,
+          fontFamily: simpleCardButtons.style.fontFamily,
+        },
+      },
     };
+    console.log("Project Data:", projectData);
     await saveProjectToFirestore(user.uid, projectData);
     const updatedProjects = await fetchUserProjects(user);
     setProjects(updatedProjects);

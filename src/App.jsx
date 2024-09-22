@@ -39,7 +39,7 @@ function App() {
                 >
                   <Route index element={<Dashboard />} />
                   <Route
-                    path="card-editor/:template"
+                    path="card-editor/:template/:projectId?"
                     element={<CardEditor />}
                   />
                   <Route path="analytics" element={<Analytics />} />
