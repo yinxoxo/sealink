@@ -7,19 +7,6 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const Template = () => {
   const { user } = useAuth();
-  const {
-    hydraText,
-    juiceText,
-    descriptionText,
-    hydraTextStyle,
-    juiceTextStyle,
-    descriptionTextStyle,
-    icons,
-    simpleCardButtons,
-    backgroundSettings,
-    iconColor,
-    iconSize,
-  } = useCardEditorContext();
 
   const navigate = useNavigate();
 
@@ -43,19 +30,7 @@ const Template = () => {
       >
         <div className="card-inner">
           <div className="template-card-size">
-            <SimpleCard
-              hydraText={hydraText}
-              juiceText={juiceText}
-              descriptionText={descriptionText}
-              icons={icons}
-              iconColor={iconColor}
-              iconSize={iconSize}
-              hydraTextStyle={hydraTextStyle}
-              juiceTextStyle={juiceTextStyle}
-              descriptionTextStyle={descriptionTextStyle}
-              simpleCardButtons={simpleCardButtons}
-              backgroundSettings={backgroundSettings}
-            />
+            <SimpleCard />
           </div>
           <div className="card-back template-card-size">
             <div className="flex h-full w-full items-center justify-center bg-white bg-opacity-90">
