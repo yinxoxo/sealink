@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 const TextCard = ({ textItem, index, onEdit, onDelete }) => (
   <Card
-    className="flex h-fit w-full items-center justify-between"
+    className="flex h-fit w-full max-w-[410px] items-center justify-between"
     style={{ body: { padding: "0px" } }}
     actions={[
       <Tooltip title="Edit" key="edit">
@@ -15,7 +15,13 @@ const TextCard = ({ textItem, index, onEdit, onDelete }) => (
       </Tooltip>,
     ]}
   >
-    <Card.Meta title={<span>{textItem.text}</span>} />
+    <Card.Meta
+      title={
+        <span className="max-w-[350px] overflow-hidden text-ellipsis whitespace-normal break-words">
+          {textItem.text}
+        </span>
+      }
+    />
   </Card>
 );
 
