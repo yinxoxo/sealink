@@ -165,7 +165,7 @@ const SimpleCard = () => {
                   </div>
                 ) : item.type === "button" ? (
                   <div
-                    className="w-full"
+                    className="w-full cursor-pointer"
                     onClick={() => setEditingType("button")}
                   >
                     <button
@@ -180,7 +180,7 @@ const SimpleCard = () => {
                   </div>
                 ) : item.type === "icons" ? (
                   <div
-                    className={getItemStyle(item.type)}
+                    className={`${getItemStyle(item.type)} cursor-pointer`}
                     onClick={() => setEditingType("icon")}
                   >
                     {icons.map((icon) => {
