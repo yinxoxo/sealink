@@ -35,13 +35,14 @@ export const CardEditorProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    if (currentProject) {
+    if (currentProject && currentProject[0]) {
       setTexts(currentProject[0].texts);
 
       const newIcons = currentProject[0].socialLinks.iconList.map((link) => ({
-        platform: link.platform,
+        // platform: link.platform,
         icon: ICON_MAP[link.platform],
-        href: link.url,
+        href: link.href,
+        name: link.name,
       }));
       setIcons(newIcons);
 

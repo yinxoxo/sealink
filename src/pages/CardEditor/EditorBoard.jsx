@@ -95,15 +95,18 @@ const EditBoard = () => {
       title: data.title,
       templateId: template,
       background: {
-        color: tempBackgroundColor || null,
-        imageUrl: tempBackgroundImage || null,
+        backgroundColor: tempBackgroundImage ? null : tempBackgroundColor,
+        backgroundImage: tempBackgroundImage
+          ? `url(${tempBackgroundImage})`
+          : null,
         opacity: tempOpacity,
       },
 
       socialLinks: {
         iconList: icons.map((icon) => ({
           platform: icon.name,
-          url: icon.href,
+          href: icon.href,
+          name: icon.name,
         })),
         style: {
           color: iconColor,
@@ -111,7 +114,7 @@ const EditBoard = () => {
         },
       },
       texts: texts.map((text) => ({
-        content: text.text,
+        text: text.text,
         style: {
           fontSize: text.style.fontSize,
           fontWeight: text.style.fontWeight,
@@ -137,6 +140,7 @@ const EditBoard = () => {
       },
     };
     console.log("Project Data:", projectData);
+
     await saveProjectToFirestore(user.uid, projectData);
     const updatedProjects = await fetchUserProjects(user);
     setProjects(updatedProjects);
@@ -235,6 +239,7 @@ const EditBoard = () => {
           id: foundIcon.id,
           name: foundIcon.name,
           icon: foundIcon.icon,
+          href: foundIcon.href,
         };
         setIcons([...icons, newIcon]);
       } else {
