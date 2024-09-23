@@ -23,8 +23,8 @@ function App() {
   return (
     <DndProvider backend={HTML5Backend}>
       <AuthProvider>
-        <ProjectsProvider>
-          <CardEditorProvider>
+        <CardEditorProvider>
+          <ProjectsProvider>
             <Router>
               <Routes>
                 <Route path="/" element={<LayoutWithHeaderFooter />}>
@@ -46,8 +46,8 @@ function App() {
                 </Route>
               </Routes>
             </Router>
-          </CardEditorProvider>
-        </ProjectsProvider>
+          </ProjectsProvider>
+        </CardEditorProvider>
       </AuthProvider>
     </DndProvider>
   );
