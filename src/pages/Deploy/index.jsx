@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCardEditorContext } from "../../contexts/CardEditorContext";
 import SimpleCard from "../../CardTemplate/SimpleCard";
+import Loading from "../../components/Loading";
 
 const Deploy = () => {
   const { projectId } = useParams();
@@ -14,7 +15,7 @@ const Deploy = () => {
   }, [projectId, setProjectId]);
 
   if (!currentProject) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
