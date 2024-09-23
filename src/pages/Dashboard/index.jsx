@@ -23,13 +23,13 @@ const Dashboard = () => {
           <Card
             key={project.id}
             className="mx-auto w-full max-w-xs"
-            cover={
-              <img
-                alt="example"
-                src="https://placekitten.com/300/200"
-                className="w-full object-cover"
-              />
-            }
+            // cover={
+            //   <img
+            //     alt="example"
+            //     src="https://placekitten.com/300/200"
+            //     className="w-full object-cover"
+            //   />
+            // }
             actions={[
               <SettingOutlined key="setting" />,
               <Link
