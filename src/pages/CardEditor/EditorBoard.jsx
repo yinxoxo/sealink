@@ -112,6 +112,8 @@ const EditBoard = () => {
           ? `url(${backgroundSettings.backgroundImage})`
           : null,
         opacity: tempOpacity,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       },
       socialLinks: {
         iconList: icons.map((icon) => ({
@@ -463,11 +465,11 @@ const EditBoard = () => {
               type="range"
               min="10"
               max="100"
-              value={iconSize.size}
+              value={iconSize}
               onChange={(e) => setIconSize(parseInt(e.target.value, 10))}
               className="slider"
             />
-            <span>{iconSize.size}px</span>
+            <span>{iconSize}px</span>
           </div>
 
           <h2 className="my-2 text-lg">Add Icons</h2>
