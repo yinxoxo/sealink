@@ -13,10 +13,12 @@ import {
   Slider,
   Radio,
   Space,
+  Modal,
 } from "antd";
 import IconCard from "./EditorComponents/IconCard";
 import TextCard from "./EditorComponents/TextCard";
 import ButtonCard from "./EditorComponents/ButtonCard";
+import DeployModal from "./EditorComponents/DeployModal";
 import EditTextModal from "./EditorComponents/EditTextModal";
 import EditIconModal from "./EditorComponents/EditIconModal";
 import EditButtonModal from "./EditorComponents/EditButtonModal";
@@ -64,6 +66,10 @@ const EditBoard = () => {
   const { setProjects } = useProjects();
 
   const { control, handleSubmit, setValue } = useForm();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [newProjectUrl, setNewProjectUrl] = useState("");
 
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -166,11 +172,23 @@ const EditBoard = () => {
       }
       const updatedProjects = await fetchUserProjects(user);
       setProjects(updatedProjects);
-      navigate("/dashboard");
+
+      if (data.action === "publish") {
+        setNewProjectUrl(`/sealink/${savedProjectId || projectId}`);
+        setIsModalOpen(true);
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.error("Error during project save:", error);
     }
   };
+
+  useEffect(() => {
+    if (projectId) {
+      console.log("newproject", newProjectUrl);
+    }
+  }, [projectId, newProjectUrl]);
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -832,7 +850,7 @@ const EditBoard = () => {
                   className={`space-y-2 ${error ? "border-red-500" : ""}`}
                 >
                   <Space direction="vertical">
-                    <Radio value="publish">Publish to a .sealink.co URL</Radio>
+                    <Radio value="publish">Publish to a /sealink/id URL</Radio>
                     <Radio value="draft">Save as an offline draft</Radio>
                   </Space>
                 </Radio.Group>
@@ -852,7 +870,13 @@ const EditBoard = () => {
 
   return (
     <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
+      <DeployModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        projectUrl={newProjectUrl}
+      />
       <NavBar />
+
       <div className="flex flex-col p-4">
         {editingType === "text" ? (
           renderTextEditor()
