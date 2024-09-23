@@ -54,6 +54,10 @@ export const CardEditorProvider = ({ children }) => {
           buttons: [...project.buttons.buttonList],
           style: { ...project.buttons.style },
         });
+
+        setBackgroundSettings({
+          ...project.background,
+        });
       }
     }
   }, [currentProject, projectId]);

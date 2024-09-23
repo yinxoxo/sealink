@@ -140,9 +140,7 @@ const SimpleCard = () => {
           backgroundImage: backgroundSettings.backgroundImage
             ? backgroundSettings.backgroundImage
             : "none",
-          backgroundColor: backgroundSettings.backgroundImage
-            ? "transparent"
-            : backgroundSettings.backgroundColor || "none",
+          backgroundColor: backgroundSettings.backgroundColor || "none",
           opacity: backgroundSettings.opacity || 0.6,
           backgroundSize: backgroundSettings.backgroundSize || "cover",
           backgroundPosition: backgroundSettings.backgroundPosition || "center",
