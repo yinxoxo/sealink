@@ -2,7 +2,7 @@ import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
 export const fetchUserProjects = async (user) => {
-  if (!user?.uid) return [];
+  if (!user?.uid) return;
 
   try {
     const q = query(collection(db, `users/${user.uid}/projects`));
@@ -16,6 +16,5 @@ export const fetchUserProjects = async (user) => {
     return userProjects;
   } catch (error) {
     console.error("Error fetching projects: ", error);
-    return [];
   }
 };
