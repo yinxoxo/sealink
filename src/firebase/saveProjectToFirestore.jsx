@@ -1,4 +1,10 @@
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  addDoc,
+  setDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
 export const saveProjectToFirestore = async (
@@ -7,23 +13,41 @@ export const saveProjectToFirestore = async (
   projectData,
 ) => {
   try {
-    const projectRef = doc(db, `users/${userId}/projects/${projectId}`);
-
-    await setDoc(
-      projectRef,
-      {
-        title: projectData.title || "Untitled Project",
-        templateId: projectData.templateId,
-        background: projectData.background,
-        socialLinks: projectData.socialLinks,
-        texts: projectData.texts,
-        buttons: projectData.buttons,
-        createdTime: serverTimestamp(),
-      },
-      { merge: true },
-    );
-
-    console.log("Project saved successfully with ID: ", projectId);
+    if (projectId) {
+      const projectRef = doc(db, `users/${userId}/projects/${projectId}`);
+      await setDoc(
+        projectRef,
+        {
+          title: projectData.title || "Untitled Project",
+          templateId: projectData.templateId,
+          background: projectData.background,
+          socialLinks: projectData.socialLinks,
+          texts: projectData.texts,
+          buttons: projectData.buttons,
+          createdTime: serverTimestamp(),
+        },
+        { merge: true },
+      );
+      console.log("Project saved successfully with ID: ", projectId);
+    } else {
+      const projectRef = await addDoc(
+        collection(db, `users/${userId}/projects`),
+        {
+          title: projectData.title || "Untitled Project",
+          templateId: projectData.templateId,
+          background: projectData.background,
+          socialLinks: projectData.socialLinks,
+          texts: projectData.texts,
+          buttons: projectData.buttons,
+          createdTime: serverTimestamp(),
+        },
+      );
+      console.log(
+        "Project created successfully with auto-generated ID: ",
+        projectRef.id,
+      );
+      return projectRef.id;
+    }
   } catch (error) {
     console.error("Error saving project:", error);
   }
