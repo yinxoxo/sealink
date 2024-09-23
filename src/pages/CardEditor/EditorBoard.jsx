@@ -115,7 +115,7 @@ const EditBoard = () => {
       background: {
         backgroundColor: backgroundSettings.backgroundColor,
         backgroundImage: backgroundSettings.backgroundImage
-          ? `url(${backgroundSettings.backgroundImage})`
+          ? backgroundSettings.backgroundImage
           : null,
         opacity: tempOpacity,
         backgroundSize: "cover",
