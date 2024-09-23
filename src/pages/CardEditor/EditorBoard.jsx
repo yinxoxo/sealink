@@ -39,6 +39,7 @@ const { Option } = Select;
 const EditBoard = () => {
   const {
     projectId,
+    setProjectId,
     currentProject,
     selectedText,
     setSelectedText,
@@ -106,9 +107,9 @@ const EditBoard = () => {
       title: data.title,
       templateId: template,
       background: {
-        backgroundColor: tempBackgroundColor,
-        backgroundImage: tempBackgroundImage
-          ? `url(${tempBackgroundImage})`
+        backgroundColor: backgroundSettings.backgroundColor,
+        backgroundImage: backgroundSettings.backgroundImage
+          ? `url(${backgroundSettings.backgroundImage})`
           : null,
         opacity: tempOpacity,
       },
@@ -152,13 +153,20 @@ const EditBoard = () => {
 
     console.log("Project Data:", projectData);
 
-    if (projectId) {
-      await saveProjectToFirestore(user.uid, projectId, projectData);
+    try {
+      const savedProjectId = await saveProjectToFirestore(
+        user.uid,
+        projectId,
+        projectData,
+      );
+      if (!projectId && savedProjectId) {
+        setProjectId(savedProjectId);
+      }
       const updatedProjects = await fetchUserProjects(user);
       setProjects(updatedProjects);
       navigate("/dashboard");
-    } else {
-      console.error("Project ID is missing.");
+    } catch (error) {
+      console.error("Error during project save:", error);
     }
   };
 
