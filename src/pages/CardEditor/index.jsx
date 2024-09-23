@@ -1,14 +1,11 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ArtCard from "../../CardTemplate/ArtCard";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
-import {
-  useCardEditorContext,
-  CardEditorProvider,
-} from "../../contexts/CardEditorContext";
+import { useCardEditorContext } from "../../contexts/CardEditorContext";
 
 const CardEditor = () => {
   const { template, projectId } = useParams();

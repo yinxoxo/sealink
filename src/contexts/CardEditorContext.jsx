@@ -33,28 +33,30 @@ export const CardEditorProvider = ({ children }) => {
   const [backgroundSettings, setBackgroundSettings] = useState({
     ...initialSimpleCardContent.backgroundSettings,
   });
-
   useEffect(() => {
-    if (currentProject && currentProject[0]) {
-      setTexts(currentProject[0].texts);
+    if (currentProject && currentProject.length > 0 && projectId) {
+      const project = currentProject.find((p) => p.id === projectId);
 
-      const newIcons = currentProject[0].socialLinks.iconList.map((link) => ({
-        // platform: link.platform,
-        icon: ICON_MAP[link.platform],
-        href: link.href,
-        name: link.name,
-      }));
-      setIcons(newIcons);
+      if (project) {
+        setTexts(project.texts);
 
-      setIconColor(currentProject[0].socialLinks.style.color);
-      setIconColor(currentProject[0].socialLinks.style.size);
+        const newIcons = project.socialLinks.iconList.map((link) => ({
+          icon: ICON_MAP[link.platform],
+          href: link.href,
+          name: link.name,
+        }));
+        setIcons(newIcons);
 
-      setSimpleCardButtons({
-        buttons: [...currentProject[0].buttons.buttonList],
-        style: { ...currentProject[0].buttons.style },
-      });
+        setIconColor(project.socialLinks.style.color);
+        setIconSize(project.socialLinks.style.size);
+
+        setSimpleCardButtons({
+          buttons: [...project.buttons.buttonList],
+          style: { ...project.buttons.style },
+        });
+      }
     }
-  }, [currentProject]);
+  }, [currentProject, projectId]);
 
   const contextValue = {
     projectId,

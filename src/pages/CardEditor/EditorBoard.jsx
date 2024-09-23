@@ -38,6 +38,8 @@ const { Option } = Select;
 
 const EditBoard = () => {
   const {
+    projectId,
+    currentProject,
     selectedText,
     setSelectedText,
     texts,
@@ -60,7 +62,7 @@ const EditBoard = () => {
   const { template } = useParams();
   const { setProjects } = useProjects();
 
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, setValue } = useForm();
 
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -89,19 +91,27 @@ const EditBoard = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [editableTextItem, setEditableTextItem] = useState(null);
+  const project = Array.isArray(currentProject)
+    ? currentProject.find((p) => p.id === projectId)
+    : null;
+
+  useEffect(() => {
+    if (project) {
+      setValue("title", project.title || "");
+    }
+  }, [project, setValue]);
 
   const onSubmit = async (data) => {
     const projectData = {
       title: data.title,
       templateId: template,
       background: {
-        backgroundColor: tempBackgroundImage ? null : tempBackgroundColor,
+        backgroundColor: tempBackgroundColor,
         backgroundImage: tempBackgroundImage
           ? `url(${tempBackgroundImage})`
           : null,
         opacity: tempOpacity,
       },
-
       socialLinks: {
         iconList: icons.map((icon) => ({
           platform: icon.name,
@@ -139,13 +149,17 @@ const EditBoard = () => {
         },
       },
     };
+
     console.log("Project Data:", projectData);
 
-    await saveProjectToFirestore(user.uid, projectData);
-    const updatedProjects = await fetchUserProjects(user);
-    setProjects(updatedProjects);
-
-    navigate("/dashboard");
+    if (projectId) {
+      await saveProjectToFirestore(user.uid, projectId, projectData);
+      const updatedProjects = await fetchUserProjects(user);
+      setProjects(updatedProjects);
+      navigate("/dashboard");
+    } else {
+      console.error("Project ID is missing.");
+    }
   };
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
