@@ -66,6 +66,20 @@ const ICON_LIST = [
   },
 ];
 
+const ICON_MAP = {
+  x: FaTwitter,
+  instagram: FaInstagram,
+  threads: FaThreads,
+  facebook: FaFacebook,
+  github: FaGithub,
+  email: FaEnvelope,
+  youtube: FaYoutube,
+  snapchat: FaSnapchat,
+  portrait: FaImagePortrait,
+  dev: FaDev,
+  linkedin: FaLinkedin,
+};
+
 const ICON_STYLE = {
   SimpleCard: {
     color: "#ffffff",
@@ -73,4 +87,4 @@ const ICON_STYLE = {
   },
 };
 
-export { ICON_LIST, ICON_STYLE };
+export { ICON_LIST, ICON_STYLE, ICON_MAP };
