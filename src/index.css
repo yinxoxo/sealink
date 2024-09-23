@@ -8,7 +8,7 @@
   }
 
   .card-container {
-    @apply relative mx-auto min-h-full w-full rounded-3xl shadow-lg;
+    @apply relative min-h-screen w-full rounded-3xl shadow-lg;
   }
 
   .template-card {

@@ -146,7 +146,6 @@ const SimpleCard = () => {
           backgroundPosition: backgroundSettings.backgroundPosition || "center",
         }}
       />
-
       <div className="relative z-10">
         {items.map((item, index) =>
           item && item.id ? (
@@ -170,6 +169,7 @@ const SimpleCard = () => {
                     onClick={() => setEditingType("button")}
                   >
                     <button
+                      className="max-w-[700px]"
                       style={getItemStyle(item.type)}
                       onClick={() => {
                         handleButtonClick(item.url);
