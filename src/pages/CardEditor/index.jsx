@@ -5,13 +5,27 @@ import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
-import { useCardEditorContext } from "../../contexts/CardEditorContext";
+import {
+  useCardEditorContext,
+  CardEditorProvider,
+} from "../../contexts/CardEditorContext";
 
 const CardEditor = () => {
-  const { backgroundSettings, setBackgroundSettings } = useCardEditorContext();
-
   const { template, projectId } = useParams();
-  console.log(projectId);
+  const { setProjectId } = useCardEditorContext();
+
+  useEffect(() => {
+    if (projectId) {
+      setProjectId(projectId);
+      // console.log("set project id:", projectId);
+    }
+  }, [projectId, setProjectId]);
+
+  return <CardEditorContent template={template} />;
+};
+
+const CardEditorContent = ({ template }) => {
+  const { backgroundSettings, setBackgroundSettings } = useCardEditorContext();
 
   const renderTemplate = () => {
     switch (template) {
