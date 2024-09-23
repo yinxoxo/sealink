@@ -146,7 +146,7 @@ const SimpleCard = () => {
           backgroundPosition: backgroundSettings.backgroundPosition || "center",
         }}
       />
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col">
         {items.map((item, index) =>
           item && item.id ? (
             <DraggableItem
@@ -169,7 +169,7 @@ const SimpleCard = () => {
                     onClick={() => setEditingType("button")}
                   >
                     <button
-                      className="max-w-[700px]"
+                      className="max-w-[540px]"
                       style={getItemStyle(item.type)}
                       onClick={() => {
                         handleButtonClick(item.url);
