@@ -2,8 +2,8 @@ import { useNavigate } from "react-router-dom";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import ArtCard from "../../CardTemplate/ArtCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
-import { useCardEditorContext } from "../../contexts/CardEditorContext";
 import { useAuth } from "../../contexts/AuthContext";
+import { CardEditorProvider } from "../../contexts/CardEditorContext"; // 假設的路徑
 
 const Template = () => {
   const { user } = useAuth();
@@ -74,4 +74,12 @@ const Template = () => {
   );
 };
 
-export default Template;
+const TemplateWithProvider = () => {
+  return (
+    <CardEditorProvider>
+      <Template />
+    </CardEditorProvider>
+  );
+};
+
+export default TemplateWithProvider;
