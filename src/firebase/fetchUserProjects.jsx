@@ -12,7 +12,7 @@ export const fetchUserProjects = async (user) => {
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(userProjects);
+    // console.log("fetch project:", userProjects);
     return userProjects;
   } catch (error) {
     console.error("Error fetching projects: ", error);
