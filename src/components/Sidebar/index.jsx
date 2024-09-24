@@ -43,20 +43,32 @@ const Sidebar = () => {
           </Link>
         </div>
 
-        <div className="flex flex-col items-center space-y-1 pb-10">
-          <button className="flex w-4/5 items-center justify-center rounded-full border border-gray-300 bg-white py-3 text-center lg:w-full">
-            <FaChartColumn />
-            <span className={`${isOpen ? "" : "hidden"}`}>Data Analyze</span>
+        <div className="flex flex-col items-center space-y-2 pb-10">
+          <button
+            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center lg:w-full`}
+          >
+            <FaChartColumn className="text-lg" />
+            {isOpen && (
+              <span className="text-sm font-medium">Data Analyze</span>
+            )}
           </button>
-          <button className="flex w-4/5 items-center justify-center rounded-full border border-gray-300 bg-white py-3 text-center lg:w-full">
-            <FaChessQueen />
-            <span className={`${isOpen ? "" : "hidden"}`}>PRO</span>
+
+          <button
+            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center lg:w-full`}
+          >
+            <FaChessQueen className="text-lg" />
+            {isOpen && <span className="text-sm font-medium">PRO</span>}
           </button>
-          <button className="flex w-4/5 items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white py-3 text-center font-bold shadow-md lg:w-full">
-            <FaChildReaching />
-            <span className={`${isOpen ? "" : "hidden"}`}>
-              {user?.displayName || "USER"}
-            </span>
+
+          <button
+            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center font-bold shadow-md lg:w-full`}
+          >
+            <FaChildReaching className="text-lg" />
+            {isOpen && (
+              <span className="text-sm font-medium">
+                {user?.displayName || "USER"}
+              </span>
+            )}
           </button>
         </div>
       </nav>
