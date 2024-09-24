@@ -103,6 +103,7 @@ const EditBoard = () => {
   const project = Array.isArray(currentProject)
     ? currentProject.find((p) => p.id === projectId)
     : null;
+  console.log("order in edit board", itemsOrder);
 
   useEffect(() => {
     if (project) {
@@ -124,8 +125,9 @@ const EditBoard = () => {
         backgroundPosition: "center",
       },
       socialLinks: {
+        id: "icons-1",
         iconList: icons.map((icon) => ({
-          id: icon.id,
+          id: icon.name,
           href: icon.href,
           name: icon.name,
         })),
@@ -134,7 +136,8 @@ const EditBoard = () => {
           size: iconSize,
         },
       },
-      texts: texts.map((text) => ({
+      texts: texts.map((text, index) => ({
+        id: `text-${index + 1}`,
         text: text.text,
         style: {
           fontSize: text.style.fontSize,
@@ -144,7 +147,8 @@ const EditBoard = () => {
         },
       })),
       buttons: {
-        buttonList: simpleCardButtons.buttons.map((button) => ({
+        buttonList: simpleCardButtons.buttons.map((button, index) => ({
+          id: `button-${index + 1}`,
           text: button.text,
           url: button.url,
         })),
@@ -392,7 +396,6 @@ const EditBoard = () => {
               const updatedTexts = texts.filter((_, idx) => idx !== index);
               setTexts(updatedTexts);
 
-              // 同時更新 itemsOrder，移除被刪除的文本
               const updatedItemsOrder = itemsOrder.filter(
                 (orderItem) => orderItem.id !== `text-${index + 1}`,
               );
@@ -418,21 +421,14 @@ const EditBoard = () => {
                 fontFamily: "Arial",
               },
             };
-
-            const newId = `text-${texts.length + 1}`; // 新的 id
-
-            // 更新 texts 狀態
+            const newId = `text-${texts.length + 1}`;
             setTexts([...texts, newTextItem]);
-
-            // 更新 itemsOrder
-            setItemsOrder([
-              ...itemsOrder,
-              { id: newId, type: "text" }, // 新增的 text 要加入 itemsOrder
-            ]);
+            setItemsOrder([...itemsOrder, { id: newId, type: "text" }]);
           }}
         >
           Add New Text
         </button>
+
         <EditTextModal
           isTextModalVisible={isModalVisible}
           setIsTextModalVisible={setIsModalVisible}
@@ -560,8 +556,6 @@ const EditBoard = () => {
           type="primary"
           onClick={() => {
             const newButtonId = `button-${simpleCardButtons.buttons.length + 1}`;
-
-            // 更新按鈕資料
             setSimpleCardButtons((prev) => {
               const newButton = {
                 text: "New Button",
@@ -574,7 +568,6 @@ const EditBoard = () => {
               };
             });
 
-            // 更新 order 資料
             setItemsOrder((prevOrder) => {
               const newItemOrder = { id: newButtonId, type: "button" };
               return [...prevOrder, newItemOrder];
