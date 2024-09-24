@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa6";
 
 const ICON_LIST = [
-  { id: "x", name: "X", icon: FaTwitter, href: "https://twitter.com" },
+  { id: "X", name: "X", icon: FaTwitter, href: "https://twitter.com" },
   {
     id: "Instagram",
     name: "Instagram",

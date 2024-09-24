@@ -123,7 +123,7 @@ const EditBoard = () => {
       },
       socialLinks: {
         iconList: icons.map((icon) => ({
-          platform: icon.name,
+          id: icon.id,
           href: icon.href,
           name: icon.name,
         })),
@@ -183,12 +183,6 @@ const EditBoard = () => {
       console.error("Error during project save:", error);
     }
   };
-
-  useEffect(() => {
-    if (projectId) {
-      console.log("newproject", newProjectUrl);
-    }
-  }, [projectId, newProjectUrl]);
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
