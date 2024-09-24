@@ -59,16 +59,33 @@ const NavBar = () => {
   return (
     <div className="flex items-center justify-between border-2 border-solid border-neutral-300 p-4 text-white">
       <Dropdown overlay={menu} trigger={["click"]}>
-        <FaPlus size={20} className="cursor-pointer" />
+        <FaPlus
+          size={20}
+          className="cursor-pointer"
+          color="rgb(160, 160, 160)"
+        />
       </Dropdown>
 
-      <FaAnglesLeft size={20} className="cursor-pointer" />
-      <FaAnglesRight size={20} className="cursor-pointer" />
-      <FaPlay size={20} className="cursor-pointer" />
-      <FaDesktop size={20} className="cursor-pointer" />
+      <FaAnglesLeft
+        size={20}
+        className="cursor-pointer"
+        color="rgb(160, 160, 160)"
+      />
+      <FaAnglesRight
+        size={20}
+        className="cursor-pointer"
+        color="rgb(160, 160, 160)"
+      />
+      <FaPlay size={20} className="cursor-pointer" color="rgb(160, 160, 160)" />
+      <FaDesktop
+        size={20}
+        className="cursor-pointer"
+        color="rgb(160, 160, 160)"
+      />
       <FaRocket
         size={20}
         className="cursor-pointer"
+        color="rgb(160, 160, 160)"
         onClick={() => {
           setEditingType("saveProject");
         }}
@@ -76,6 +93,7 @@ const NavBar = () => {
       <FaBars
         size={20}
         className="cursor-pointer"
+        color="rgb(160, 160, 160)"
         onClick={() => setEditingType("background")}
       />
     </div>

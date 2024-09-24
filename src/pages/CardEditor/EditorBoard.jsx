@@ -827,7 +827,7 @@ const EditBoard = () => {
 
   const renderUserProjectForm = () => {
     return (
-      <div className="rounded-lg bg-gray-100 p-4">
+      <div className="rounded-lg p-4">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="title"
@@ -884,7 +884,7 @@ const EditBoard = () => {
   };
 
   return (
-    <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-slate-100">
+    <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-white">
       <DeployModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
