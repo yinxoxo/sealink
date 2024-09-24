@@ -18,12 +18,14 @@ export const saveProjectToFirestore = async (
       await setDoc(
         projectRef,
         {
+          itemsOrder: projectData.itemsOrder,
           title: projectData.title || "Untitled Project",
           templateId: projectData.templateId,
           background: projectData.background,
           socialLinks: projectData.socialLinks,
           texts: projectData.texts,
           buttons: projectData.buttons,
+
           createdTime: serverTimestamp(),
         },
         { merge: true },
@@ -33,6 +35,7 @@ export const saveProjectToFirestore = async (
       const projectRef = await addDoc(
         collection(db, `users/${userId}/projects`),
         {
+          itemsOrder: projectData.itemsOrder,
           title: projectData.title || "Untitled Project",
           templateId: projectData.templateId,
           background: projectData.background,

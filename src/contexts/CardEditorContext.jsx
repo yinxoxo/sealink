@@ -35,9 +35,8 @@ export const CardEditorProvider = ({ children }) => {
   });
 
   const [itemsOrder, setItemsOrder] = useState([
-    // 初始化排序
     ...initialSimpleCardContent.texts.map((text, index) => ({
-      id: `text-${index + 1}`, // 你可以根據索引或其它規則生成 id
+      id: `text-${index + 1}`,
       type: "text",
     })),
     { id: `icons-1`, type: "icons" },
@@ -81,6 +80,34 @@ export const CardEditorProvider = ({ children }) => {
         setBackgroundSettings({
           ...project.background,
         });
+        setItemsOrder(project.itemsOrder);
+      }
+    }
+  }, [currentProject, projectId]);
+
+  useEffect(() => {
+    if (currentProject && currentProject.length > 0 && projectId) {
+      const project = currentProject.find((p) => p.id === projectId);
+
+      if (project) {
+        if (
+          project.buttons &&
+          project.buttons.buttonList &&
+          project.buttons.style
+        ) {
+          console.log("Project Buttons List:", project.buttons.buttonList);
+          console.log("Project Buttons Style:", project.buttons.style);
+          setSimpleCardButtons({
+            buttons: project.buttons.buttonList,
+            style: project.buttons.style,
+          });
+        } else {
+          console.warn("No buttons or button style found in project");
+        }
+      } else {
+        console.error(
+          `Project with ID ${projectId} not found in currentProject`,
+        );
       }
     }
   }, [currentProject, projectId]);

@@ -1,16 +1,18 @@
-import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { useDrag, useDrop } from "react-dnd";
 import { useCardEditorContext } from "../contexts/CardEditorContext";
+import { useDrag, useDrop } from "react-dnd";
 import PropTypes from "prop-types";
+import { useState, useEffect, useRef } from "react";
+
 const ItemType = "ITEM";
 
 const DraggableItem = ({ id, content, index, moveItem }) => {
-  const [{ isDragging }, ref] = useDrag({
+  const ref = useRef(null); // 使用 useRef 來引用 DOM 節點
+
+  const [{ isDragging }, drag] = useDrag({
     type: ItemType,
     item: { id, index },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+      isDragging: monitor.isDragging(), // 是否正在拖動
     }),
   });
 
@@ -22,13 +24,38 @@ const DraggableItem = ({ id, content, index, moveItem }) => {
         draggedItem.index = index;
       }
     },
+    drop: (draggedItem) => {
+      if (draggedItem.index !== index) {
+        moveItem(draggedItem.index, index);
+        draggedItem.index = index;
+      }
+    },
   });
 
+  drag(drop(ref));
+
   return (
-    <div ref={(node) => ref(drop(node))} className="fade-in-up my-2 w-full">
+    <div
+      ref={ref}
+      className="fade-in-up my-2 w-full rounded-3xl"
+      style={{
+        transition: "transform 0.2s ease",
+        opacity: isDragging ? 0.6 : 1,
+        boxShadow: isDragging ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none",
+        zIndex: isDragging ? 20 : 1,
+        transformOrigin: "center",
+      }}
+    >
       {content}
     </div>
   );
+};
+
+DraggableItem.propTypes = {
+  id: PropTypes.string.isRequired,
+  content: PropTypes.node.isRequired,
+  index: PropTypes.number.isRequired,
+  moveItem: PropTypes.func.isRequired,
 };
 
 const SimpleCard = () => {
@@ -37,71 +64,118 @@ const SimpleCard = () => {
     icons,
     simpleCardButtons,
     setEditingType,
-    setSelectedText,
     iconColor,
     iconSize,
     backgroundSettings,
+    itemsOrder,
+    setItemsOrder,
   } = useCardEditorContext();
 
-  const [items, setItems] = useState([
-    ...texts.map((text, index) => ({
-      id: uuidv4(),
-      type: "text",
-      content: text.text,
-      index,
-    })),
-    {
-      id: uuidv4(),
-      type: "icons",
-    },
-    ...(simpleCardButtons.buttons || []).map((button) => ({
-      id: uuidv4(),
-      type: "button",
-      content: button.text,
-      url: button.url,
-    })),
-  ]);
+  console.log("simple card itemsorder", itemsOrder);
 
-  useEffect(() => {
-    setItems((prevItems) => {
-      const updatedTextItems = texts.map((text, index) => ({
-        id:
-          prevItems.find((item) => item.type === "text" && item.index === index)
-            ?.id || uuidv4(),
-        type: "text",
-        content: text.text,
-        index,
-      }));
+  console.log("button in simple card", simpleCardButtons);
 
-      const updatedButtonItems = simpleCardButtons.buttons.map((button) => ({
-        id:
-          prevItems.find(
-            (item) => item.type === "button" && item.url === button.url,
-          )?.id || uuidv4(),
-        type: "button",
-        content: button.text,
-        url: button.url,
-      }));
+  const renderItems = () => {
+    return itemsOrder.map((item) => {
+      if (item.type === "text") {
+        const textItem = texts.find(
+          (text, index) => `text-${index + 1}` === item.id,
+        );
+        if (!textItem) return null;
+        return (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            content={
+              <div
+                style={getItemStyle(item.type, textItem)}
+                onClick={() => {
+                  setEditingType("text");
+                }}
+              >
+                {textItem.text}
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
+            moveItem={moveItem}
+          />
+        );
+      } else if (item.type === "button") {
+        const buttonItem = simpleCardButtons.buttons.find(
+          (button, index) => `button-${index + 1}` === item.id,
+        );
+        if (!buttonItem) return null;
+        return (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            content={
+              <div onClick={() => setEditingType("button")} className="w-full">
+                <button
+                  style={getItemStyle(item.type)}
+                  onClick={() => handleButtonClick(buttonItem.url)}
+                >
+                  {buttonItem.text}
+                </button>
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
+            moveItem={moveItem}
+          />
+        );
+      } else if (item.type === "icons") {
+        return (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            content={
+              <div
+                className={`${getItemStyle(item.type)} cursor-pointer`}
+                onClick={() => setEditingType("icon")}
+              >
+                {icons.map((icon) => {
+                  const IconComponent = icon.icon;
 
-      const iconItem = {
-        id: prevItems.find((item) => item.type === "icons")?.id || uuidv4(),
-        type: "icons",
-      };
-
-      return [...updatedTextItems, iconItem, ...updatedButtonItems];
+                  if (!IconComponent) {
+                    console.error(
+                      `IconComponent for ${icon.name} is undefined`,
+                    );
+                    return null;
+                  }
+                  return (
+                    <a
+                      key={icon.id}
+                      href={icon.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <IconComponent size={iconSize} color={iconColor} />
+                    </a>
+                  );
+                })}
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
+            moveItem={moveItem}
+          />
+        );
+      }
+      return null;
     });
-  }, [texts, simpleCardButtons]);
+  };
+
+  //
+  const moveItem = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex) return;
+    const updatedItemsOrder = [...itemsOrder];
+    const [movedItem] = updatedItemsOrder.splice(fromIndex, 1);
+    updatedItemsOrder.splice(toIndex, 0, movedItem);
+
+    setItemsOrder(updatedItemsOrder);
+  };
 
   const handleButtonClick = (url) => {
     window.open(url, "_blank", "noopener,noreferrer");
-  };
-
-  const moveItem = (fromIndex, toIndex) => {
-    if (fromIndex === toIndex) return;
-    const updatedItems = [...items];
-    const [movedItem] = updatedItems.splice(fromIndex, 1);
-    updatedItems.splice(toIndex, 0, movedItem);
-    setItems(updatedItems);
   };
 
   const getItemStyle = (type, item = {}) => {
@@ -132,6 +206,9 @@ const SimpleCard = () => {
     }
   };
 
+  console.log("buttons in simplecard", simpleCardButtons);
+  console.log("order in simpleCard", itemsOrder);
+
   return (
     <div className="card-container relative bg-white p-6 text-center">
       <div
@@ -146,81 +223,9 @@ const SimpleCard = () => {
           backgroundPosition: backgroundSettings.backgroundPosition || "center",
         }}
       />
-      <div className="relative z-10 flex flex-col">
-        {items.map((item, index) =>
-          item && item.id ? (
-            <DraggableItem
-              key={item.id}
-              id={item.id}
-              content={
-                item.type === "text" ? (
-                  <div
-                    style={getItemStyle(item.type, texts[item.index])}
-                    onClick={() => {
-                      setSelectedText(item.index);
-                      setEditingType("text");
-                    }}
-                  >
-                    {item.content}
-                  </div>
-                ) : item.type === "button" ? (
-                  <div
-                    className="w-full cursor-pointer"
-                    onClick={() => setEditingType("button")}
-                  >
-                    <button
-                      className="max-w-[540px]"
-                      style={getItemStyle(item.type)}
-                      onClick={() => {
-                        handleButtonClick(item.url);
-                      }}
-                    >
-                      {item.content}
-                    </button>
-                  </div>
-                ) : item.type === "icons" ? (
-                  <div
-                    className={`${getItemStyle(item.type)} cursor-pointer`}
-                    onClick={() => setEditingType("icon")}
-                  >
-                    {icons.map((icon) => {
-                      const IconComponent = icon.icon;
-
-                      if (typeof IconComponent !== "function") {
-                        console.error("Invalid icon component", IconComponent);
-                        return null;
-                      }
-
-                      return (
-                        <a
-                          key={icon.id}
-                          href={icon.href}
-                          className="text-gray-500 hover:text-gray-700"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <IconComponent size={iconSize} color={iconColor} />
-                        </a>
-                      );
-                    })}
-                  </div>
-                ) : null
-              }
-              index={index}
-              moveItem={moveItem}
-            />
-          ) : null,
-        )}
-      </div>
+      <div className="relative z-10 flex flex-col">{renderItems()}</div>
     </div>
   );
 };
 
 export default SimpleCard;
-
-DraggableItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  content: PropTypes.node.isRequired,
-  index: PropTypes.number.isRequired,
-  moveItem: PropTypes.func.isRequired,
-};
