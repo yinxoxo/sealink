@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, Input, Slider, Select } from "antd";
 import { SketchPicker } from "react-color";
 import PropTypes from "prop-types";
-import { fontOptions } from "../../../cardTemplate/cardContent/fontOptions";
+import fontOptions from "../../../cardTemplate/cardContent/fontOptions";
 
 const { Option } = Select;
 

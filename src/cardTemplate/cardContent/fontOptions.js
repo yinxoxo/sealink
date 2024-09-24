@@ -1,5 +1,5 @@
 // fontOptions.js
-export const fontOptions = [
+const fontOptions = [
   { label: "Arial", value: "Arial, sans-serif" },
   { label: "Georgia", value: "Georgia, serif" },
   { label: "Times New Roman", value: "'Times New Roman', Times, serif" },
@@ -16,3 +16,5 @@ export const fontOptions = [
   { label: "Nunito", value: "'Nunito', sans-serif" },
   { label: "Playfair Display", value: "'Playfair Display', serif" },
 ];
+
+export default fontOptions;

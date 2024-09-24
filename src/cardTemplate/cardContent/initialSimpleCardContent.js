@@ -1,4 +1,4 @@
-export const initialSimpleCardContent = {
+const initialSimpleCardContent = {
   texts: [
     {
       text: "Hydra",
@@ -63,3 +63,5 @@ export const initialSimpleCardContent = {
     backgroundPosition: "center",
   },
 };
+
+export default initialSimpleCardContent;

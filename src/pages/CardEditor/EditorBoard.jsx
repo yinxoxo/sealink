@@ -24,7 +24,7 @@ import EditIconModal from "./EditorComponents/EditIconModal";
 import EditButtonModal from "./EditorComponents/EditButtonModal";
 import CropperModal from "./EditorComponents/CropperModal";
 import { SketchPicker } from "react-color";
-import { fontOptions } from "../../cardTemplate/cardContent/fontOptions";
+import fontOptions from "../../cardTemplate/cardContent/fontOptions";
 import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
 import { UploadOutlined } from "@ant-design/icons";
 import { storage } from "../../firebase/firebaseConfig";
@@ -58,6 +58,8 @@ const EditBoard = () => {
     setIconColor,
     iconSize,
     setIconSize,
+    itemsOrder,
+    setItemsOrder,
   } = useCardEditorContext();
 
   const navigate = useNavigate();
@@ -157,6 +159,7 @@ const EditBoard = () => {
           fontFamily: simpleCardButtons.style.fontFamily,
         },
       },
+      itemsOrder: itemsOrder,
     };
 
     console.log("Project Data:", projectData);
@@ -388,6 +391,12 @@ const EditBoard = () => {
             onDelete={() => {
               const updatedTexts = texts.filter((_, idx) => idx !== index);
               setTexts(updatedTexts);
+
+              // 同時更新 itemsOrder，移除被刪除的文本
+              const updatedItemsOrder = itemsOrder.filter(
+                (orderItem) => orderItem.id !== `text-${index + 1}`,
+              );
+              setItemsOrder(updatedItemsOrder);
             }}
             onUpdate={(index, updatedItem) => {
               const updatedTexts = texts.map((item, idx) =>
@@ -409,7 +418,17 @@ const EditBoard = () => {
                 fontFamily: "Arial",
               },
             };
+
+            const newId = `text-${texts.length + 1}`; // 新的 id
+
+            // 更新 texts 狀態
             setTexts([...texts, newTextItem]);
+
+            // 更新 itemsOrder
+            setItemsOrder([
+              ...itemsOrder,
+              { id: newId, type: "text" }, // 新增的 text 要加入 itemsOrder
+            ]);
           }}
         >
           Add New Text
@@ -540,6 +559,9 @@ const EditBoard = () => {
         <Button
           type="primary"
           onClick={() => {
+            const newButtonId = `button-${simpleCardButtons.buttons.length + 1}`;
+
+            // 更新按鈕資料
             setSimpleCardButtons((prev) => {
               const newButton = {
                 text: "New Button",
@@ -550,6 +572,12 @@ const EditBoard = () => {
                 ...prev,
                 buttons: updatedButtons,
               };
+            });
+
+            // 更新 order 資料
+            setItemsOrder((prevOrder) => {
+              const newItemOrder = { id: newButtonId, type: "button" };
+              return [...prevOrder, newItemOrder];
             });
           }}
         >
