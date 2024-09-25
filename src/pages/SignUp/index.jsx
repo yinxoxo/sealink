@@ -8,6 +8,7 @@ import {
   saveUserToFirestore,
 } from "./auth";
 import { useAuth } from "../../contexts/AuthContext";
+import { FaGoogle } from "react-icons/fa6";
 
 const SignUp = () => {
   const { login } = useAuth();
@@ -206,8 +207,9 @@ const SignUp = () => {
                 <button
                   type="button"
                   onClick={handleGoogleLogin}
-                  className="flex w-full justify-center rounded-lg border border-gray-300 bg-gray-100 py-3 hover:bg-gray-200"
+                  className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-gray-100 py-3 hover:bg-gray-200"
                 >
+                  <FaGoogle className="mr-2" />
                   {isLogin ? "Log in with Google" : "Sign up with Google"}
                 </button>
               </div>
