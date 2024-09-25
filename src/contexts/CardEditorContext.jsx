@@ -63,6 +63,7 @@ export const CardEditorProvider = ({ children }) => {
 
         const newIcons = project.socialLinks.iconList.map((link) => ({
           icon: ICON_MAP[link.name],
+          id: link.id,
           href: link.href,
           name: link.name,
         }));
