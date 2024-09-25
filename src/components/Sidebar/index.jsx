@@ -47,7 +47,7 @@ const Sidebar = () => {
           <button
             className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center lg:w-full`}
           >
-            <FaChartColumn className="text-lg" />
+            <FaChartColumn className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`} />
             {isOpen && (
               <span className="text-sm font-medium">Data Analyze</span>
             )}
@@ -56,14 +56,16 @@ const Sidebar = () => {
           <button
             className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center lg:w-full`}
           >
-            <FaChessQueen className="text-lg" />
+            <FaChessQueen className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`} />
             {isOpen && <span className="text-sm font-medium">PRO</span>}
           </button>
 
           <button
             className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center font-bold shadow-md lg:w-full`}
           >
-            <FaChildReaching className="text-lg" />
+            <FaChildReaching
+              className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`}
+            />
             {isOpen && (
               <span className="text-sm font-medium">
                 {user?.displayName || "USER"}

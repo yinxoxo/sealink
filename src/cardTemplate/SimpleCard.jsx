@@ -87,6 +87,7 @@ const SimpleCard = () => {
             id={item.id}
             content={
               <div
+                className="px-3"
                 style={getItemStyle(item.type, textItem)}
                 onClick={() => {
                   setEditingType("text");
@@ -111,6 +112,7 @@ const SimpleCard = () => {
             content={
               <div onClick={() => setEditingType("button")} className="w-full">
                 <button
+                  className="max-w-[540px]"
                   style={getItemStyle(item.type)}
                   onClick={() => handleButtonClick(buttonItem.url)}
                 >

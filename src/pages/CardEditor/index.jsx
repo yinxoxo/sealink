@@ -72,9 +72,9 @@ const CardEditorContent = ({ template }) => {
   }, [template, setBackgroundSettings]);
 
   return (
-    <section className="ml-64 flex h-full min-h-screen w-full overflow-y-auto border-2 border-solid border-neutral-300">
+    <section className="ml-64 flex h-full min-h-screen w-full overflow-y-auto">
       <div
-        className="flex flex-[7] flex-col items-center border-2 border-solid border-neutral-300"
+        className="flex flex-[7] flex-col items-center"
         style={{
           backgroundColor: backgroundSettings.backgroundColor,
           backgroundImage: backgroundSettings.backgroundImage,
