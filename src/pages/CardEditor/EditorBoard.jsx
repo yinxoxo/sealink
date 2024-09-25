@@ -103,7 +103,9 @@ const EditBoard = () => {
   const project = Array.isArray(currentProject)
     ? currentProject.find((p) => p.id === projectId)
     : null;
-  console.log("order in edit board", itemsOrder);
+
+  console.log("current project in edit", currentProject);
+  // console.log("icon in edit", icons);
 
   useEffect(() => {
     if (project) {
@@ -317,7 +319,11 @@ const EditBoard = () => {
   };
 
   const handleIconDelete = (id) => {
-    setIcons(icons.filter((icon) => icon.id !== id));
+    console.log("Deleting icon with ID:", id);
+    const updatedIcons = icons.filter((icon) => icon.id !== id);
+    console.log("Icons after deletion:", updatedIcons);
+
+    setIcons(updatedIcons);
   };
 
   const handleColorChange = (color) => {
@@ -380,7 +386,7 @@ const EditBoard = () => {
     const currentFontStyle = texts[selectedText]?.style || {};
     return (
       <>
-        <h1 className="text-xl">Texts</h1>
+        <h1 className="mb-4 text-xl">Texts</h1>
         {texts.map((item, index) => (
           <TextCard
             key={index}
@@ -507,9 +513,20 @@ const EditBoard = () => {
           >
             {ICON_LIST.map((icon) => {
               const IconComponent = icon.icon;
+              const isIconAdded = icons.some(
+                (existingIcon) => existingIcon.name === icon.name,
+              );
+
               return (
-                <Option key={icon.name} value={icon.name}>
-                  <div className="flex items-center">
+                <Option
+                  key={icon.name}
+                  value={icon.name}
+                  disabled={isIconAdded}
+                >
+                  <div
+                    className="flex items-center"
+                    style={{ opacity: isIconAdded ? 0.5 : 1 }}
+                  >
                     <IconComponent size={20} className="mr-2" />
                     <span>{icon.name}</span>
                   </div>
@@ -835,7 +852,7 @@ const EditBoard = () => {
             rules={{ required: "Title is required" }}
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
-                <label className="mb-1 block text-sm font-bold text-gray-700">
+                <label className="mb-1 block font-bold text-gray-700">
                   Title (required)
                 </label>
                 <Input
@@ -857,7 +874,7 @@ const EditBoard = () => {
             defaultValue="draft"
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
-                <label className="mb-1 block text-sm font-bold text-gray-700">
+                <label className="mb-1 block font-bold text-gray-700">
                   Action
                 </label>
                 <Radio.Group
@@ -884,7 +901,7 @@ const EditBoard = () => {
   };
 
   return (
-    <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto border-2 border-solid border-neutral-300 bg-white">
+    <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto bg-white">
       <DeployModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

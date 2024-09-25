@@ -74,10 +74,6 @@ const SimpleCard = () => {
     setItemsOrder,
   } = useCardEditorContext();
 
-  console.log("simple card itemsorder", itemsOrder);
-
-  console.log("button in simple card", simpleCardButtons);
-
   const renderItems = () => {
     return itemsOrder.map((item) => {
       if (item.type === "text") {
@@ -211,9 +207,6 @@ const SimpleCard = () => {
         return "";
     }
   };
-
-  console.log("buttons in simplecard", simpleCardButtons);
-  console.log("order in simpleCard", itemsOrder);
 
   return (
     <div className="card-container relative bg-white p-6 text-center">
