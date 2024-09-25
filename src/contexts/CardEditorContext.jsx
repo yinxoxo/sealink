@@ -68,7 +68,6 @@ export const CardEditorProvider = ({ children }) => {
           name: link.name,
         }));
         setIcons(newIcons);
-        console.log("icon", newIcons);
 
         setIconColor(project.socialLinks.style.color);
         setIconSize(project.socialLinks.style.size);
@@ -86,32 +85,30 @@ export const CardEditorProvider = ({ children }) => {
     }
   }, [currentProject, projectId]);
 
-  useEffect(() => {
-    if (currentProject && currentProject.length > 0 && projectId) {
-      const project = currentProject.find((p) => p.id === projectId);
+  // useEffect(() => {
+  //   if (currentProject && currentProject.length > 0 && projectId) {
+  //     const project = currentProject.find((p) => p.id === projectId);
 
-      if (project) {
-        if (
-          project.buttons &&
-          project.buttons.buttonList &&
-          project.buttons.style
-        ) {
-          console.log("Project Buttons List:", project.buttons.buttonList);
-          console.log("Project Buttons Style:", project.buttons.style);
-          setSimpleCardButtons({
-            buttons: project.buttons.buttonList,
-            style: project.buttons.style,
-          });
-        } else {
-          console.warn("No buttons or button style found in project");
-        }
-      } else {
-        console.error(
-          `Project with ID ${projectId} not found in currentProject`,
-        );
-      }
-    }
-  }, [currentProject, projectId]);
+  //     if (project) {
+  //       if (
+  //         project.buttons &&
+  //         project.buttons.buttonList &&
+  //         project.buttons.style
+  //       ) {
+  //         setSimpleCardButtons({
+  //           buttons: project.buttons.buttonList,
+  //           style: project.buttons.style,
+  //         });
+  //       } else {
+  //         console.warn("No buttons or button style found in project");
+  //       }
+  //     } else {
+  //       console.error(
+  //         `Project with ID ${projectId} not found in currentProject`,
+  //       );
+  //     }
+  //   }
+  // }, [currentProject, projectId]);
 
   const contextValue = {
     projectId,
