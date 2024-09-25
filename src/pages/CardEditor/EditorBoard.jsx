@@ -268,7 +268,6 @@ const EditBoard = () => {
       icon.id === editIconData.id ? editIconData : icon,
     );
     setIcons(updatedIcons);
-    setIconColor(editIconData.color);
 
     setIsModalVisible(false);
   };
@@ -456,6 +455,7 @@ const EditBoard = () => {
             <IconCard
               key={icon.id}
               icon={icon.icon}
+              iconColor="black"
               iconName={icon.name}
               onEdit={() => handleIconEdit(icon.name)}
               onDelete={() => handleIconDelete(icon.id)}
