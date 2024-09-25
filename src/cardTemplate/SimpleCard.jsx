@@ -1,18 +1,18 @@
 import { useCardEditorContext } from "../contexts/CardEditorContext";
 import { useDrag, useDrop } from "react-dnd";
 import PropTypes from "prop-types";
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 
 const ItemType = "ITEM";
 
 const DraggableItem = ({ id, content, index, moveItem }) => {
-  const ref = useRef(null); // 使用 useRef 來引用 DOM 節點
+  const ref = useRef(null);
 
   const [{ isDragging }, drag] = useDrag({
     type: ItemType,
     item: { id, index },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(), // 是否正在拖動
+      isDragging: monitor.isDragging(),
     }),
   });
 
@@ -39,8 +39,11 @@ const DraggableItem = ({ id, content, index, moveItem }) => {
       ref={ref}
       className="fade-in-up my-2 w-full rounded-3xl"
       style={{
-        transition: "transform 0.2s ease",
-        opacity: isDragging ? 0.6 : 1,
+        transition: "transform 0.3s ease",
+        opacity: isDragging ? 0.8 : 1,
+        backgroundColor: isDragging
+          ? "rgba(255, 255, 255, 0.2)"
+          : "transparent",
         boxShadow: isDragging ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none",
         zIndex: isDragging ? 20 : 1,
         transformOrigin: "center",
@@ -142,11 +145,14 @@ const SimpleCard = () => {
                     );
                     return null;
                   }
+
+                  const href =
+                    icon.name === "Email" ? `mailto:${icon.href}` : icon.href;
                   return (
                     <a
                       key={icon.id}
-                      href={icon.href}
-                      target="_blank"
+                      href={href}
+                      target={icon.name === "email" ? "_self" : "_blank"}
                       rel="noopener noreferrer"
                     >
                       <IconComponent size={iconSize} color={iconColor} />

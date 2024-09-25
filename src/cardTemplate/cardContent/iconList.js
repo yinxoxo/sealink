@@ -42,7 +42,7 @@ const ICON_LIST = [
     id: "Email",
     name: "Email",
     icon: FaEnvelope,
-    href: "mailto:someone@example.com",
+    href: "mailto:youremail@mail.com",
   },
   {
     id: "Youtube",
