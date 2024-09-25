@@ -6,20 +6,14 @@ import {
   ICON_STYLE,
   ICON_MAP,
 } from "../cardTemplate/cardContent/iconList";
-// import { useProjects } from "./ProjectsContext";
 
 const CardEditorContext = createContext();
 
 export const useCardEditorContext = () => useContext(CardEditorContext);
 
 export const CardEditorProvider = ({ children }) => {
-  // with project
-  // const { projects } = useProjects();
   const [projectId, setProjectId] = useState(null);
-
   const [currentProject, setCurrentProject] = useState(null);
-
-  // init edit
   const [editingType, setEditingType] = useState(null);
   const [icons, setIcons] = useState(ICON_LIST.slice(0, 3));
   const [iconColor, setIconColor] = useState(ICON_STYLE.SimpleCard.color);
