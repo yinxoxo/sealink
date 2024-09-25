@@ -646,33 +646,6 @@ const EditBoard = () => {
         </div>
 
         <div className="mt-4">
-          <label>Text Color</label>
-          <div
-            style={{
-              backgroundColor: style.color,
-              width: "40px",
-              height: "40px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={() => {
-              setShowFontColorPicker(!showFontColorPicker);
-              setShowBackgroundColorPicker(false);
-            }}
-          />
-          {showFontColorPicker && (
-            <div style={{ position: "absolute", zIndex: 2 }}>
-              <SketchPicker
-                color={style.color}
-                onChangeComplete={(color) =>
-                  handleButtonStyleChange("color", color.hex)
-                }
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="mt-4">
           <label>Border Radius</label>
           <input
             type="range"
@@ -756,6 +729,33 @@ const EditBoard = () => {
               </Option>
             ))}
           </Select>
+        </div>
+
+        <div className="mt-4">
+          <label>Text Color</label>
+          <div
+            style={{
+              backgroundColor: style.color,
+              width: "40px",
+              height: "40px",
+              cursor: "pointer",
+              borderRadius: "5px",
+            }}
+            onClick={() => {
+              setShowFontColorPicker(!showFontColorPicker);
+              setShowBackgroundColorPicker(false);
+            }}
+          />
+          {showFontColorPicker && (
+            <div style={{ position: "absolute", zIndex: 2 }}>
+              <SketchPicker
+                color={style.color}
+                onChangeComplete={(color) =>
+                  handleButtonStyleChange("color", color.hex)
+                }
+              />
+            </div>
+          )}
         </div>
       </>
     );
