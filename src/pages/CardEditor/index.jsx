@@ -9,20 +9,23 @@ import { useCardEditorContext } from "../../contexts/CardEditorContext";
 
 const CardEditor = () => {
   const { template, projectId } = useParams();
-  const { setProjectId } = useCardEditorContext();
+  const { setProjectId, setCurrentProject } = useCardEditorContext();
 
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId);
-      // console.log("set project id:", projectId);
+    } else {
+      setProjectId(null);
+      setCurrentProject(null);
     }
-  }, [projectId, setProjectId]);
+  }, [projectId, setProjectId, setCurrentProject]);
 
   return <CardEditorContent template={template} />;
 };
 
 const CardEditorContent = ({ template }) => {
-  const { backgroundSettings, setBackgroundSettings } = useCardEditorContext();
+  const { backgroundSettings, setBackgroundSettings, currentProject } =
+    useCardEditorContext();
 
   const renderTemplate = () => {
     switch (template) {
@@ -38,38 +41,31 @@ const CardEditorContent = ({ template }) => {
   };
 
   useEffect(() => {
-    let backgroundConfig;
+    let backgroundConfig = backgroundSettings;
 
-    switch (template) {
-      case "SimpleCard":
-        backgroundConfig = backgroundSettings;
-        break;
-      case "ArtCard":
-      case "BusinessCard":
-        backgroundConfig = {};
-        break;
-      default:
-        backgroundConfig = null;
+    if (currentProject && currentProject.background) {
+      backgroundConfig = {
+        ...backgroundConfig,
+        ...currentProject.background,
+      };
     }
 
-    if (backgroundConfig) {
-      setBackgroundSettings((prevSettings) => {
-        const newSettings = {
-          backgroundColor: backgroundConfig.backgroundColor || "none",
-          backgroundImage: backgroundConfig.backgroundImage
-            ? backgroundConfig.backgroundImage
-            : "none",
-          backgroundSize: backgroundConfig.backgroundSize || "cover",
-          backgroundPosition: backgroundConfig.backgroundPosition || "center",
-        };
+    setBackgroundSettings((prevSettings) => {
+      const newSettings = {
+        backgroundColor: backgroundConfig.backgroundColor || "none",
+        backgroundImage: backgroundConfig.backgroundImage
+          ? `url(${backgroundConfig.backgroundImage})`
+          : "none",
+        backgroundSize: backgroundConfig.backgroundSize || "cover",
+        backgroundPosition: backgroundConfig.backgroundPosition || "center",
+      };
 
-        if (JSON.stringify(prevSettings) !== JSON.stringify(newSettings)) {
-          return newSettings;
-        }
-        return prevSettings;
-      });
-    }
-  }, [template, setBackgroundSettings]);
+      if (JSON.stringify(prevSettings) !== JSON.stringify(newSettings)) {
+        return newSettings;
+      }
+      return prevSettings;
+    });
+  }, [template, currentProject, backgroundSettings, setBackgroundSettings]);
 
   return (
     <section className="ml-64 flex h-full min-h-screen w-full overflow-y-auto">
