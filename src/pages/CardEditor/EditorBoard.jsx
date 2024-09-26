@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
+import { useMutation, useQueryClient } from "react-query";
 import PropTypes from "prop-types";
 import NavBar from "./NavBar";
 import {
@@ -33,7 +34,7 @@ import getCroppedImg from "../../utils/getCroppedImg";
 import { useCardEditorContext } from "../../contexts/CardEditorContext";
 import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
 import { fetchUserProjects } from "../../firebase/fetchUserProjects";
-import { useProjects } from "../../contexts/ProjectsContext";
+import { useProjects } from "../../contexts/ProjectContext.jsx/ProjectsProvider";
 import { useAuth } from "../../contexts/AuthContext";
 
 const { Option } = Select;
@@ -62,10 +63,10 @@ const EditBoard = () => {
     setItemsOrder,
   } = useCardEditorContext();
 
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { template } = useParams();
-  const { setProjects } = useProjects();
 
   const { control, handleSubmit, setValue } = useForm();
 
@@ -100,18 +101,45 @@ const EditBoard = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [editableTextItem, setEditableTextItem] = useState(null);
-  const project = Array.isArray(currentProject)
-    ? currentProject.find((p) => p.id === projectId)
-    : null;
 
-  console.log("current project in edit", currentProject);
+  const mutation = useMutation(
+    (newProject) => saveProjectToFirestore(user.uid, projectId, newProject),
+    {
+      onSuccess: (savedProjectId, variables) => {
+        const { action } = variables;
+        // 如果是新專案，設置 projectId
+        if (!projectId && savedProjectId) {
+          setProjectId(savedProjectId);
+        }
+
+        // 刷新專案列表快取
+        queryClient.invalidateQueries("userProjects");
+
+        // 決定是否發佈專案或返回 Dashboard
+        if (action === "publish") {
+          setNewProjectUrl(`/sealink/${savedProjectId || projectId}`);
+          setIsModalOpen(true);
+        } else {
+          navigate("/dashboard");
+        }
+      },
+      onError: (error) => {
+        console.error("Error saving project:", error);
+      },
+    },
+  );
+  // const project = Array.isArray(currentProject)
+  //   ? currentProject.find((p) => p.id === projectId)
+  //   : null;
+
+  // console.log("current project in edit", currentProject);
   // console.log("icon in edit", icons);
 
   useEffect(() => {
-    if (project) {
-      setValue("title", project.title || "");
+    if (currentProject) {
+      setValue("title", currentProject.title || "");
     }
-  }, [project, setValue]);
+  }, [currentProject, setValue]);
 
   const onSubmit = async (data) => {
     const projectData = {
@@ -119,9 +147,7 @@ const EditBoard = () => {
       templateId: template,
       background: {
         backgroundColor: backgroundSettings.backgroundColor,
-        backgroundImage: backgroundSettings.backgroundImage
-          ? backgroundSettings.backgroundImage
-          : null,
+        backgroundImage: backgroundSettings.backgroundImage || null,
         opacity: tempOpacity,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -170,27 +196,11 @@ const EditBoard = () => {
 
     console.log("Project Data:", projectData);
 
-    try {
-      const savedProjectId = await saveProjectToFirestore(
-        user.uid,
-        projectId,
-        projectData,
-      );
-      if (!projectId && savedProjectId) {
-        setProjectId(savedProjectId);
-      }
-      const updatedProjects = await fetchUserProjects(user);
-      setProjects(updatedProjects);
-
-      if (data.action === "publish") {
-        setNewProjectUrl(`/sealink/${savedProjectId || projectId}`);
-        setIsModalOpen(true);
-      } else {
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      console.error("Error during project save:", error);
-    }
+    // 使用 React Query 的 useMutation 來處理專案保存
+    // 調用 mutation 來提交數據
+    mutation.mutate(projectData, {
+      action: data.action, // 傳入 action
+    });
   };
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {

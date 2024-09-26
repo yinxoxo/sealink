@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
+import { useProjects } from "./ProjectContext.jsx/ProjectsProvider";
 import initialSimpleCardContent from "../cardTemplate/cardContent/initialSimpleCardContent";
 import {
   ICON_LIST,
@@ -40,6 +41,44 @@ export const CardEditorProvider = ({ children }) => {
     })),
   ]);
 
+  const { projects } = useProjects();
+
+  useEffect(() => {
+    if (projects && projects.length > 0 && projectId) {
+      const selectedProject = projects.find((p) => p.id === projectId);
+      if (selectedProject) {
+        setCurrentProject(selectedProject);
+      }
+    }
+  }, [projects, projectId]);
+
+  useEffect(() => {
+    if (currentProject) {
+      setTexts(currentProject.texts);
+
+      const newIcons = currentProject.socialLinks.iconList.map((link) => ({
+        icon: ICON_MAP[link.name],
+        id: link.id,
+        href: link.href,
+        name: link.name,
+      }));
+      setIcons(newIcons);
+
+      setIconColor(currentProject.socialLinks.style.color);
+      setIconSize(currentProject.socialLinks.style.size);
+
+      setSimpleCardButtons({
+        buttons: [...currentProject.buttons.buttonList],
+        style: { ...currentProject.buttons.style },
+      });
+
+      setBackgroundSettings({
+        ...currentProject.background,
+      });
+      setItemsOrder(currentProject.itemsOrder);
+    }
+  }, [currentProject, projectId]);
+
   useEffect(() => {
     if (!projectId && !currentProject) {
       setBackgroundSettings({
@@ -47,62 +86,6 @@ export const CardEditorProvider = ({ children }) => {
       });
     }
   }, [projectId, currentProject]);
-
-  useEffect(() => {
-    if (currentProject && currentProject.length > 0 && projectId) {
-      const project = currentProject.find((p) => p.id === projectId);
-
-      if (project) {
-        setTexts(project.texts);
-
-        const newIcons = project.socialLinks.iconList.map((link) => ({
-          icon: ICON_MAP[link.name],
-          id: link.id,
-          href: link.href,
-          name: link.name,
-        }));
-        setIcons(newIcons);
-
-        setIconColor(project.socialLinks.style.color);
-        setIconSize(project.socialLinks.style.size);
-
-        setSimpleCardButtons({
-          buttons: [...project.buttons.buttonList],
-          style: { ...project.buttons.style },
-        });
-
-        setBackgroundSettings({
-          ...project.background,
-        });
-        setItemsOrder(project.itemsOrder);
-      }
-    }
-  }, [currentProject, projectId]);
-
-  // useEffect(() => {
-  //   if (currentProject && currentProject.length > 0 && projectId) {
-  //     const project = currentProject.find((p) => p.id === projectId);
-
-  //     if (project) {
-  //       if (
-  //         project.buttons &&
-  //         project.buttons.buttonList &&
-  //         project.buttons.style
-  //       ) {
-  //         setSimpleCardButtons({
-  //           buttons: project.buttons.buttonList,
-  //           style: project.buttons.style,
-  //         });
-  //       } else {
-  //         console.warn("No buttons or button style found in project");
-  //       }
-  //     } else {
-  //       console.error(
-  //         `Project with ID ${projectId} not found in currentProject`,
-  //       );
-  //     }
-  //   }
-  // }, [currentProject, projectId]);
 
   const contextValue = {
     projectId,

@@ -17,41 +17,46 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { CardEditorProvider } from "./contexts/CardEditorContext";
 import { AuthProvider } from "./contexts/AuthContext";
-import { ProjectsProvider } from "./contexts/ProjectsContext";
+import { ProjectsProvider } from "./contexts/ProjectContext.jsx/ProjectsProvider";
 import PrivateRoute from "./components/PrivateRoute";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <AuthProvider>
-        <CardEditorProvider>
+    <QueryClientProvider client={queryClient}>
+      <DndProvider backend={HTML5Backend}>
+        <AuthProvider>
           <ProjectsProvider>
-            <Router>
-              <Routes>
-                <Route path="/" element={<LayoutWithHeaderFooter />}>
-                  <Route index element={<Home />} />
-                  <Route path="templates" element={<Templates />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Route>
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/sealink/:projectId?" element={<Deploy />} />
-                <Route
-                  path="/dashboard"
-                  element={<PrivateRoute element={<LayoutWithSidebar />} />}
-                >
-                  <Route index element={<Dashboard />} />
+            <CardEditorProvider>
+              <Router>
+                <Routes>
+                  <Route path="/" element={<LayoutWithHeaderFooter />}>
+                    <Route index element={<Home />} />
+                    <Route path="templates" element={<Templates />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Route>
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/sealink/:projectId?" element={<Deploy />} />
                   <Route
-                    path="card-editor/:template/:projectId?"
-                    element={<CardEditor />}
-                  />
-                  <Route path="analytics" element={<Analytics />} />
-                </Route>
-              </Routes>
-            </Router>
+                    path="/dashboard"
+                    element={<PrivateRoute element={<LayoutWithSidebar />} />}
+                  >
+                    <Route index element={<Dashboard />} />
+                    <Route
+                      path="card-editor/:template/:projectId?"
+                      element={<CardEditor />}
+                    />
+                    <Route path="analytics" element={<Analytics />} />
+                  </Route>
+                </Routes>
+              </Router>
+            </CardEditorProvider>
           </ProjectsProvider>
-        </CardEditorProvider>
-      </AuthProvider>
-    </DndProvider>
+        </AuthProvider>
+      </DndProvider>
+    </QueryClientProvider>
   );
 }
 

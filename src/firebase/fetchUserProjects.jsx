@@ -1,8 +1,11 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "./firebaseConfig";
+import { useQuery } from "react-query";
 
 export const fetchUserProjects = async (user) => {
-  if (!user?.uid) return;
+  if (!user?.uid) {
+    throw new Error("User ID is required");
+  }
 
   try {
     const q = query(collection(db, `users/${user.uid}/projects`));
@@ -12,9 +15,16 @@ export const fetchUserProjects = async (user) => {
       id: doc.id,
       ...doc.data(),
     }));
-    // console.log("fetch project:", userProjects);
+
     return userProjects;
   } catch (error) {
     console.error("Error fetching projects: ", error);
+    throw error;
   }
+};
+
+export const useUserProjects = (user) => {
+  return useQuery(["userProjects", user?.uid], () => fetchUserProjects(user), {
+    enabled: !!user?.uid,
+  });
 };
