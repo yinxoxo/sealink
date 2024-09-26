@@ -1,4 +1,4 @@
-import { useCardEditorContext } from "../contexts/CardEditorContext";
+import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
 import { useDrag, useDrop } from "react-dnd";
 import PropTypes from "prop-types";
 import { useRef } from "react";

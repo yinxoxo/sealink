@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-
-const AuthContext = createContext();
+import { AuthContext } from "./useAuth";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -54,5 +53,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

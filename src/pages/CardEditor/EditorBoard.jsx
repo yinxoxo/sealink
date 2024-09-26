@@ -31,11 +31,9 @@ import { UploadOutlined } from "@ant-design/icons";
 import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import getCroppedImg from "../../utils/getCroppedImg";
-import { useCardEditorContext } from "../../contexts/CardEditorContext";
+import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
-import { fetchUserProjects } from "../../firebase/fetchUserProjects";
-import { useProjects } from "../../contexts/ProjectContext/useProjects";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
 
 const { Option } = Select;
 

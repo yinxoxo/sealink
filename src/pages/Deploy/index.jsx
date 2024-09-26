@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useCardEditorContext } from "../../contexts/CardEditorContext";
+import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import Loading from "../../components/Loading";
 

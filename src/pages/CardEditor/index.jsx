@@ -5,7 +5,7 @@ import SimpleCard from "../../CardTemplate/SimpleCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
-import { useCardEditorContext } from "../../contexts/CardEditorContext";
+import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 
 const CardEditor = () => {
   const { template, projectId } = useParams();

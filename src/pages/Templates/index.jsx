@@ -2,8 +2,8 @@ import { useNavigate } from "react-router-dom";
 import SimpleCard from "../../CardTemplate/SimpleCard";
 import ArtCard from "../../CardTemplate/ArtCard";
 import BusinessCard from "../../CardTemplate/BusinessCard";
-import { useAuth } from "../../contexts/AuthContext";
-import { CardEditorProvider } from "../../contexts/CardEditorContext";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
+import { CardEditorProvider } from "../../contexts/CardEditorContext/CardEditorProvider";
 
 const Template = () => {
   const { user } = useAuth();

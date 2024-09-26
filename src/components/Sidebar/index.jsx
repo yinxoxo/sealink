@@ -2,7 +2,7 @@ import { useState } from "react";
 import sealinkLogo from "../../images/logo.png";
 
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
 import {
   FaChildReaching,
   FaBars,

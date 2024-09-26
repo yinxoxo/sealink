@@ -7,7 +7,7 @@ import {
   registerWithEmail,
   saveUserToFirestore,
 } from "./auth";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { FaGoogle } from "react-icons/fa6";
 
 const SignUp = () => {

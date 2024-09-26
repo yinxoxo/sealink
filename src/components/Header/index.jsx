@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import sealinkLogo from "../../images/logo.png";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
 
 const Header = () => {
   const { user, logout } = useAuth();

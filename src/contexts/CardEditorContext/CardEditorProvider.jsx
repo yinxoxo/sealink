@@ -1,16 +1,14 @@
-import { useEffect } from "react";
-import { createContext, useContext, useState } from "react";
-import { useProjects } from "./ProjectContext/useProjects";
-import initialSimpleCardContent from "../cardTemplate/cardContent/initialSimpleCardContent";
+import { useEffect, useState } from "react";
+import { createContext } from "react";
+import { useProjects } from "../ProjectContext/useProjects";
+import initialSimpleCardContent from "../../cardTemplate/cardContent/initialSimpleCardContent";
 import {
   ICON_LIST,
   ICON_STYLE,
   ICON_MAP,
-} from "../cardTemplate/cardContent/iconList";
+} from "../../cardTemplate/cardContent/iconList";
 
-const CardEditorContext = createContext();
-
-export const useCardEditorContext = () => useContext(CardEditorContext);
+export const CardEditorContext = createContext();
 
 export const CardEditorProvider = ({ children }) => {
   const [projectId, setProjectId] = useState(null);
@@ -55,7 +53,6 @@ export const CardEditorProvider = ({ children }) => {
   useEffect(() => {
     if (currentProject) {
       setTexts(currentProject.texts);
-
       const newIcons = currentProject.socialLinks.iconList.map((link) => ({
         icon: ICON_MAP[link.name],
         id: link.id,
@@ -63,15 +60,12 @@ export const CardEditorProvider = ({ children }) => {
         name: link.name,
       }));
       setIcons(newIcons);
-
       setIconColor(currentProject.socialLinks.style.color);
       setIconSize(currentProject.socialLinks.style.size);
-
       setSimpleCardButtons({
         buttons: [...currentProject.buttons.buttonList],
         style: { ...currentProject.buttons.style },
       });
-
       setBackgroundSettings({
         ...currentProject.background,
       });

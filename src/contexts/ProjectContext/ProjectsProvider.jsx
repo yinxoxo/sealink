@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { useUserProjects } from "../../firebase/fetchUserProjects";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../AuthContext/useAuth";
 
 export const ProjectsContext = createContext();
 
