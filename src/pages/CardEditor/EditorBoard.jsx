@@ -34,7 +34,7 @@ import getCroppedImg from "../../utils/getCroppedImg";
 import { useCardEditorContext } from "../../contexts/CardEditorContext";
 import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
 import { fetchUserProjects } from "../../firebase/fetchUserProjects";
-import { useProjects } from "../../contexts/ProjectContext.jsx/ProjectsProvider";
+import { useProjects } from "../../contexts/ProjectContext/useProjects";
 import { useAuth } from "../../contexts/AuthContext";
 
 const { Option } = Select;
@@ -107,15 +107,12 @@ const EditBoard = () => {
     {
       onSuccess: (savedProjectId, variables) => {
         const { action } = variables;
-        // 如果是新專案，設置 projectId
         if (!projectId && savedProjectId) {
           setProjectId(savedProjectId);
         }
 
-        // 刷新專案列表快取
         queryClient.invalidateQueries("userProjects");
 
-        // 決定是否發佈專案或返回 Dashboard
         if (action === "publish") {
           setNewProjectUrl(`/sealink/${savedProjectId || projectId}`);
           setIsModalOpen(true);
@@ -128,13 +125,6 @@ const EditBoard = () => {
       },
     },
   );
-  // const project = Array.isArray(currentProject)
-  //   ? currentProject.find((p) => p.id === projectId)
-  //   : null;
-
-  // console.log("current project in edit", currentProject);
-  // console.log("icon in edit", icons);
-
   useEffect(() => {
     if (currentProject) {
       setValue("title", currentProject.title || "");
@@ -195,11 +185,8 @@ const EditBoard = () => {
     };
 
     console.log("Project Data:", projectData);
-
-    // 使用 React Query 的 useMutation 來處理專案保存
-    // 調用 mutation 來提交數據
     mutation.mutate(projectData, {
-      action: data.action, // 傳入 action
+      action: data.action,
     });
   };
 

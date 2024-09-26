@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useProjects } from "../../contexts/ProjectsContext";
+import { useProjects } from "../../contexts/ProjectContext/useProjects";
 import { Card } from "antd";
 import { EditOutlined, SettingOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";

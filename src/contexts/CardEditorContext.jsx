@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
-import { useProjects } from "./ProjectContext.jsx/ProjectsProvider";
+import { useProjects } from "./ProjectContext/useProjects";
 import initialSimpleCardContent from "../cardTemplate/cardContent/initialSimpleCardContent";
 import {
   ICON_LIST,

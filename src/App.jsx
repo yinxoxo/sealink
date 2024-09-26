@@ -17,7 +17,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { CardEditorProvider } from "./contexts/CardEditorContext";
 import { AuthProvider } from "./contexts/AuthContext";
-import { ProjectsProvider } from "./contexts/ProjectContext.jsx/ProjectsProvider";
+import { ProjectsProvider } from "./contexts/ProjectContext/ProjectsProvider";
 import PrivateRoute from "./components/PrivateRoute";
 import { QueryClient, QueryClientProvider } from "react-query";
 
