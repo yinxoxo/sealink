@@ -29,30 +29,32 @@ function App() {
       <DndProvider backend={HTML5Backend}>
         <AuthProvider>
           <ProjectsProvider>
-            <CardEditorProvider>
-              <Router>
-                <Routes>
-                  <Route path="/" element={<LayoutWithHeaderFooter />}>
-                    <Route index element={<Home />} />
-                    <Route path="templates" element={<Templates />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                  </Route>
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/sealink/:projectId?" element={<Deploy />} />
+            <Router>
+              <Routes>
+                <Route path="/" element={<LayoutWithHeaderFooter />}>
+                  <Route index element={<Home />} />
+                  <Route path="templates" element={<Templates />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Route>
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/sealink/:projectId?" element={<Deploy />} />
+                <Route
+                  path="/dashboard"
+                  element={<PrivateRoute element={<LayoutWithSidebar />} />}
+                >
+                  <Route index element={<Dashboard />} />
                   <Route
-                    path="/dashboard"
-                    element={<PrivateRoute element={<LayoutWithSidebar />} />}
-                  >
-                    <Route index element={<Dashboard />} />
-                    <Route
-                      path="card-editor/:template/:projectId?"
-                      element={<CardEditor />}
-                    />
-                    <Route path="analytics" element={<Analytics />} />
-                  </Route>
-                </Routes>
-              </Router>
-            </CardEditorProvider>
+                    path="card-editor/:template/:projectId?"
+                    element={
+                      <CardEditorProvider>
+                        <CardEditor />
+                      </CardEditorProvider>
+                    }
+                  />
+                  <Route path="analytics" element={<Analytics />} />
+                </Route>
+              </Routes>
+            </Router>
           </ProjectsProvider>
         </AuthProvider>
       </DndProvider>

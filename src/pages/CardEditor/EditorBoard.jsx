@@ -38,6 +38,7 @@ import { useAuth } from "../../contexts/AuthContext/useAuth";
 const { Option } = Select;
 
 const EditBoard = () => {
+  console.log("editboard");
   const {
     projectId,
     setProjectId,
@@ -105,9 +106,6 @@ const EditBoard = () => {
     {
       onSuccess: (savedProjectId, variables) => {
         const { action } = variables;
-        if (!projectId && savedProjectId) {
-          setProjectId(savedProjectId);
-        }
 
         queryClient.invalidateQueries("userProjects");
 

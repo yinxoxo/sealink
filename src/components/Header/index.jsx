@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import sealinkLogo from "../../images/logo.png";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
+import Loading from "../Loading";
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const auth = useAuth();
 
+  const { user, logout, loading } = auth;
+
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <header>
       <div className="flex w-full items-center justify-between rounded-full bg-white p-3 shadow-md">

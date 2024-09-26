@@ -7,12 +7,12 @@ import {
   ICON_STYLE,
   ICON_MAP,
 } from "../../cardTemplate/cardContent/iconList";
+import { useParams } from "react-router-dom";
 
 export const CardEditorContext = createContext();
 
 export const CardEditorProvider = ({ children }) => {
-  const [projectId, setProjectId] = useState(null);
-  const [currentProject, setCurrentProject] = useState(null);
+  const { projectId } = useParams();
   const [editingType, setEditingType] = useState(null);
   const [icons, setIcons] = useState(ICON_LIST.slice(0, 3));
   const [iconColor, setIconColor] = useState(ICON_STYLE.SimpleCard.color);
@@ -41,14 +41,14 @@ export const CardEditorProvider = ({ children }) => {
 
   const { projects } = useProjects();
 
-  useEffect(() => {
-    if (projects && projects.length > 0 && projectId) {
-      const selectedProject = projects.find((p) => p.id === projectId);
-      if (selectedProject) {
-        setCurrentProject(selectedProject);
-      }
-    }
-  }, [projects, projectId]);
+  console.log("edit type in context", editingType);
+
+  let currentProject = null;
+  console.log(projectId);
+  if (projects && projects.length > 0 && projectId) {
+    currentProject = projects.find((p) => p.id === projectId);
+  }
+  console.log(currentProject);
 
   useEffect(() => {
     if (currentProject) {
@@ -83,7 +83,6 @@ export const CardEditorProvider = ({ children }) => {
 
   const contextValue = {
     projectId,
-    setProjectId,
     editingType,
     setEditingType,
     iconColor,
@@ -101,7 +100,6 @@ export const CardEditorProvider = ({ children }) => {
     backgroundSettings,
     setBackgroundSettings,
     currentProject,
-    setCurrentProject,
     itemsOrder,
     setItemsOrder,
   };

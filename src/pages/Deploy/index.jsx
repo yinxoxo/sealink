@@ -8,11 +8,11 @@ const Deploy = () => {
   const { projectId } = useParams();
   const { setProjectId, currentProject } = useCardEditorContext();
 
-  useEffect(() => {
-    if (projectId) {
-      setProjectId(projectId);
-    }
-  }, [projectId, setProjectId]);
+  // useEffect(() => {
+  //   if (projectId) {
+  //     setProjectId(projectId);
+  //   }
+  // }, [projectId, setProjectId]);
 
   if (!currentProject) {
     return <Loading />;
