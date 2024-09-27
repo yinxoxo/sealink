@@ -2,6 +2,11 @@ import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEdito
 import { useDrag, useDrop } from "react-dnd";
 import PropTypes from "prop-types";
 import { useRef } from "react";
+import {
+  ICON_LIST,
+  ICON_STYLE,
+  ICON_MAP,
+} from "../cardTemplate/cardContent/iconList";
 
 const ItemType = "ITEM";
 
@@ -62,22 +67,33 @@ DraggableItem.propTypes = {
 };
 
 const SimpleCard = () => {
-  const {
-    texts,
-    icons,
-    simpleCardButtons,
-    setEditingType,
-    iconColor,
-    iconSize,
-    backgroundSettings,
-    itemsOrder,
-    setItemsOrder,
-  } = useCardEditorContext();
+  const { projectData, setProjectData, setEditingType } =
+    useCardEditorContext();
 
+  if (!projectData) return null;
+
+  const icons =
+    projectData.socialLinks && projectData.socialLinks.iconList
+      ? projectData.socialLinks.iconList.map((link) => ({
+          icon: ICON_MAP[link.name],
+          id: link.id,
+          href: link.href,
+          name: link.name,
+        }))
+      : ICON_LIST.slice(0, 3);
+
+  const iconColor =
+    projectData.socialLinks?.style?.color || ICON_STYLE.SimpleCard.color;
+  const iconSize =
+    projectData.socialLinks?.style?.size || ICON_STYLE.SimpleCard.size;
+
+  const { itemsOrder } = projectData;
+
+  console.log("data in simplecard", projectData);
   const renderItems = () => {
     return itemsOrder.map((item) => {
       if (item.type === "text") {
-        const textItem = texts.find(
+        const textItem = projectData.texts.find(
           (text, index) => `text-${index + 1}` === item.id,
         );
         if (!textItem) return null;
@@ -101,7 +117,7 @@ const SimpleCard = () => {
           />
         );
       } else if (item.type === "button") {
-        const buttonItem = simpleCardButtons.buttons.find(
+        const buttonItem = projectData.buttons.buttonList.find(
           (button, index) => `button-${index + 1}` === item.id,
         );
         if (!buttonItem) return null;
@@ -175,7 +191,10 @@ const SimpleCard = () => {
     const [movedItem] = updatedItemsOrder.splice(fromIndex, 1);
     updatedItemsOrder.splice(toIndex, 0, movedItem);
 
-    setItemsOrder(updatedItemsOrder);
+    setProjectData((prevData) => ({
+      ...prevData,
+      itemsOrder: updatedItemsOrder,
+    }));
   };
 
   const handleButtonClick = (url) => {
@@ -194,14 +213,14 @@ const SimpleCard = () => {
         };
       case "button":
         return {
-          backgroundColor: simpleCardButtons.style.backgroundColor,
-          width: simpleCardButtons.style.width,
-          color: simpleCardButtons.style.color,
-          borderRadius: simpleCardButtons.style.borderRadius,
-          padding: simpleCardButtons.style.padding,
-          fontSize: simpleCardButtons.style.fontSize,
-          fontWeight: simpleCardButtons.style.fontWeight,
-          fontFamily: simpleCardButtons.style.fontFamily,
+          backgroundColor: projectData.buttons.style.backgroundColor,
+          width: projectData.buttons.style.width,
+          color: projectData.buttons.style.color,
+          borderRadius: projectData.buttons.style.borderRadius,
+          padding: projectData.buttons.style.padding,
+          fontSize: projectData.buttons.style.fontSize,
+          fontWeight: projectData.buttons.style.fontWeight,
+          fontFamily: projectData.buttons.style.fontFamily,
         };
       case "icons":
         return "flex justify-center space-x-4";
@@ -215,13 +234,14 @@ const SimpleCard = () => {
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage: backgroundSettings.backgroundImage
-            ? backgroundSettings.backgroundImage
+          backgroundImage: projectData.background.backgroundImage
+            ? projectData.background.backgroundImage
             : "none",
-          backgroundColor: backgroundSettings.backgroundColor || "none",
-          opacity: backgroundSettings.opacity || 0.6,
-          backgroundSize: backgroundSettings.backgroundSize || "cover",
-          backgroundPosition: backgroundSettings.backgroundPosition || "center",
+          backgroundColor: projectData.background.backgroundColor || "none",
+          opacity: projectData.background.opacity || 0.6,
+          backgroundSize: projectData.background.backgroundSize || "cover",
+          backgroundPosition:
+            projectData.background.backgroundPosition || "center",
         }}
       />
       <div className="relative z-10 flex flex-col">{renderItems()}</div>

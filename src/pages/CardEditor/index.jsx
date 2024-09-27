@@ -8,24 +8,28 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 
 const CardEditor = () => {
-  const { template, projectId } = useParams();
-  const { setProjectId, setCurrentProject } = useCardEditorContext();
-
-  // useEffect(() => {
-  //   if (projectId) {
-  //     setProjectId(projectId);
-  //   } else {
-  //     setProjectId(null);
-  //     setCurrentProject(null);
-  //   }
-  // }, [projectId, setProjectId, setCurrentProject]);
-
+  const { template } = useParams();
   return <CardEditorContent template={template} />;
 };
 
 const CardEditorContent = ({ template }) => {
-  const { backgroundSettings, setBackgroundSettings, currentProject } =
-    useCardEditorContext();
+  const { projectData } = useCardEditorContext();
+
+  if (!projectData) return null;
+
+  const {
+    backgroundColor,
+    backgroundImage,
+    backgroundSize,
+    backgroundPosition,
+  } = projectData.background || {};
+
+  const backgroundSettings = {
+    backgroundColor: backgroundColor || "none",
+    backgroundImage: backgroundImage ? backgroundImage : "none",
+    backgroundSize: backgroundSize || "cover",
+    backgroundPosition: backgroundPosition || "center",
+  };
 
   const renderTemplate = () => {
     switch (template) {
@@ -40,43 +44,11 @@ const CardEditorContent = ({ template }) => {
     }
   };
 
-  // useEffect(() => {
-  //   let backgroundConfig = backgroundSettings;
-
-  //   if (currentProject && currentProject.background) {
-  //     backgroundConfig = {
-  //       ...backgroundConfig,
-  //       ...currentProject.background,
-  //     };
-  //   }
-
-  //   setBackgroundSettings((prevSettings) => {
-  //     const newSettings = {
-  //       backgroundColor: backgroundConfig.backgroundColor || "none",
-  //       backgroundImage: backgroundConfig.backgroundImage
-  //         ? `url(${backgroundConfig.backgroundImage})`
-  //         : "none",
-  //       backgroundSize: backgroundConfig.backgroundSize || "cover",
-  //       backgroundPosition: backgroundConfig.backgroundPosition || "center",
-  //     };
-
-  //     if (JSON.stringify(prevSettings) !== JSON.stringify(newSettings)) {
-  //       return newSettings;
-  //     }
-  //     return prevSettings;
-  //   });
-  // }, [template, currentProject, backgroundSettings, setBackgroundSettings]);
-
   return (
     <section className="ml-64 flex h-full min-h-screen w-full overflow-y-auto">
       <div
         className="flex flex-[7] flex-col items-center"
-        style={{
-          backgroundColor: backgroundSettings.backgroundColor,
-          backgroundImage: backgroundSettings.backgroundImage,
-          backgroundSize: backgroundSettings.backgroundSize,
-          backgroundPosition: backgroundSettings.backgroundPosition,
-        }}
+        style={{ ...backgroundSettings, opacity: 1 }}
       >
         <div className="mr-[450px] w-[560px] flex-grow rounded-3xl">
           {renderTemplate()}

@@ -14,8 +14,12 @@ import {
   Slider,
   Radio,
   Space,
-  Modal,
 } from "antd";
+import {
+  ICON_LIST,
+  ICON_STYLE,
+  ICON_MAP,
+} from "../../cardTemplate/cardContent/iconList";
 import IconCard from "./EditorComponents/IconCard";
 import TextCard from "./EditorComponents/TextCard";
 import ButtonCard from "./EditorComponents/ButtonCard";
@@ -26,7 +30,7 @@ import EditButtonModal from "./EditorComponents/EditButtonModal";
 import CropperModal from "./EditorComponents/CropperModal";
 import { SketchPicker } from "react-color";
 import fontOptions from "../../cardTemplate/cardContent/fontOptions";
-import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
+
 import { UploadOutlined } from "@ant-design/icons";
 import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -38,41 +42,39 @@ import { useAuth } from "../../contexts/AuthContext/useAuth";
 const { Option } = Select;
 
 const EditBoard = () => {
-  console.log("editboard");
   const {
     projectId,
-    setProjectId,
-    currentProject,
+    projectData,
+    setProjectData,
     selectedText,
     setSelectedText,
-    texts,
-    setTexts,
     editingType,
-    icons,
-    setIcons,
-    simpleCardButtons,
-    setSimpleCardButtons,
-    backgroundSettings,
-    setBackgroundSettings,
-    iconColor,
-    setIconColor,
-    iconSize,
-    setIconSize,
-    itemsOrder,
-    setItemsOrder,
   } = useCardEditorContext();
+
+  const icons =
+    projectData.socialLinks && projectData.socialLinks.iconList
+      ? projectData.socialLinks.iconList.map((link) => ({
+          icon: ICON_MAP[link.name],
+          id: link.id,
+          href: link.href,
+          name: link.name,
+        }))
+      : ICON_LIST.slice(0, 3);
+  const iconColor =
+    projectData?.socialLinks?.style?.color || ICON_STYLE.SimpleCard.color;
+  const iconSize =
+    projectData?.socialLinks?.style?.size || ICON_STYLE.SimpleCard.size;
+
+  const { itemsOrder } = projectData;
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { template } = useParams();
-
   const { control, handleSubmit, setValue } = useForm();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [newProjectUrl, setNewProjectUrl] = useState("");
-
   const [selectedIcon, setSelectedIcon] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editIconData, setEditIconData] = useState(null);
@@ -82,16 +84,16 @@ const EditBoard = () => {
   const [isButtonModalVisible, setIsButtonModalVisible] = useState(false);
   const [editButtonData, setEditButtonData] = useState(null);
   const [useBackgroundImage, setUseBackgroundImage] = useState(
-    !!backgroundSettings.backgroundImage,
+    !!projectData.background.backgroundImage,
   );
   const [tempBackgroundImage, setTempBackgroundImage] = useState(
-    backgroundSettings.backgroundImage,
+    projectData.background.backgroundImage,
   );
   const [tempBackgroundColor, setTempBackgroundColor] = useState(
-    backgroundSettings.backgroundColor || "#ffffff",
+    projectData.background.backgroundColor || "#ffffff",
   );
   const [tempOpacity, setTempOpacity] = useState(
-    backgroundSettings.opacity || 0.6,
+    projectData.background.opacity || 0.6,
   );
   const [uploading, setUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
@@ -101,8 +103,74 @@ const EditBoard = () => {
   const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [editableTextItem, setEditableTextItem] = useState(null);
 
+  useEffect(() => {
+    if (projectData) {
+      setValue("title", projectData.title || "");
+    }
+  }, [projectData, setValue]);
+
+  const onSubmit = async (data) => {
+    const newProjectData = {
+      title: data.title,
+      templateId: template,
+      background: {
+        backgroundColor: projectData.background.backgroundColor || null,
+        backgroundImage: projectData.background.backgroundImage || null,
+        opacity: tempOpacity,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      },
+      socialLinks: {
+        id: "icons-1",
+        iconList: icons.map((icon) => ({
+          id: icon.name,
+          href: icon.href,
+          name: icon.name,
+        })),
+        style: {
+          color: iconColor,
+          size: iconSize,
+        },
+      },
+      texts: projectData.texts.map((text, index) => ({
+        id: `text-${index + 1}`,
+        text: text.text,
+        style: {
+          fontSize: text.style.fontSize,
+          fontWeight: text.style.fontWeight,
+          color: text.style.color,
+          fontFamily: text.style.fontFamily,
+        },
+      })),
+      buttons: {
+        buttonList: projectData.buttons.buttonList.map((button, index) => ({
+          id: `button-${index + 1}`,
+          text: button.text,
+          url: button.url,
+        })),
+        style: {
+          backgroundColor: projectData.buttons.style.backgroundColor,
+          width: projectData.buttons.style.width,
+          color: projectData.buttons.style.color,
+          borderRadius: projectData.buttons.style.borderRadius,
+          padding: projectData.buttons.style.padding,
+          fontSize: projectData.buttons.style.fontSize,
+          fontWeight: projectData.buttons.style.fontWeight,
+          fontFamily: projectData.buttons.style.fontFamily,
+        },
+      },
+      itemsOrder: itemsOrder,
+    };
+
+    console.log("Submit Project Data:", newProjectData);
+    mutation.mutate(newProjectData, {
+      action: data.action,
+    });
+  };
+
   const mutation = useMutation(
-    (newProject) => saveProjectToFirestore(user.uid, projectId, newProject),
+    (newProjectData) =>
+      saveProjectToFirestore(user.uid, projectId, newProjectData),
     {
       onSuccess: (savedProjectId, variables) => {
         const { action } = variables;
@@ -121,70 +189,6 @@ const EditBoard = () => {
       },
     },
   );
-  useEffect(() => {
-    if (currentProject) {
-      setValue("title", currentProject.title || "");
-    }
-  }, [currentProject, setValue]);
-
-  const onSubmit = async (data) => {
-    const projectData = {
-      title: data.title,
-      templateId: template,
-      background: {
-        backgroundColor: backgroundSettings.backgroundColor,
-        backgroundImage: backgroundSettings.backgroundImage || null,
-        opacity: tempOpacity,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      },
-      socialLinks: {
-        id: "icons-1",
-        iconList: icons.map((icon) => ({
-          id: icon.name,
-          href: icon.href,
-          name: icon.name,
-        })),
-        style: {
-          color: iconColor,
-          size: iconSize,
-        },
-      },
-      texts: texts.map((text, index) => ({
-        id: `text-${index + 1}`,
-        text: text.text,
-        style: {
-          fontSize: text.style.fontSize,
-          fontWeight: text.style.fontWeight,
-          color: text.style.color,
-          fontFamily: text.style.fontFamily,
-        },
-      })),
-      buttons: {
-        buttonList: simpleCardButtons.buttons.map((button, index) => ({
-          id: `button-${index + 1}`,
-          text: button.text,
-          url: button.url,
-        })),
-        style: {
-          backgroundColor: simpleCardButtons.style.backgroundColor,
-          width: simpleCardButtons.style.width,
-          color: simpleCardButtons.style.color,
-          borderRadius: simpleCardButtons.style.borderRadius,
-          padding: simpleCardButtons.style.padding,
-          fontSize: simpleCardButtons.style.fontSize,
-          fontWeight: simpleCardButtons.style.fontWeight,
-          fontFamily: simpleCardButtons.style.fontFamily,
-        },
-      },
-      itemsOrder: itemsOrder,
-    };
-
-    console.log("Project Data:", projectData);
-    mutation.mutate(projectData, {
-      action: data.action,
-    });
-  };
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -262,7 +266,13 @@ const EditBoard = () => {
     const updatedIcons = icons.map((icon) =>
       icon.id === editIconData.id ? editIconData : icon,
     );
-    setIcons(updatedIcons);
+    setProjectData((prevData) => ({
+      ...prevData,
+      socialLinks: {
+        ...prevData.socialLinks,
+        iconList: updatedIcons,
+      },
+    }));
 
     setIsModalVisible(false);
   };
@@ -278,7 +288,13 @@ const EditBoard = () => {
           icon: foundIcon.icon,
           href: foundIcon.href,
         };
-        setIcons([...icons, newIcon]);
+        setProjectData((prevData) => ({
+          ...prevData,
+          socialLinks: {
+            ...prevData.socialLinks,
+            iconList: [...prevData.socialLinks.iconList, newIcon],
+          },
+        }));
       } else {
         console.error(`Icon ${selectedIcon} not found or invalid icon`);
       }
@@ -291,24 +307,30 @@ const EditBoard = () => {
   };
 
   const handleSaveButtonEdit = () => {
-    const updatedButtons = simpleCardButtons.buttons.map((button, i) =>
+    const updatedButtons = projectData.buttons.buttonList.map((button, i) =>
       i === editButtonData.index ? { ...editButtonData } : button,
     );
-    setSimpleCardButtons({
-      ...simpleCardButtons,
-      buttons: updatedButtons,
-    });
+    setProjectData((prevData) => ({
+      ...prevData,
+      buttons: {
+        ...prevData.buttons,
+        buttonList: updatedButtons,
+      },
+    }));
     setIsButtonModalVisible(false);
   };
 
   const handleButtonDelete = (index) => {
-    const updatedButtons = simpleCardButtons.buttons.filter(
+    const updatedButtons = projectData.buttons.buttonList.filter(
       (_, i) => i !== index,
     );
-    setSimpleCardButtons({
-      ...simpleCardButtons,
-      buttons: updatedButtons,
-    });
+    setProjectData((prevData) => ({
+      ...prevData,
+      buttons: {
+        ...prevData.buttons,
+        buttonList: updatedButtons,
+      },
+    }));
   };
 
   const handleIconDelete = (id) => {
@@ -316,37 +338,24 @@ const EditBoard = () => {
     const updatedIcons = icons.filter((icon) => icon.id !== id);
     console.log("Icons after deletion:", updatedIcons);
 
-    setIcons(updatedIcons);
-  };
-
-  const handleColorChange = (color) => {
-    setTexts(
-      texts.map((item, idx) =>
-        idx === selectedText
-          ? { ...item, style: { ...item.style, color: color.hex } }
-          : item,
-      ),
-    );
-  };
-
-  const handleFontChange = (e) => {
-    const selectedFont = e.target.value;
-
-    setTexts(
-      texts.map((item, idx) =>
-        idx === selectedText
-          ? { ...item, style: { ...item.style, fontFamily: selectedFont } }
-          : item,
-      ),
-    );
+    setProjectData((prevData) => ({
+      ...prevData,
+      socialLinks: {
+        ...prevData.socialLinks,
+        iconList: updatedIcons,
+      },
+    }));
   };
 
   const handleButtonStyleChange = (styleProp, value) => {
-    setSimpleCardButtons((prev) => ({
-      ...prev,
-      style: {
-        ...prev.style,
-        [styleProp]: value,
+    setProjectData((prevData) => ({
+      ...prevData,
+      buttons: {
+        ...prevData.buttons,
+        style: {
+          ...prevData.buttons.style,
+          [styleProp]: value,
+        },
       },
     }));
   };
@@ -359,9 +368,9 @@ const EditBoard = () => {
       return;
     }
 
-    setBackgroundSettings((prevSettings) => {
-      const newSettings = {
-        ...prevSettings,
+    setProjectData((prevData) => {
+      const newBackgroundSettings = {
+        ...prevData.background,
         backgroundImage: useBackgroundImage
           ? `url(${tempBackgroundImage})`
           : null,
@@ -369,18 +378,20 @@ const EditBoard = () => {
         opacity: tempOpacity,
       };
 
-      return newSettings;
+      return {
+        ...prevData,
+        background: newBackgroundSettings,
+      };
     });
 
     message.success("Background settings saved successfully!");
   };
 
   const renderTextEditor = () => {
-    const currentFontStyle = texts[selectedText]?.style || {};
     return (
       <>
         <h1 className="mb-4 text-xl">Texts</h1>
-        {texts.map((item, index) => (
+        {projectData.texts.map((item, index) => (
           <TextCard
             key={index}
             textItem={item}
@@ -391,19 +402,31 @@ const EditBoard = () => {
               setIsModalVisible(true);
             }}
             onDelete={() => {
-              const updatedTexts = texts.filter((_, idx) => idx !== index);
-              setTexts(updatedTexts);
+              const updatedTexts = projectData.texts.filter(
+                (_, idx) => idx !== index,
+              );
+              setProjectData({
+                ...projectData,
+                texts: updatedTexts,
+              });
 
               const updatedItemsOrder = itemsOrder.filter(
                 (orderItem) => orderItem.id !== `text-${index + 1}`,
               );
-              setItemsOrder(updatedItemsOrder);
+              setProjectData({
+                ...projectData,
+                texts: updatedTexts,
+                itemsOrder: updatedItemsOrder,
+              });
             }}
             onUpdate={(index, updatedItem) => {
-              const updatedTexts = texts.map((item, idx) =>
+              const updatedTexts = projectData.texts.map((item, idx) =>
                 idx === index ? updatedItem : item,
               );
-              setTexts(updatedTexts);
+              setProjectData({
+                ...projectData,
+                texts: updatedTexts,
+              });
             }}
           />
         ))}
@@ -419,9 +442,12 @@ const EditBoard = () => {
                 fontFamily: "Arial",
               },
             };
-            const newId = `text-${texts.length + 1}`;
-            setTexts([...texts, newTextItem]);
-            setItemsOrder([...itemsOrder, { id: newId, type: "text" }]);
+            const newId = `text-${projectData.texts.length + 1}`;
+            setProjectData((prevData) => ({
+              ...prevData,
+              texts: [...prevData.texts, newTextItem],
+              itemsOrder: [...prevData.itemsOrder, { id: newId, type: "text" }],
+            }));
           }}
         >
           Add New Text
@@ -433,10 +459,18 @@ const EditBoard = () => {
           editTextData={editableTextItem}
           setEditTextData={setEditableTextItem}
           handleSaveTextEdit={() => {
-            const updatedTexts = texts.map((item, idx) =>
+            console.log("Saving text edit:", editableTextItem);
+
+            const updatedTexts = projectData.texts.map((item, idx) =>
               idx === selectedText ? editableTextItem : item,
             );
-            setTexts(updatedTexts);
+
+            setProjectData({
+              ...projectData,
+              texts: updatedTexts,
+            });
+
+            console.log("Updated texts:", updatedTexts);
             setIsModalVisible(false);
           }}
         />
@@ -479,7 +513,16 @@ const EditBoard = () => {
                   color={editIconData?.color}
                   onChangeComplete={(color) => {
                     setEditIconData({ ...editIconData, color: color.hex });
-                    setIconColor(color.hex);
+                    setProjectData((prevData) => ({
+                      ...prevData,
+                      socialLinks: {
+                        ...prevData.socialLinks,
+                        style: {
+                          ...prevData.socialLinks.style,
+                          color: color.hex,
+                        },
+                      },
+                    }));
                   }}
                 />
               </div>
@@ -492,7 +535,20 @@ const EditBoard = () => {
               min="10"
               max="100"
               value={iconSize}
-              onChange={(e) => setIconSize(parseInt(e.target.value, 10))}
+              onChange={(e) => {
+                const newSize = parseInt(e.target.value, 10);
+
+                setProjectData((prevData) => ({
+                  ...prevData,
+                  socialLinks: {
+                    ...prevData.socialLinks,
+                    style: {
+                      ...prevData.socialLinks.style,
+                      size: newSize,
+                    },
+                  },
+                }));
+              }}
               className="slider"
             />
             <span>{iconSize}px</span>
@@ -545,13 +601,13 @@ const EditBoard = () => {
   );
 
   const renderButtonEditor = () => {
-    const { style, buttons } = simpleCardButtons;
+    const { style, buttonList } = projectData.buttons;
 
     return (
       <>
         <h1 className="text-xl">Button</h1>
         <div className="mt-4">
-          {buttons.map((button, index) => (
+          {buttonList.map((button, index) => (
             <ButtonCard
               key={index}
               button={button}
@@ -565,23 +621,22 @@ const EditBoard = () => {
         <Button
           type="primary"
           onClick={() => {
-            const newButtonId = `button-${simpleCardButtons.buttons.length + 1}`;
-            setSimpleCardButtons((prev) => {
-              const newButton = {
-                text: "New Button",
-                url: "https://example.com/new-button",
-              };
-              const updatedButtons = [...prev.buttons, newButton];
-              return {
-                ...prev,
-                buttons: updatedButtons,
-              };
-            });
-
-            setItemsOrder((prevOrder) => {
-              const newItemOrder = { id: newButtonId, type: "button" };
-              return [...prevOrder, newItemOrder];
-            });
+            const newButtonId = `button-${buttonList.length + 1}`;
+            const newButton = {
+              text: "New Button",
+              url: "https://example.com/new-button",
+            };
+            setProjectData((prevData) => ({
+              ...prevData,
+              buttons: {
+                ...prevData.buttons,
+                buttonList: [...prevData.buttons.buttonList, newButton],
+              },
+              itemsOrder: [
+                ...prevData.itemsOrder,
+                { id: newButtonId, type: "button" },
+              ],
+            }));
           }}
         >
           Add Button

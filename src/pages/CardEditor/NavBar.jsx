@@ -16,9 +16,7 @@ import {
 } from "@ant-design/icons";
 
 const NavBar = () => {
-  const { editingType, setEditingType } = useCardEditorContext();
-
-  console.log("edit type in navbar", editingType);
+  const { setEditingType } = useCardEditorContext();
 
   const menu = (
     <Menu
