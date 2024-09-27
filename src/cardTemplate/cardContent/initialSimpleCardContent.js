@@ -55,7 +55,7 @@ const initialSimpleCardContent = {
       fontFamily: "Arial, sans-serif",
     },
   },
-  backgroundSettings: {
+  background: {
     backgroundImage: `url(https://images.unsplash.com/photo-1725785897139-1a7834b62e2f?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
     opacity: 0.6,
     backgroundColor: "",
@@ -70,5 +70,17 @@ const initialSimpleCardContent = {
     },
   },
 };
+
+initialSimpleCardContent.itemsOrder = [
+  ...initialSimpleCardContent.texts.map((text, index) => ({
+    id: `text-${index + 1}`,
+    type: "text",
+  })),
+  { id: `icons-1`, type: "icons" },
+  ...initialSimpleCardContent.buttons.buttonList.map((button, index) => ({
+    id: `button-${index + 1}`,
+    type: "button",
+  })),
+];
 
 export default initialSimpleCardContent;
