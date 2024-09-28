@@ -15,7 +15,7 @@ import {
   FileImageOutlined,
 } from "@ant-design/icons";
 
-const NavBar = () => {
+const NavBar = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
   const { setEditingType } = useCardEditorContext();
 
   const menu = (
@@ -70,11 +70,15 @@ const NavBar = () => {
         size={20}
         className="cursor-pointer"
         color="rgb(160, 160, 160)"
+        onClick={onUndo}
+        disabled={disableUndo}
       />
       <FaAnglesRight
         size={20}
         className="cursor-pointer"
         color="rgb(160, 160, 160)"
+        onClick={onRedo}
+        disabled={disableRedo}
       />
       <FaPlay size={20} className="cursor-pointer" color="rgb(160, 160, 160)" />
       <FaDesktop

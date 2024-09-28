@@ -51,15 +51,12 @@ const EditBoard = () => {
     editingType,
   } = useCardEditorContext();
 
-  const icons =
-    projectData.socialLinks && projectData.socialLinks.iconList
-      ? projectData.socialLinks.iconList.map((link) => ({
-          icon: ICON_MAP[link.name],
-          id: link.id,
-          href: link.href,
-          name: link.name,
-        }))
-      : ICON_LIST.slice(0, 3);
+  const icons = projectData.socialLinks.iconList.map((link) => ({
+    icon: ICON_MAP[link.name],
+    id: link.id,
+    href: link.href,
+    name: link.name,
+  }));
   const iconColor =
     projectData?.socialLinks?.style?.color || ICON_STYLE.SimpleCard.color;
   const iconSize =
@@ -72,6 +69,38 @@ const EditBoard = () => {
   const { user } = useAuth();
   const { template } = useParams();
   const { control, handleSubmit, setValue } = useForm();
+
+  const [history, setHistory] = useState([projectData]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [redoHistory, setRedoHistory] = useState([]);
+
+  const updateProjectData = (newData) => {
+    const updatedHistory = [...history.slice(0, currentStep + 1), newData];
+    setHistory(updatedHistory);
+    setCurrentStep(currentStep + 1);
+    setRedoHistory([]);
+    setProjectData(newData);
+    console.log("update data");
+  };
+
+  const handleUndo = () => {
+    if (currentStep > 0) {
+      const previousStep = currentStep - 1;
+      setRedoHistory([history[currentStep], ...redoHistory]);
+      setCurrentStep(previousStep);
+      setProjectData(history[previousStep]);
+    }
+  };
+
+  const handleRedo = () => {
+    if (redoHistory.length > 0) {
+      const nextStep = redoHistory[0];
+      setHistory([...history.slice(0, currentStep + 1), nextStep]);
+      setRedoHistory(redoHistory.slice(1));
+      setCurrentStep(currentStep + 1);
+      setProjectData(nextStep);
+    }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProjectUrl, setNewProjectUrl] = useState("");
@@ -263,17 +292,19 @@ const EditBoard = () => {
   };
 
   const handleAvatarSizeChange = (value) => {
-    setProjectData((prevData) => ({
-      ...prevData,
+    const updatedData = {
+      ...projectData,
       avatar: {
-        ...prevData.avatar,
+        ...projectData.avatar,
         style: {
-          ...prevData.avatar.style,
+          ...projectData.avatar.style,
           width: `${value}px`,
           height: `${value}px`,
         },
       },
-    }));
+    };
+    setProjectData(updatedData);
+    updateProjectData(updatedData);
   };
 
   const handleIconEdit = (iconName) => {
@@ -288,14 +319,16 @@ const EditBoard = () => {
     const updatedIcons = icons.map((icon) =>
       icon.id === editIconData.id ? editIconData : icon,
     );
-    setProjectData((prevData) => ({
-      ...prevData,
+
+    const updatedData = {
+      ...projectData,
       socialLinks: {
-        ...prevData.socialLinks,
+        ...projectData.socialLinks,
         iconList: updatedIcons,
       },
-    }));
-
+    };
+    setProjectData(updatedData);
+    updateProjectData(updatedData);
     setIsModalVisible(false);
   };
 
@@ -310,13 +343,16 @@ const EditBoard = () => {
           icon: foundIcon.icon,
           href: foundIcon.href,
         };
-        setProjectData((prevData) => ({
-          ...prevData,
+
+        const updatedData = {
+          ...projectData,
           socialLinks: {
-            ...prevData.socialLinks,
-            iconList: [...prevData.socialLinks.iconList, newIcon],
+            ...projectData.socialLinks,
+            iconList: [...projectData.socialLinks.iconList, newIcon],
           },
-        }));
+        };
+        setProjectData(updatedData);
+        updateProjectData(updatedData);
       } else {
         console.error(`Icon ${selectedIcon} not found or invalid icon`);
       }
@@ -332,13 +368,16 @@ const EditBoard = () => {
     const updatedButtons = projectData.buttons.buttonList.map((button, i) =>
       i === editButtonData.index ? { ...editButtonData } : button,
     );
-    setProjectData((prevData) => ({
-      ...prevData,
+
+    const updatedData = {
+      ...projectData,
       buttons: {
-        ...prevData.buttons,
+        ...projectData.buttons,
         buttonList: updatedButtons,
       },
-    }));
+    };
+    setProjectData(updatedData);
+    updateProjectData(updatedData);
     setIsButtonModalVisible(false);
   };
 
@@ -346,13 +385,16 @@ const EditBoard = () => {
     const updatedButtons = projectData.buttons.buttonList.filter(
       (_, i) => i !== index,
     );
-    setProjectData((prevData) => ({
-      ...prevData,
+
+    const updatedData = {
+      ...projectData,
       buttons: {
-        ...prevData.buttons,
+        ...projectData.buttons,
         buttonList: updatedButtons,
       },
-    }));
+    };
+    setProjectData(updatedData);
+    updateProjectData(updatedData);
   };
 
   const handleIconDelete = (id) => {
@@ -360,26 +402,30 @@ const EditBoard = () => {
     const updatedIcons = icons.filter((icon) => icon.id !== id);
     console.log("Icons after deletion:", updatedIcons);
 
-    setProjectData((prevData) => ({
-      ...prevData,
+    const updatedData = {
+      ...projectData,
       socialLinks: {
-        ...prevData.socialLinks,
+        ...projectData.socialLinks,
         iconList: updatedIcons,
       },
-    }));
+    };
+    setProjectData(updatedData);
+    updateProjectData(updatedData);
   };
 
   const handleButtonStyleChange = (styleProp, value) => {
-    setProjectData((prevData) => ({
-      ...prevData,
+    const updatedData = {
+      ...projectData,
       buttons: {
-        ...prevData.buttons,
+        ...projectData.buttons,
         style: {
-          ...prevData.buttons.style,
+          ...projectData.buttons.style,
           [styleProp]: value,
         },
       },
-    }));
+    };
+    setProjectData(updatedData);
+    updateProjectData(updatedData);
   };
 
   const handleSaveBackgroundSettings = () => {
@@ -390,22 +436,18 @@ const EditBoard = () => {
       return;
     }
 
-    setProjectData((prevData) => {
-      const newBackgroundSettings = {
-        ...prevData.background,
+    const updatedData = {
+      ...projectData,
+      background: {
         backgroundImage: useBackgroundImage
           ? `url(${tempBackgroundImage})`
           : null,
         backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
         opacity: tempOpacity,
-      };
-
-      return {
-        ...prevData,
-        background: newBackgroundSettings,
-      };
-    });
-
+      },
+    };
+    setProjectData(updatedData);
+    updateProjectData(updatedData);
     message.success("Background settings saved successfully!");
   };
 
@@ -427,28 +469,29 @@ const EditBoard = () => {
               const updatedTexts = projectData.texts.filter(
                 (_, idx) => idx !== index,
               );
-              setProjectData({
-                ...projectData,
-                texts: updatedTexts,
-              });
 
               const updatedItemsOrder = itemsOrder.filter(
                 (orderItem) => orderItem.id !== `text-${index + 1}`,
               );
-              setProjectData({
+
+              const updatedData = {
                 ...projectData,
                 texts: updatedTexts,
                 itemsOrder: updatedItemsOrder,
-              });
+              };
+              setProjectData(updatedData);
+              updateProjectData(updatedData);
             }}
             onUpdate={(index, updatedItem) => {
               const updatedTexts = projectData.texts.map((item, idx) =>
                 idx === index ? updatedItem : item,
               );
-              setProjectData({
+              const updatedData = {
                 ...projectData,
                 texts: updatedTexts,
-              });
+              };
+              setProjectData(updatedData);
+              updateProjectData(updatedData);
             }}
           />
         ))}
@@ -465,11 +508,17 @@ const EditBoard = () => {
               },
             };
             const newId = `text-${projectData.texts.length + 1}`;
-            setProjectData((prevData) => ({
-              ...prevData,
-              texts: [...prevData.texts, newTextItem],
-              itemsOrder: [...prevData.itemsOrder, { id: newId, type: "text" }],
-            }));
+
+            const updatedData = {
+              ...projectData,
+              texts: [...projectData.texts, newTextItem],
+              itemsOrder: [
+                ...projectData.itemsOrder,
+                { id: newId, type: "text" },
+              ],
+            };
+            setProjectData(updatedData);
+            updateProjectData(updatedData);
           }}
         >
           Add New Text
@@ -481,18 +530,15 @@ const EditBoard = () => {
           editTextData={editableTextItem}
           setEditTextData={setEditableTextItem}
           handleSaveTextEdit={() => {
-            console.log("Saving text edit:", editableTextItem);
-
             const updatedTexts = projectData.texts.map((item, idx) =>
               idx === selectedText ? editableTextItem : item,
             );
-
-            setProjectData({
+            const updatedData = {
               ...projectData,
               texts: updatedTexts,
-            });
-
-            console.log("Updated texts:", updatedTexts);
+            };
+            setProjectData(updatedData);
+            updateProjectData(updatedData);
             setIsModalVisible(false);
           }}
         />
@@ -535,16 +581,18 @@ const EditBoard = () => {
                   color={editIconData?.color}
                   onChangeComplete={(color) => {
                     setEditIconData({ ...editIconData, color: color.hex });
-                    setProjectData((prevData) => ({
-                      ...prevData,
+                    const updatedData = {
+                      ...projectData,
                       socialLinks: {
-                        ...prevData.socialLinks,
+                        ...projectData.socialLinks,
                         style: {
-                          ...prevData.socialLinks.style,
+                          ...projectData.socialLinks.style,
                           color: color.hex,
                         },
                       },
-                    }));
+                    };
+                    setProjectData(updatedData);
+                    updateProjectData(updatedData);
                   }}
                 />
               </div>
@@ -559,17 +607,18 @@ const EditBoard = () => {
               value={iconSize}
               onChange={(e) => {
                 const newSize = parseInt(e.target.value, 10);
-
-                setProjectData((prevData) => ({
-                  ...prevData,
+                const updatedData = {
+                  ...projectData,
                   socialLinks: {
-                    ...prevData.socialLinks,
+                    ...projectData.socialLinks,
                     style: {
-                      ...prevData.socialLinks.style,
+                      ...projectData.socialLinks.style,
                       size: newSize,
                     },
                   },
-                }));
+                };
+                setProjectData(updatedData);
+                updateProjectData(updatedData);
               }}
               className="slider"
             />
@@ -647,17 +696,20 @@ const EditBoard = () => {
               text: "New Button",
               url: "https://example.com/new-button",
             };
-            setProjectData((prevData) => ({
-              ...prevData,
+
+            const updatedData = {
+              ...projectData,
               buttons: {
-                ...prevData.buttons,
-                buttonList: [...prevData.buttons.buttonList, newButton],
+                ...projectData.buttons,
+                buttonList: [...projectData.buttons.buttonList, newButton],
               },
               itemsOrder: [
-                ...prevData.itemsOrder,
+                ...projectData.itemsOrder,
                 { id: newButtonId, type: "button" },
               ],
-            }));
+            };
+            setProjectData(updatedData);
+            updateProjectData(updatedData);
           }}
         >
           Add Button
@@ -852,7 +904,7 @@ const EditBoard = () => {
             beforeUpload={(file) =>
               handleUpload(file, "backgroundimage", (downloadURL) => {
                 setTempBackgroundImage(downloadURL);
-                setProjectData((prevData) => ({
+                updateProjectData((prevData) => ({
                   ...prevData,
                   background: {
                     ...prevData.background,
@@ -867,6 +919,7 @@ const EditBoard = () => {
               {uploading ? "Uploading..." : "Upload Image"}
             </Button>
           </Upload>
+
           <CropperModal
             isCropModalVisible={isCropModalVisible}
             setIsCropModalVisible={setIsCropModalVisible}
@@ -953,13 +1006,12 @@ const EditBoard = () => {
               onChange={handleAvatarSizeChange}
             />
           </div>
-
           <div className="my-4">
             <Button
               danger
               onClick={() => {
-                setProjectData((prevData) => ({
-                  ...prevData,
+                const updatedData = {
+                  ...projectData,
                   avatar: {
                     image: null,
                     style: {
@@ -967,7 +1019,9 @@ const EditBoard = () => {
                       height: "0px",
                     },
                   },
-                }));
+                };
+                setProjectData(updatedData);
+                updateProjectData(updatedData);
               }}
             >
               Delete Avatar
@@ -980,17 +1034,19 @@ const EditBoard = () => {
         <Upload
           beforeUpload={(file) =>
             handleUpload(file, "avatars", (downloadURL) => {
-              setProjectData((prevData) => ({
-                ...prevData,
+              const updatedData = {
+                ...projectData,
                 avatar: {
-                  ...prevData.avatar,
+                  ...projectData.avatar,
                   image: downloadURL,
                   style: {
                     width: "100px",
                     height: "100px",
                   },
                 },
-              }));
+              };
+              setProjectData(updatedData);
+              updateProjectData(updatedData);
             })
           }
           showUploadList={false}
@@ -1093,7 +1149,12 @@ const EditBoard = () => {
         onClose={() => setIsModalOpen(false)}
         projectUrl={newProjectUrl}
       />
-      <NavBar />
+      <NavBar
+        onUndo={handleUndo}
+        onRedo={handleRedo}
+        disableUndo={currentStep === 0}
+        disableRedo={redoHistory.length === 0}
+      />
 
       <div className="flex flex-col p-4">
         {editingType === "text"

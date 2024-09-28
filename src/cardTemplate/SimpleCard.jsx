@@ -72,15 +72,12 @@ const SimpleCard = () => {
 
   if (!projectData) return null;
 
-  const icons =
-    projectData.socialLinks && projectData.socialLinks.iconList
-      ? projectData.socialLinks.iconList.map((link) => ({
-          icon: ICON_MAP[link.name],
-          id: link.id,
-          href: link.href,
-          name: link.name,
-        }))
-      : ICON_LIST.slice(0, 3);
+  const icons = projectData.socialLinks.iconList.map((link) => ({
+    icon: ICON_MAP[link.name],
+    id: link.id,
+    href: link.href,
+    name: link.name,
+  }));
 
   const iconColor =
     projectData.socialLinks?.style?.color || ICON_STYLE.SimpleCard.color;
@@ -89,7 +86,7 @@ const SimpleCard = () => {
 
   const { itemsOrder } = projectData;
 
-  console.log("data in simplecard", projectData);
+  // console.log("data in simplecard", projectData);
   const renderItems = () => {
     return itemsOrder.map((item) => {
       if (item.type === "avatar" && projectData.avatar?.image) {
