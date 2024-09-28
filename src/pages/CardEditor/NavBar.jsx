@@ -48,7 +48,7 @@ const NavBar = () => {
       </Menu.Item>
       <Menu.Item
         key="4"
-        onClick={() => setEditingType("image")}
+        onClick={() => setEditingType("avatar")}
         icon={<FileImageOutlined />}
       >
         Image

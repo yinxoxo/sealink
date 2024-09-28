@@ -160,6 +160,13 @@ const EditBoard = () => {
         },
       },
       itemsOrder: itemsOrder,
+      avatar: {
+        image: projectData.avatar.image,
+        style: {
+          width: projectData.avatar.style.width,
+          height: projectData.avatar.style.height,
+        },
+      },
     };
 
     console.log("Submit Project Data:", newProjectData);
@@ -214,16 +221,17 @@ const EditBoard = () => {
     });
   };
 
-  const handleSaveCroppedImage = async () => {
+  const handleSaveCroppedImage = async (folderName, onSuccessCallback) => {
     try {
       const { blob } = await getCroppedImg(imageUrl, croppedAreaPixels);
 
       setUploading(true);
 
-      const downloadURL = await uploadImageToFirebase(blob, "cropped_images");
+      const downloadURL = await uploadImageToFirebase(blob, folderName);
 
       setImageUrl(downloadURL);
       setTempBackgroundImage(downloadURL);
+      onSuccessCallback(downloadURL);
       setUploading(false);
       message.success("Image uploaded successfully!");
     } catch (error) {
@@ -233,7 +241,7 @@ const EditBoard = () => {
     }
   };
 
-  const handleUpload = (file) => {
+  const handleUpload = (file, folderName, onSuccessCallback) => {
     setUploading(true);
     const reader = new FileReader();
 
@@ -243,15 +251,29 @@ const EditBoard = () => {
 
       const blob = new Blob([file], { type: file.type });
 
-      const downloadURL = await uploadImageToFirebase(blob, "backgroundimage");
+      const downloadURL = await uploadImageToFirebase(blob, folderName);
+      onSuccessCallback(downloadURL);
 
-      setTempBackgroundImage(downloadURL);
       setUploading(false);
       setIsCropModalVisible(true);
       message.success("Image uploaded successfully!");
     };
 
     reader.readAsDataURL(file);
+  };
+
+  const handleAvatarSizeChange = (value) => {
+    setProjectData((prevData) => ({
+      ...prevData,
+      avatar: {
+        ...prevData.avatar,
+        style: {
+          ...prevData.avatar.style,
+          width: `${value}px`,
+          height: `${value}px`,
+        },
+      },
+    }));
   };
 
   const handleIconEdit = (iconName) => {
@@ -556,7 +578,7 @@ const EditBoard = () => {
 
           <h2 className="my-2 text-lg">Add Icons</h2>
           <Select
-            style={{ width: "100%" }}
+            className="w-full"
             placeholder="Select an icon"
             onChange={(value) => setSelectedIcon(value)}
           >
@@ -573,8 +595,7 @@ const EditBoard = () => {
                   disabled={isIconAdded}
                 >
                   <div
-                    className="flex items-center"
-                    style={{ opacity: isIconAdded ? 0.5 : 1 }}
+                    className={`flex items-center ${isIconAdded ? "opacity-50" : "opacity-100"}`}
                   >
                     <IconComponent size={20} className="mr-2" />
                     <span>{icon.name}</span>
@@ -828,20 +849,48 @@ const EditBoard = () => {
             placeholder="Enter image URL or upload"
           />
           <Upload
-            beforeUpload={(file) => {
-              handleUpload(file);
-              return false;
-            }}
+            beforeUpload={(file) =>
+              handleUpload(file, "backgroundimage", (downloadURL) => {
+                setTempBackgroundImage(downloadURL);
+                setProjectData((prevData) => ({
+                  ...prevData,
+                  background: {
+                    ...prevData.background,
+                    backgroundImage: downloadURL,
+                  },
+                }));
+              })
+            }
             showUploadList={false}
           >
-            <Button
-              icon={<UploadOutlined />}
-              loading={uploading}
-              disabled={uploading}
-            >
+            <Button icon={<UploadOutlined />} loading={uploading}>
               {uploading ? "Uploading..." : "Upload Image"}
             </Button>
           </Upload>
+          <CropperModal
+            isCropModalVisible={isCropModalVisible}
+            setIsCropModalVisible={setIsCropModalVisible}
+            imageUrl={imageUrl}
+            crop={crop}
+            setCrop={setCrop}
+            zoom={zoom}
+            setZoom={setZoom}
+            aspect={9 / 16}
+            onCropComplete={onCropComplete}
+            handleSaveCroppedImage={() =>
+              handleSaveCroppedImage("backgroundimage", (downloadURL) => {
+                setTempBackgroundImage(downloadURL);
+                setProjectData((prevData) => ({
+                  ...prevData,
+                  background: {
+                    ...prevData.background,
+                    backgroundImage: downloadURL,
+                  },
+                }));
+              })
+            }
+            uploading={uploading}
+          />
         </div>
       ) : (
         <div className="my-4">
@@ -887,6 +936,95 @@ const EditBoard = () => {
       <Button type="primary" onClick={handleSaveBackgroundSettings}>
         Save Background Settings
       </Button>
+    </div>
+  );
+
+  const renderAvatarEditor = () => (
+    <div>
+      <h2 className="mb-4">Edit Avatar</h2>
+      {projectData.avatar?.image && (
+        <>
+          <div className="my-4">
+            <label>Adjust Avatar Size</label>
+            <Slider
+              min={50}
+              max={300}
+              value={parseInt(projectData.avatar.style.width, 10)}
+              onChange={handleAvatarSizeChange}
+            />
+          </div>
+
+          <div className="my-4">
+            <Button
+              danger
+              onClick={() => {
+                setProjectData((prevData) => ({
+                  ...prevData,
+                  avatar: {
+                    image: null,
+                    style: {
+                      width: "0px",
+                      height: "0px",
+                    },
+                  },
+                }));
+              }}
+            >
+              Delete Avatar
+            </Button>
+          </div>
+        </>
+      )}
+
+      <div className="my-4">
+        <Upload
+          beforeUpload={(file) =>
+            handleUpload(file, "avatars", (downloadURL) => {
+              setProjectData((prevData) => ({
+                ...prevData,
+                avatar: {
+                  ...prevData.avatar,
+                  image: downloadURL,
+                  style: {
+                    width: "100px",
+                    height: "100px",
+                  },
+                },
+              }));
+            })
+          }
+          showUploadList={false}
+        >
+          <Button icon={<UploadOutlined />} loading={uploading}>
+            {uploading ? "Uploading..." : "Upload New Avatar"}
+          </Button>
+        </Upload>
+      </div>
+
+      <CropperModal
+        isCropModalVisible={isCropModalVisible}
+        setIsCropModalVisible={setIsCropModalVisible}
+        imageUrl={imageUrl}
+        crop={crop}
+        setCrop={setCrop}
+        zoom={zoom}
+        setZoom={setZoom}
+        cropShape="round"
+        aspect={1 / 1}
+        onCropComplete={onCropComplete}
+        handleSaveCroppedImage={() =>
+          handleSaveCroppedImage("avatars", (downloadURL) => {
+            setProjectData((prevData) => ({
+              ...prevData,
+              avatar: {
+                ...prevData.avatar,
+                image: downloadURL,
+              },
+            }));
+          })
+        }
+        uploading={uploading}
+      />
     </div>
   );
 
@@ -958,31 +1096,19 @@ const EditBoard = () => {
       <NavBar />
 
       <div className="flex flex-col p-4">
-        {editingType === "text" ? (
-          renderTextEditor()
-        ) : editingType === "icon" ? (
-          renderIconList()
-        ) : editingType === "saveProject" ? (
-          renderUserProjectForm()
-        ) : editingType === "button" ? (
-          renderButtonEditor()
-        ) : editingType === "background" ? (
-          <>
-            {renderBackgroundEditor()}
-            <CropperModal
-              isCropModalVisible={isCropModalVisible}
-              setIsCropModalVisible={setIsCropModalVisible}
-              imageUrl={imageUrl}
-              crop={crop}
-              setCrop={setCrop}
-              zoom={zoom}
-              setZoom={setZoom}
-              onCropComplete={onCropComplete}
-              handleSaveCroppedImage={handleSaveCroppedImage}
-              uploading={uploading}
-            />
-          </>
-        ) : null}
+        {editingType === "text"
+          ? renderTextEditor()
+          : editingType === "icon"
+            ? renderIconList()
+            : editingType === "saveProject"
+              ? renderUserProjectForm()
+              : editingType === "button"
+                ? renderButtonEditor()
+                : editingType === "background"
+                  ? renderBackgroundEditor()
+                  : editingType === "avatar"
+                    ? renderAvatarEditor()
+                    : null}
       </div>
     </section>
   );

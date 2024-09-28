@@ -6,7 +6,6 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
-
 export const saveProjectToFirestore = async (
   userId,
   projectId,
@@ -25,8 +24,7 @@ export const saveProjectToFirestore = async (
           socialLinks: projectData.socialLinks,
           texts: projectData.texts,
           buttons: projectData.buttons,
-
-          createdTime: serverTimestamp(),
+          avatar: projectData.avatar,
         },
         { merge: true },
       );
@@ -42,6 +40,7 @@ export const saveProjectToFirestore = async (
           socialLinks: projectData.socialLinks,
           texts: projectData.texts,
           buttons: projectData.buttons,
+          avatar: projectData.avatar,
           createdTime: serverTimestamp(),
         },
       );

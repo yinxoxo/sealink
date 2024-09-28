@@ -63,7 +63,8 @@ const initialSimpleCardContent = {
     backgroundPosition: "center",
   },
   avatar: {
-    image: `url(https://images.unsplash.com/photo-1498982261566-1c28c9cf4c02?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
+    image:
+      "https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     style: {
       width: "100px",
       height: "100px",
@@ -72,6 +73,7 @@ const initialSimpleCardContent = {
 };
 
 initialSimpleCardContent.itemsOrder = [
+  { id: `avatar-1`, type: "avatar" },
   ...initialSimpleCardContent.texts.map((text, index) => ({
     id: `text-${index + 1}`,
     type: "text",

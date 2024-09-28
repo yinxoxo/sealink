@@ -13,6 +13,8 @@ const CropperModal = ({
   onCropComplete,
   handleSaveCroppedImage,
   uploading,
+  aspect,
+  cropShape = "rect",
 }) => (
   <Modal
     className="h-full w-full"
@@ -38,7 +40,8 @@ const CropperModal = ({
           image={imageUrl}
           crop={crop}
           zoom={zoom}
-          aspect={9 / 16}
+          aspect={aspect}
+          cropShape={cropShape}
           onCropChange={setCrop}
           onZoomChange={setZoom}
           onCropComplete={onCropComplete}

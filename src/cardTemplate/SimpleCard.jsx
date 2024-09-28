@@ -92,6 +92,30 @@ const SimpleCard = () => {
   console.log("data in simplecard", projectData);
   const renderItems = () => {
     return itemsOrder.map((item) => {
+      if (item.type === "avatar" && projectData.avatar?.image) {
+        const avatar = projectData.avatar;
+        return (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            content={
+              <div
+                className="flex w-full items-center justify-center"
+                onClick={() => setEditingType("avatar")}
+              >
+                <img
+                  src={avatar.image}
+                  alt="Avatar"
+                  style={getItemStyle(item.type)}
+                />
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
+            moveItem={moveItem}
+          />
+        );
+      }
+
       if (item.type === "text") {
         const textItem = projectData.texts.find(
           (text, index) => `text-${index + 1}` === item.id,
@@ -224,6 +248,15 @@ const SimpleCard = () => {
         };
       case "icons":
         return "flex justify-center space-x-4";
+      case "avatar":
+        return {
+          width: projectData.avatar.style.width,
+          height: projectData.avatar.style.height,
+          borderRadius: "50%",
+          overflow: "hidden",
+          objectFit: "cover",
+          cursor: "pointer",
+        };
       default:
         return "";
     }
