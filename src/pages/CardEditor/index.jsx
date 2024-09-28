@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import ArtCard from "../../CardTemplate/ArtCard";
 import SimpleCard from "../../CardTemplate/SimpleCard";
-import BusinessCard from "../../CardTemplate/BusinessCard";
+import WoodCard from "../../cardTemplate/WoodCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
@@ -35,10 +35,11 @@ const CardEditorContent = ({ template }) => {
     switch (template) {
       case "SimpleCard":
         return <SimpleCard />;
+      case "WoodCard":
+        return <WoodCard />;
       case "ArtCard":
         return <ArtCard />;
-      case "BusinessCard":
-        return <BusinessCard />;
+
       default:
         return <ErrorMessage message="No matching template found." />;
     }

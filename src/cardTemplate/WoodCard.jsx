@@ -63,7 +63,7 @@ DraggableItem.propTypes = {
   moveItem: PropTypes.func.isRequired,
 };
 
-const SimpleCard = ({ data }) => {
+const WoodCard = ({ data }) => {
   const location = useLocation();
 
   const {
@@ -285,4 +285,4 @@ const SimpleCard = ({ data }) => {
   );
 };
 
-export default SimpleCard;
+export default WoodCard;
