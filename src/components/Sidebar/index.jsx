@@ -21,7 +21,7 @@ const Sidebar = () => {
   return (
     <div className="relative">
       <nav
-        className={`fixed flex h-full ${isOpen ? "w-64" : "w-20"} flex-col justify-between bg-white px-2 shadow-lg transition-all duration-300`}
+        className={`fixed flex h-full ${isOpen ? "w-64 px-6" : "w-20 px-2"} flex-col justify-between bg-white shadow-lg transition-all duration-300`}
       >
         <button
           onClick={toggleSidebar}
@@ -45,7 +45,7 @@ const Sidebar = () => {
 
         <div className="flex flex-col items-center space-y-2 pb-10">
           <button
-            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center lg:w-full`}
+            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} w-full space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center`}
           >
             <FaChartColumn className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`} />
             {isOpen && (
@@ -54,14 +54,14 @@ const Sidebar = () => {
           </button>
 
           <button
-            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center lg:w-full`}
+            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} w-full space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center`}
           >
             <FaChessQueen className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`} />
             {isOpen && <span className="text-sm font-medium">PRO</span>}
           </button>
 
           <button
-            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center font-bold shadow-md lg:w-full`}
+            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} w-full space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center font-bold shadow-md`}
           >
             <FaChildReaching
               className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`}
