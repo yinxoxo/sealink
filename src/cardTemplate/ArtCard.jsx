@@ -76,9 +76,6 @@ const ArtCard = ({ data }) => {
 
   const projectData = isTemplatesPage ? data : contextProjectData;
 
-  console.log("Current page:", location.pathname);
-  console.log("Using project data:", projectData);
-
   if (!projectData) return <div>No project data available</div>;
 
   const icons = projectData.socialLinks.iconList.map((link) => ({
