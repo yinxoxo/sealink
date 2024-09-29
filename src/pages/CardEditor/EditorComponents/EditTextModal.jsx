@@ -108,7 +108,11 @@ const EditTextModal = ({
           style={{ width: "100%" }}
         >
           {fontOptions.map((font) => (
-            <Select.Option key={font.value} value={font.value}>
+            <Select.Option
+              key={font.value}
+              value={font.value}
+              style={{ fontFamily: font.value }}
+            >
               {font.label}
             </Select.Option>
           ))}

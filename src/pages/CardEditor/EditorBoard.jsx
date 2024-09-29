@@ -845,7 +845,11 @@ const EditBoard = () => {
             className="rounded border p-2"
           >
             {fontOptions.map((font) => (
-              <Option key={font.value} value={font.value}>
+              <Option
+                key={font.value}
+                value={font.value}
+                style={{ fontFamily: font.value }}
+              >
                 {font.label}
               </Option>
             ))}
