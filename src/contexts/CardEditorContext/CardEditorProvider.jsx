@@ -19,6 +19,7 @@ export const CardEditorProvider = ({ children }) => {
   const [editingType, setEditingType] = useState(null);
   const [selectedText, setSelectedText] = useState(null);
 
+  const isDashboardPage = location.pathname === "/dashboard";
   const isCardEditorPage = location.pathname.startsWith(
     "/dashboard/card-editor",
   );

@@ -73,8 +73,10 @@ const SimpleCard = ({ data }) => {
   } = useCardEditorContext();
 
   const isTemplatesPage = location.pathname === "/templates";
+  const isDashboardPage = location.pathname === "/dashboard";
 
-  const projectData = isTemplatesPage ? data : contextProjectData;
+  const projectData =
+    isTemplatesPage || isDashboardPage ? data : contextProjectData;
 
   if (!projectData) return <div>No project data available</div>;
 

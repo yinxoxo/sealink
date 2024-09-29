@@ -30,6 +30,7 @@ export const saveProjectToFirestore = async (
           texts: projectData.texts,
           buttons: projectData.buttons,
           avatar: projectData.avatar,
+          isPublished: projectData.isPublished,
           publishedUrl: projectData.publishedUrl,
         },
         { merge: true },
@@ -48,6 +49,7 @@ export const saveProjectToFirestore = async (
           texts: projectData.texts,
           buttons: projectData.buttons,
           avatar: projectData.avatar,
+          isPublished: projectData.isPublished,
           createdTime: serverTimestamp(),
         },
       );

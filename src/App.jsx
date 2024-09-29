@@ -49,7 +49,14 @@ function App() {
                   path="/dashboard"
                   element={<PrivateRoute element={<LayoutWithSidebar />} />}
                 >
-                  <Route index element={<Dashboard />} />
+                  <Route
+                    index
+                    element={
+                      <CardEditorProvider>
+                        <Dashboard />
+                      </CardEditorProvider>
+                    }
+                  />
                   <Route
                     path="card-editor/:template/:projectId?"
                     element={
