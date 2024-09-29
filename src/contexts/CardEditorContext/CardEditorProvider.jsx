@@ -3,6 +3,11 @@ import { createContext } from "react";
 import { useProjects } from "../ProjectContext/useProjects";
 import initialSimpleCardContent from "../../cardTemplate/cardContent/initialSimpleCardContent";
 import initialWoodCardContent from "../../cardTemplate/cardContent/initialWoodCardContent";
+import initialArtCardContent from "../../cardTemplate/cardContent/initialArtCardContent";
+import initialBreadCardContent from "../../cardTemplate/cardContent/initialBreadCardContent";
+import initialJiaCardContent from "../../cardTemplate/cardContent/initialJiaCardContent";
+import initialForestCardContent from "../../cardTemplate/cardContent/initialForestCardContent";
+import initialGalaxyCardContent from "../../cardTemplate/cardContent/initialGalaxyCardContent";
 import { useParams, useLocation } from "react-router-dom";
 
 export const CardEditorContext = createContext();
@@ -25,14 +30,23 @@ export const CardEditorProvider = ({ children }) => {
   }, [projects, projectId]);
 
   if (!projectId && !projectData && isCardEditorPage) {
-    // 根據模板判斷應該載入的初始資料
     if (template === "WoodCard") {
       setProjectData({ ...initialWoodCardContent });
     } else if (template === "SimpleCard") {
       setProjectData({ ...initialSimpleCardContent });
+    } else if (template === "ArtCard") {
+      setProjectData({ ...initialArtCardContent });
+    } else if (template === "BreadCard") {
+      setProjectData({ ...initialBreadCardContent });
+    } else if (template === "JiaCard") {
+      setProjectData({ ...initialJiaCardContent });
+    } else if (template === "ForestCard") {
+      setProjectData({ ...initialForestCardContent });
+    } else if (template === "GalaxyCard") {
+      setProjectData({ ...initialGalaxyCardContent });
     } else {
       console.error("找不到對應的模板資料");
-      return; // 或者其他錯誤處理
+      return;
     }
   }
 

@@ -1,13 +1,17 @@
-import { FaFacebook, FaGithub } from "react-icons/fa";
-import { useState, useCallback } from "react";
+import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
 import { useDrag, useDrop } from "react-dnd";
-
-import { v4 as uuidv4 } from "uuid";
+import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useRef } from "react";
+import { ICON_MAP } from "../cardTemplate/cardContent/iconList";
 
-const DraggableItem = ({ id, children, index, moveItem }) => {
+const ItemType = "ITEM";
+
+const DraggableItem = ({ id, content, index, moveItem }) => {
+  const ref = useRef(null);
+
   const [{ isDragging }, drag] = useDrag({
-    type: "item",
+    type: ItemType,
     item: { id, index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -15,136 +19,269 @@ const DraggableItem = ({ id, children, index, moveItem }) => {
   });
 
   const [, drop] = useDrop({
-    accept: "item",
-    hover(item, monitor) {
-      if (!drag) {
-        return;
+    accept: ItemType,
+    hover: (draggedItem) => {
+      if (draggedItem.index !== index) {
+        moveItem(draggedItem.index, index);
+        draggedItem.index = index;
       }
-      const dragIndex = item.index;
-      const hoverIndex = index;
-
-      if (dragIndex === hoverIndex) {
-        return;
+    },
+    drop: (draggedItem) => {
+      if (draggedItem.index !== index) {
+        moveItem(draggedItem.index, index);
+        draggedItem.index = index;
       }
-
-      moveItem(dragIndex, hoverIndex);
-      item.index = hoverIndex;
     },
   });
 
+  drag(drop(ref));
+
   return (
     <div
-      ref={(node) => drag(drop(node))}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
+      ref={ref}
+      className="fade-in-up my-2 w-full rounded-3xl"
+      style={{
+        transition: "transform 0.3s ease",
+        opacity: isDragging ? 0.8 : 1,
+        backgroundColor: isDragging
+          ? "rgba(255, 255, 255, 0.2)"
+          : "transparent",
+        boxShadow: isDragging ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none",
+        zIndex: isDragging ? 20 : 1,
+        transformOrigin: "center",
+      }}
     >
-      {children}
+      {content}
     </div>
   );
 };
 
 DraggableItem.propTypes = {
   id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
+  content: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
   moveItem: PropTypes.func.isRequired,
 };
 
-const ArtCard = () => {
-  const buttons = [
-    { id: uuidv4(), text: "VISIT MY WEBSITE" },
-    { id: uuidv4(), text: "MY SERVICES" },
-  ];
+const ArtCard = ({ data }) => {
+  const location = useLocation();
 
-  const icons = [
-    { id: uuidv4(), icon: <FaFacebook size={30} color="#d1c3a1" />, link: "#" },
-    { id: uuidv4(), icon: <FaGithub size={30} color="#d1c3a1" />, link: "#" },
-  ];
+  const {
+    projectData: contextProjectData,
+    setProjectData,
+    setEditingType,
+  } = useCardEditorContext();
 
-  const [items, setItems] = useState([
-    ...buttons.map((button) => ({
-      id: button.id,
-      content: (
-        <button
-          key={button.id}
-          className="my-2 block w-full rounded-l-none rounded-r-full bg-[#87794e] py-3 text-white hover:bg-[#746945]"
-        >
-          {button.text}
-        </button>
-      ),
-    })),
-    {
-      id: uuidv4(),
-      content: (
-        <div className="mt-6 flex justify-center space-x-4">
-          {icons.map((icon) => (
-            <a
-              key={icon.id}
-              href={icon.link}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              {icon.icon}
-            </a>
-          ))}
-        </div>
-      ),
-    },
-  ]);
+  const isTemplatesPage = location.pathname === "/templates";
 
-  const moveItem = useCallback((dragIndex, hoverIndex) => {
-    setItems((prevItems) => {
-      const newItems = [...prevItems];
-      const draggedItem = newItems[dragIndex];
-      newItems.splice(dragIndex, 1);
-      newItems.splice(hoverIndex, 0, draggedItem);
-      return newItems;
-    });
-  }, []);
+  const projectData = isTemplatesPage ? data : contextProjectData;
 
-  return (
-    <div
-      className="card-container p-4"
-      style={{ backgroundColor: ArtCard.backgroundSettings.backgroundColor }}
-    >
-      <div className="flex items-center justify-center bg-transparent p-4">
-        <h1 className="font-serif text-4xl text-[#8d4925]">SHEILA</h1>
-      </div>
+  console.log("Current page:", location.pathname);
+  console.log("Using project data:", projectData);
 
-      <div className="relative bg-transparent p-6">
-        <div className="flex flex-row items-center">
-          <div className="flex h-full w-1/2 items-center justify-center bg-[#d1c3a1] p-4">
-            <div>
-              <h2 className="text-4xl font-bold text-[#8d4925]">HI!</h2>
-              <p className="mt-2 font-bold text-[#554f46]">I AM SHEILA</p>
-            </div>
-          </div>
+  if (!projectData) return <div>No project data available</div>;
 
-          <div className="relative h-full w-1/2 overflow-hidden rounded-br-[50%] bg-[#d04d37]">
-            <img
-              className="h-full w-full object-cover"
-              src="https://images.unsplash.com/photo-1720048171419-b515a96a73b8?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="profile"
-            />
-          </div>
-        </div>
-      </div>
+  const icons = projectData.socialLinks.iconList.map((link) => ({
+    icon: ICON_MAP[link.name],
+    id: link.id,
+    href: link.href,
+    name: link.name,
+  }));
 
-      <div className="bg-transparent p-6">
-        {items.map((item, index) => (
+  const iconColor = projectData.socialLinks?.style?.color;
+  const iconSize = projectData.socialLinks?.style?.size;
+
+  const { itemsOrder } = projectData;
+
+  const renderItems = () => {
+    return itemsOrder.map((item) => {
+      if (item.type === "avatar" && projectData.avatar?.image) {
+        const avatar = projectData.avatar;
+        return (
           <DraggableItem
             key={item.id}
             id={item.id}
-            index={index}
+            content={
+              <div
+                className="flex w-full items-center justify-center"
+                onClick={() => setEditingType("avatar")}
+              >
+                <img
+                  src={avatar.image}
+                  alt="Avatar"
+                  style={getItemStyle(item.type)}
+                />
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
             moveItem={moveItem}
-          >
-            {item.content}
-          </DraggableItem>
-        ))}
-      </div>
+          />
+        );
+      }
+
+      if (item.type === "text") {
+        const textItem = projectData.texts.find(
+          (text, index) => `text-${index + 1}` === item.id,
+        );
+        if (!textItem) return null;
+        return (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            content={
+              <div
+                className="px-3"
+                style={getItemStyle(item.type, textItem)}
+                onClick={() => {
+                  setEditingType("text");
+                }}
+              >
+                {textItem.text}
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
+            moveItem={moveItem}
+          />
+        );
+      } else if (item.type === "button") {
+        const buttonItem = projectData.buttons.buttonList.find(
+          (button, index) => `button-${index + 1}` === item.id,
+        );
+        if (!buttonItem) return null;
+        return (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            content={
+              <div onClick={() => setEditingType("button")} className="w-full">
+                <button
+                  className="max-w-[540px]"
+                  style={getItemStyle(item.type)}
+                  onClick={() => handleButtonClick(buttonItem.url)}
+                >
+                  {buttonItem.text}
+                </button>
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
+            moveItem={moveItem}
+          />
+        );
+      } else if (item.type === "icons") {
+        return (
+          <DraggableItem
+            key={item.id}
+            id={item.id}
+            content={
+              <div
+                className={`${getItemStyle(item.type)} cursor-pointer`}
+                onClick={() => setEditingType("icon")}
+              >
+                {icons.map((icon) => {
+                  const IconComponent = icon.icon;
+
+                  if (!IconComponent) {
+                    console.error(
+                      `IconComponent for ${icon.name} is undefined`,
+                    );
+                    return null;
+                  }
+
+                  const href =
+                    icon.name === "Email" ? `mailto:${icon.href}` : icon.href;
+                  return (
+                    <a
+                      key={icon.id}
+                      href={href}
+                      target={icon.name === "email" ? "_self" : "_blank"}
+                      rel="noopener noreferrer"
+                    >
+                      <IconComponent size={iconSize} color={iconColor} />
+                    </a>
+                  );
+                })}
+              </div>
+            }
+            index={itemsOrder.indexOf(item)}
+            moveItem={moveItem}
+          />
+        );
+      }
+      return null;
+    });
+  };
+
+  const moveItem = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex) return;
+    const updatedItemsOrder = [...itemsOrder];
+    const [movedItem] = updatedItemsOrder.splice(fromIndex, 1);
+    updatedItemsOrder.splice(toIndex, 0, movedItem);
+
+    setProjectData((prevData) => ({
+      ...prevData,
+      itemsOrder: updatedItemsOrder,
+    }));
+  };
+
+  const handleButtonClick = (url) => {
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const getItemStyle = (type, item = {}) => {
+    switch (type) {
+      case "text":
+        return {
+          fontSize: item.style?.fontSize,
+          fontWeight: item.style?.fontWeight,
+          color: item.style?.color,
+          fontFamily: item.style?.fontFamily,
+          cursor: "pointer",
+        };
+      case "button":
+        return {
+          backgroundColor: projectData.buttons.style.backgroundColor,
+          width: projectData.buttons.style.width,
+          color: projectData.buttons.style.color,
+          borderRadius: projectData.buttons.style.borderRadius,
+          padding: projectData.buttons.style.padding,
+          fontSize: projectData.buttons.style.fontSize,
+          fontWeight: projectData.buttons.style.fontWeight,
+          fontFamily: projectData.buttons.style.fontFamily,
+        };
+      case "icons":
+        return "flex justify-center space-x-4";
+      case "avatar":
+        return {
+          width: projectData.avatar.style.width,
+          height: projectData.avatar.style.height,
+          borderRadius: "50%",
+          overflow: "hidden",
+          objectFit: "cover",
+          cursor: "pointer",
+        };
+      default:
+        return "";
+    }
+  };
+
+  return (
+    <div className="card-container relative bg-white p-6 text-center">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: projectData.background.backgroundImage
+            ? projectData.background.backgroundImage
+            : "none",
+          backgroundColor: projectData.background.backgroundColor || "none",
+          opacity: projectData.background.opacity || 0.6,
+          backgroundSize: projectData.background.backgroundSize || "cover",
+          backgroundPosition:
+            projectData.background.backgroundPosition || "center",
+        }}
+      />
+      <div className="relative z-10 flex flex-col">{renderItems()}</div>
     </div>
   );
-};
-ArtCard.backgroundSettings = {
-  backgroundColor: "#f5f3ee",
 };
 
 export default ArtCard;

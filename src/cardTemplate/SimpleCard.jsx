@@ -210,8 +210,6 @@ const SimpleCard = ({ data }) => {
       return null;
     });
   };
-
-  //
   const moveItem = (fromIndex, toIndex) => {
     if (fromIndex === toIndex) return;
     const updatedItemsOrder = [...itemsOrder];

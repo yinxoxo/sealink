@@ -32,7 +32,7 @@ const Header = () => {
                 Hello, {user.displayName || "User"}
               </span>
               <Link to="/dashboard">
-                <button className="mr-1 mr-2 bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
+                <button className="mr-1 bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
                   Dashboard
                 </button>
               </Link>
@@ -45,7 +45,7 @@ const Header = () => {
             </>
           ) : (
             <Link to="/signup">
-              <button className="mr-1 mr-2 bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
+              <button className="mr-1 bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
                 Log in
               </button>
 

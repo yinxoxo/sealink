@@ -1,8 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import ArtCard from "../../CardTemplate/ArtCard";
-import SimpleCard from "../../CardTemplate/SimpleCard";
+import ArtCard from "../../cardTemplate/ArtCard";
+import SimpleCard from "../../cardTemplate/SimpleCard";
 import WoodCard from "../../cardTemplate/WoodCard";
+import BreadCard from "../../cardTemplate/BreadCard";
+import JiaCard from "../../cardTemplate/JiaCard";
+import ForestCard from "../../cardTemplate/ForestCard";
+import GalaxyCard from "../../cardTemplate/GalaxyCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
@@ -39,6 +43,14 @@ const CardEditorContent = ({ template }) => {
         return <WoodCard />;
       case "ArtCard":
         return <ArtCard />;
+      case "BreadCard":
+        return <BreadCard />;
+      case "JiaCard":
+        return <JiaCard />;
+      case "ForestCard":
+        return <ForestCard />;
+      case "GalaxyCard":
+        return <GalaxyCard />;
 
       default:
         return <ErrorMessage message="No matching template found." />;

@@ -63,7 +63,7 @@ DraggableItem.propTypes = {
   moveItem: PropTypes.func.isRequired,
 };
 
-const WoodCard = ({ data }) => {
+const GalaxyCard = ({ data }) => {
   const location = useLocation();
 
   const {
@@ -211,6 +211,7 @@ const WoodCard = ({ data }) => {
     });
   };
 
+  //
   const moveItem = (fromIndex, toIndex) => {
     if (fromIndex === toIndex) return;
     const updatedItemsOrder = [...itemsOrder];
@@ -284,4 +285,4 @@ const WoodCard = ({ data }) => {
   );
 };
 
-export default WoodCard;
+export default GalaxyCard;

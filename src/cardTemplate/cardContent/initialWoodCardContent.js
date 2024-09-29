@@ -5,8 +5,8 @@ const initialWoodCardContent = {
       style: {
         color: "#8C8276",
         fontWeight: 700,
-        fontSize: "36px",
-        fontFamily: "Georgia, serif",
+        fontSize: "48px",
+        fontFamily: "Dancing Script, serif",
       },
     },
     {
@@ -15,7 +15,7 @@ const initialWoodCardContent = {
         color: "#000000",
         fontWeight: 400,
         fontSize: "18px",
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "Dancing Script, sans-serif",
       },
     },
     {
@@ -57,7 +57,7 @@ const initialWoodCardContent = {
       padding: "14px",
       fontSize: "14px",
       fontWeight: 400,
-      fontFamily: "Arial, sans-serif",
+      fontFamily: "Oswald, sans-serif",
     },
   },
 
