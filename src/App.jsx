@@ -37,7 +37,14 @@ function App() {
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Route>
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/sealink/:projectId?" element={<Deploy />} />
+                <Route
+                  path="/sealink/:template/:projectId"
+                  element={
+                    <CardEditorProvider>
+                      <Deploy />
+                    </CardEditorProvider>
+                  }
+                />
                 <Route
                   path="/dashboard"
                   element={<PrivateRoute element={<LayoutWithSidebar />} />}

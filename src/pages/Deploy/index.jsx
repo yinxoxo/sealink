@@ -1,26 +1,37 @@
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
-import SimpleCard from "../../CardTemplate/SimpleCard";
+import SimpleCard from "../../cardTemplate/SimpleCard";
+import ArtCard from "../../cardTemplate/ArtCard";
+import BreadCard from "../../cardTemplate/BreadCard";
+import ForestCard from "../../cardTemplate/ForestCard";
+import GalaxyCard from "../../cardTemplate/GalaxyCard";
+import JiaCard from "../../cardTemplate/JiaCard";
+import WoodCard from "../../cardTemplate/WoodCard";
 import Loading from "../../components/Loading";
 
 const Deploy = () => {
-  const { projectId } = useParams();
-  const { setProjectId, currentProject } = useCardEditorContext();
+  const { template } = useParams();
+  const { projectData } = useCardEditorContext();
 
-  // useEffect(() => {
-  //   if (projectId) {
-  //     setProjectId(projectId);
-  //   }
-  // }, [projectId, setProjectId]);
+  const cardComponents = {
+    ArtCard,
+    BreadCard,
+    ForestCard,
+    GalaxyCard,
+    JiaCard,
+    SimpleCard,
+    WoodCard,
+  };
 
-  if (!currentProject) {
+  const CardComponent = cardComponents[template];
+
+  if (!projectData) {
     return <Loading />;
   }
 
   return (
     <div className="w- h-full min-h-screen">
-      <SimpleCard />
+      <CardComponent />
     </div>
   );
 };
