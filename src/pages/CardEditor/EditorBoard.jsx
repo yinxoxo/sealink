@@ -190,31 +190,34 @@ const EditBoard = () => {
       },
       itemsOrder: itemsOrder,
       avatar: {
-        image: projectData.avatar.image,
+        image: projectData.avatar.image || null,
         style: {
           width: projectData.avatar.style.width,
           height: projectData.avatar.style.height,
         },
       },
+      isPublished: data.action === "publish",
+      publishedUrl: null,
     };
 
-    console.log("Submit Project Data:", newProjectData);
-    mutation.mutate(newProjectData, {
+    const dataToMutate = {
+      ...newProjectData,
       action: data.action,
-    });
+    };
+
+    mutation.mutate(dataToMutate);
   };
 
   const mutation = useMutation(
-    (newProjectData) =>
-      saveProjectToFirestore(user.uid, projectId, newProjectData),
+    (dataToMutate) => saveProjectToFirestore(user.uid, projectId, dataToMutate),
     {
-      onSuccess: (savedProjectId, variables) => {
-        const { action } = variables;
-
+      onSuccess: (result, dataToMutate) => {
+        const { action } = dataToMutate;
+        const { publishedUrl } = result;
         queryClient.invalidateQueries("userProjects");
 
         if (action === "publish") {
-          setNewProjectUrl(`/sealink/${savedProjectId || projectId}`);
+          setNewProjectUrl(publishedUrl);
           setIsModalOpen(true);
         } else {
           navigate("/dashboard");
