@@ -26,7 +26,7 @@ TextCard.propTypes = {
   textItem: PropTypes.shape({
     text: PropTypes.string.isRequired,
     style: PropTypes.shape({
-      fontSize: PropTypes.string,
+      fontSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       fontWeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       color: PropTypes.string,
       fontFamily: PropTypes.string,

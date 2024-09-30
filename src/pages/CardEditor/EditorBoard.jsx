@@ -43,7 +43,6 @@ import getCroppedImg from "../../utils/getCroppedImg";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 
-import { UploadOutlined } from "@ant-design/icons";
 import { FaBacon, FaRegTrashCan } from "react-icons/fa6";
 
 const { Option } = Select;
@@ -122,15 +121,7 @@ const EditBoard = () => {
   const [useBackgroundImage, setUseBackgroundImage] = useState(
     !!projectData.background.backgroundImage,
   );
-  const [tempBackgroundImage, setTempBackgroundImage] = useState(
-    projectData.background.backgroundImage,
-  );
-  const [tempBackgroundColor, setTempBackgroundColor] = useState(
-    projectData.background.backgroundColor || "#ffffff",
-  );
-  const [tempOpacity, setTempOpacity] = useState(
-    projectData.background.opacity || 0.6,
-  );
+
   const [uploading, setUploading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -157,7 +148,7 @@ const EditBoard = () => {
       background: {
         backgroundColor: projectData.background.backgroundColor || null,
         backgroundImage: projectData.background.backgroundImage || null,
-        opacity: tempOpacity,
+        opacity: projectData.background.opacity,
         backgroundSize: "cover",
         backgroundPosition: "center",
       },
@@ -283,27 +274,6 @@ const EditBoard = () => {
       message.error("Failed to crop and upload the image.");
       setUploading(false);
     }
-  };
-
-  const handleUpload = (file, folderName, onSuccessCallback) => {
-    setUploading(true);
-    const reader = new FileReader();
-
-    reader.onload = async () => {
-      const base64URL = reader.result;
-      setImageUrl(base64URL);
-
-      const blob = new Blob([file], { type: file.type });
-
-      const downloadURL = await uploadImageToFirebase(blob, folderName);
-      onSuccessCallback(downloadURL);
-
-      setUploading(false);
-      setIsCropModalVisible(true);
-      message.success("Image uploaded successfully!");
-    };
-
-    reader.readAsDataURL(file);
   };
 
   const handleAvatarSizeChange = (value) => {
@@ -443,28 +413,28 @@ const EditBoard = () => {
     updateProjectData(updatedData);
   };
 
-  const handleSaveBackgroundSettings = () => {
-    if (useBackgroundImage && !tempBackgroundImage) {
-      console.error(
-        "Error: No background image available while useBackgroundImage is true",
-      );
-      return;
-    }
+  // const handleSaveBackgroundSettings = () => {
+  //   if (useBackgroundImage && !tempBackgroundImage) {
+  //     console.error(
+  //       "Error: No background image available while useBackgroundImage is true",
+  //     );
+  //     return;
+  //   }
 
-    const updatedData = {
-      ...projectData,
-      background: {
-        backgroundImage: useBackgroundImage
-          ? `url(${tempBackgroundImage})`
-          : null,
-        backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
-        opacity: tempOpacity,
-      },
-    };
-    setProjectData(updatedData);
-    updateProjectData(updatedData);
-    message.success("Background settings saved successfully!");
-  };
+  //   const updatedData = {
+  //     ...projectData,
+  //     background: {
+  //       backgroundImage: useBackgroundImage
+  //         ? `url(${tempBackgroundImage})`
+  //         : null,
+  //       backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
+  //       opacity: tempOpacity,
+  //     },
+  //   };
+  //   setProjectData(updatedData);
+  //   updateProjectData(updatedData);
+  //   message.success("Background settings saved successfully!");
+  // };
 
   const renderTextEditor = () => {
     return (
@@ -957,20 +927,25 @@ const EditBoard = () => {
         <div className="mt-2 space-y-2">
           <label className="text-sm font-medium">Background Image URL</label>
           <Input
-            value={tempBackgroundImage}
-            onChange={(e) => setTempBackgroundImage(e.target.value)}
+            value={projectData.background.backgroundImage}
             placeholder="Enter image URL or upload"
+            onChange={(e) => {
+              const newImage = e.target.value;
+              const updatedData = {
+                ...projectData,
+                background: {
+                  ...projectData.background,
+                  backgroundImage: newImage,
+                },
+              };
+              setProjectData(updatedData);
+              updateProjectData(updatedData);
+            }}
           />
           <UploadButton
             onUpload={(downloadURL) => {
-              setTempBackgroundImage(downloadURL);
-              updateProjectData((prevData) => ({
-                ...prevData,
-                background: {
-                  ...prevData.background,
-                  backgroundImage: downloadURL,
-                },
-              }));
+              setImageUrl(downloadURL);
+              setIsCropModalVisible(true);
             }}
           />
 
@@ -986,27 +961,30 @@ const EditBoard = () => {
             onCropComplete={onCropComplete}
             handleSaveCroppedImage={() =>
               handleSaveCroppedImage("backgroundimage", (downloadURL) => {
-                setTempBackgroundImage(downloadURL);
-                setProjectData((prevData) => ({
-                  ...prevData,
+                const updatedData = {
+                  ...projectData,
                   background: {
-                    ...prevData.background,
-                    backgroundImage: downloadURL,
+                    ...projectData.background,
+                    backgroundImage: `url(${downloadURL})`,
+                    backgroundColor: null,
                   },
-                }));
+                };
+                console.log(updatedData);
+                setProjectData(updatedData);
+                updateProjectData(updatedData);
               })
             }
             uploading={uploading}
           />
         </div>
       ) : (
-        <div className="flex flex-col space-y-2">
+        <div className="mt-2 flex flex-col space-y-2">
           <label className="text-sm font-medium">Background Color</label>
           <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
             <div
               className="relative h-6 w-20 cursor-pointer rounded"
               style={{
-                backgroundColor: tempBackgroundColor,
+                backgroundColor: projectData.background.backgroundColor,
               }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -1020,16 +998,18 @@ const EditBoard = () => {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <ChromePicker
-                    color={tempBackgroundColor}
-                    onChangeComplete={(color) => {
-                      setTempBackgroundColor(color.hex);
+                    color={projectData.background.backgroundColor}
+                    onChange={(color) => {
+                      // setTempBackgroundColor(color.hex);
                       const updatedData = {
                         ...projectData,
                         background: {
                           ...projectData.background,
+                          backgroundImage: null,
                           backgroundColor: color.hex,
                         },
                       };
+
                       setProjectData(updatedData);
                       updateProjectData(updatedData);
                     }}
@@ -1046,7 +1026,9 @@ const EditBoard = () => {
           <label htmlFor="background-opacity" className="text-sm font-medium">
             Background Opacity
           </label>
-          <span className="text-graySpan text-sm">{tempOpacity}</span>
+          <span className="text-graySpan text-sm">
+            {projectData.background.opacity}
+          </span>
         </div>
         <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
           <Slider
@@ -1054,18 +1036,29 @@ const EditBoard = () => {
             min={0.1}
             max={1}
             step={0.1}
-            value={[tempOpacity]}
-            onValueChange={(value) => setTempOpacity(value[0])}
+            value={[projectData.background.opacity]}
+            onValueChange={(value) => {
+              const newOpacity = value[0];
+              const updatedData = {
+                ...projectData,
+                background: {
+                  ...projectData.background,
+                  opacity: newOpacity,
+                },
+              };
+              setProjectData(updatedData);
+              updateProjectData(updatedData);
+            }}
           />
         </div>
       </div>
 
-      <Button
+      {/* <Button
         className="bg-button hover:bg-button-hover w-full"
         onClick={handleSaveBackgroundSettings}
       >
         Save Background Settings
-      </Button>
+      </Button> */}
     </div>
   );
 
@@ -1145,6 +1138,7 @@ const EditBoard = () => {
                 },
               },
             };
+            console.log(updatedData);
             setProjectData(updatedData);
             updateProjectData(updatedData);
           })
