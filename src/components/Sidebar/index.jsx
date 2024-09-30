@@ -10,12 +10,11 @@ import {
   FaChessQueen,
 } from "react-icons/fa6";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, setIsOpen }) => {
   const { user } = useAuth();
-  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(!isOpen); // Update state from parent component
   };
 
   return (

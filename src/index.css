@@ -49,6 +49,16 @@
   .template-card-size {
     @apply h-full w-full;
   }
+
+  .fade-in-up {
+    @apply opacity-0;
+    animation: fadeInUp 1s ease-out forwards;
+  }
+
+  .skeleton {
+    @apply rounded-md bg-gray-300;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+  }
 }
 
 @keyframes fadeInUp {
@@ -62,9 +72,13 @@
   }
 }
 
-.fade-in-up {
-  @apply opacity-0;
-  animation: fadeInUp 1s ease-out forwards;
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
 }
 
 @layer base {

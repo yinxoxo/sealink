@@ -4,17 +4,16 @@ import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import PropTypes from "prop-types";
 import NavBar from "./NavBar";
+import { Button } from "@/components/ui/button";
 import {
   Select,
-  Button,
-  Input,
-  Switch,
-  Upload,
-  message,
-  Slider,
-  Radio,
-  Space,
-} from "antd";
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Input, Switch, Upload, message, Radio, Space } from "antd";
 import {
   ICON_LIST,
   ICON_STYLE,
@@ -31,13 +30,16 @@ import CropperModal from "./EditorComponents/CropperModal";
 import { SketchPicker } from "react-color";
 import fontOptions from "../../cardTemplate/cardContent/fontOptions";
 
-import { UploadOutlined } from "@ant-design/icons";
 import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import getCroppedImg from "../../utils/getCroppedImg";
-import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
+
+import getCroppedImg from "../../utils/getCroppedImg";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
+import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
+
+import { UploadOutlined } from "@ant-design/icons";
+import { FaBacon } from "react-icons/fa6";
 
 const { Option } = Select;
 
@@ -678,7 +680,11 @@ const EditBoard = () => {
 
     return (
       <>
-        <h1 className="text-xl">Button</h1>
+        <div className="flex w-full">
+          <FaBacon />
+          <h1 className="ml-2 text-3xl font-bold">Buttons</h1>
+        </div>
+
         <div className="mt-4">
           {buttonList.map((button, index) => (
             <ButtonCard
@@ -692,7 +698,7 @@ const EditBoard = () => {
         </div>
 
         <Button
-          type="primary"
+          className="bg-button hover:bg-button-hover mt-6"
           onClick={() => {
             const newButtonId = `button-${buttonList.length + 1}`;
             const newButton = {
@@ -728,162 +734,181 @@ const EditBoard = () => {
           />
         )}
 
-        <div className="mt-4">
-          <label>Background Color</label>
-          <div
-            style={{
-              backgroundColor: style.backgroundColor,
-              width: "40px",
-              height: "40px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={() => {
-              setShowBackgroundColorPicker(!showBackgroundColorPicker);
-              setShowFontColorPicker(false);
-            }}
-          />
-          {showBackgroundColorPicker && (
-            <div className="absolute z-10">
-              <SketchPicker
-                color={style.backgroundColor}
-                onChangeComplete={(color) =>
-                  handleButtonStyleChange("backgroundColor", color.hex)
+        <div className="mt-6 flex w-full">
+          <FaBacon />
+          <h1 className="ml-2 text-2xl font-bold">Apperence</h1>
+        </div>
+        <div className="mt-4 space-y-6">
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Background Color</label>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
+              <div
+                className="h-6 w-20 cursor-pointer rounded"
+                style={{
+                  backgroundColor: style.backgroundColor,
+                }}
+                onClick={() => {
+                  setShowBackgroundColorPicker(!showBackgroundColorPicker);
+                  setShowFontColorPicker(false);
+                }}
+              />
+              {showBackgroundColorPicker && (
+                <div className="absolute z-10">
+                  <SketchPicker
+                    color={style.backgroundColor}
+                    onChangeComplete={(color) =>
+                      handleButtonStyleChange("backgroundColor", color.hex)
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Width</label>
+            <span className="text-sm">{style.width}</span>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+              <Slider
+                min={50}
+                max={100}
+                step={1}
+                defaultValue={[parseInt(style.width, 10)]}
+                onValueChange={(value) =>
+                  handleButtonStyleChange("width", `${value[0]}%`)
                 }
+                className="w-full"
               />
             </div>
-          )}
-        </div>
-
-        <div className="mt-4">
-          <label>Width</label>
-          <input
-            type="range"
-            min="50"
-            max="100"
-            value={parseInt(style.width, 10) || 70}
-            onChange={(e) =>
-              handleButtonStyleChange("width", `${e.target.value}%`)
-            }
-          />
-          <span>{style.width}</span>
-        </div>
-
-        <div className="mt-4">
-          <label>Border Radius</label>
-          <input
-            type="range"
-            min="1"
-            max="50"
-            value={parseInt(style.borderRadius, 10) || 20}
-            onChange={(e) =>
-              handleButtonStyleChange("borderRadius", `${e.target.value}px`)
-            }
-          />
-          <span>{style.borderRadius}</span>
-        </div>
-
-        <div className="mt-4">
-          <label>Padding</label>
-          <input
-            type="range"
-            min="1"
-            max="50"
-            value={parseInt(style.padding, 10) || 20}
-            onChange={(e) =>
-              handleButtonStyleChange("padding", `${e.target.value}px`)
-            }
-          />
-          <span>{style.padding}</span>
-        </div>
-
-        <div className="mt-4">
-          <label>Font Size</label>
-          <input
-            type="range"
-            min="10"
-            max="50"
-            value={parseInt(style.fontSize, 10) || 18}
-            onChange={(e) =>
-              handleButtonStyleChange("fontSize", `${e.target.value}px`)
-            }
-          />
-          <span>{style.fontSize}</span>
-        </div>
-
-        <div className="mt-4">
-          <label>Font Weight</label>
-          <input
-            type="range"
-            min="1"
-            max="4"
-            step="1"
-            value={
-              style.fontWeight === 300
-                ? 1
-                : style.fontWeight === 400
-                  ? 2
-                  : style.fontWeight === 600
-                    ? 3
-                    : 4
-            }
-            onChange={(e) => {
-              const weightMap = {
-                1: 300,
-                2: 400,
-                3: 600,
-                4: 700,
-              };
-              handleButtonStyleChange("fontWeight", weightMap[e.target.value]);
-            }}
-          />
-          <span>{style.fontWeight}</span>
-        </div>
-
-        <div className="mt-4">
-          <label>Font Family</label>
-          <Select
-            value={style.fontFamily}
-            onChange={(value) => handleButtonStyleChange("fontFamily", value)}
-            className="rounded border p-2"
-          >
-            {fontOptions.map((font) => (
-              <Option
-                key={font.value}
-                value={font.value}
-                style={{ fontFamily: font.value }}
-              >
-                {font.label}
-              </Option>
-            ))}
-          </Select>
-        </div>
-
-        <div className="mt-4">
-          <label>Text Color</label>
-          <div
-            style={{
-              backgroundColor: style.color,
-              width: "40px",
-              height: "40px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
-            onClick={() => {
-              setShowFontColorPicker(!showFontColorPicker);
-              setShowBackgroundColorPicker(false);
-            }}
-          />
-          {showFontColorPicker && (
-            <div style={{ position: "absolute", zIndex: 2 }}>
-              <SketchPicker
-                color={style.color}
-                onChangeComplete={(color) =>
-                  handleButtonStyleChange("color", color.hex)
+          </div>
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Border Radius</label>
+            <span className="text-sm">{style.borderRadius}</span>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+              <Slider
+                min={1}
+                max={50}
+                step={1}
+                defaultValue={[parseInt(style.borderRadius, 10)]}
+                onValueChange={(value) =>
+                  handleButtonStyleChange("borderRadius", `${value[0]}px`)
                 }
+                className="w-full"
               />
             </div>
-          )}
+          </div>
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Padding</label>
+            <span className="text-sm">{style.padding}</span>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+              <Slider
+                min={1}
+                max={50}
+                step={1}
+                defaultValue={[parseInt(style.padding, 10) || 20]}
+                onValueChange={(value) =>
+                  handleButtonStyleChange("padding", `${value[0]}px`)
+                }
+                className="w-full"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Font Size</label>
+            <span className="text-sm">{style.fontSize}</span>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+              <Slider
+                min={10}
+                max={50}
+                step={1}
+                defaultValue={[parseInt(style.fontSize, 10) || 18]}
+                onValueChange={(value) =>
+                  handleButtonStyleChange("fontSize", `${value[0]}px`)
+                }
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Font Weight</label>
+            <span className="text-sm">{style.fontWeight}</span>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+              <Slider
+                min={1}
+                max={4}
+                step={1}
+                defaultValue={[
+                  style.fontWeight === 300
+                    ? 1
+                    : style.fontWeight === 400
+                      ? 2
+                      : style.fontWeight === 600
+                        ? 3
+                        : 4,
+                ]}
+                onValueChange={(value) => {
+                  const weightMap = {
+                    1: 300,
+                    2: 400,
+                    3: 600,
+                    4: 700,
+                  };
+                  handleButtonStyleChange("fontWeight", weightMap[value[0]]);
+                }}
+                className="w-full"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Font Family</label>
+            <Select
+              onValueChange={(value) =>
+                handleButtonStyleChange("fontFamily", value)
+              }
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select font" />
+              </SelectTrigger>
+              <SelectContent>
+                {fontOptions.map((font) => (
+                  <SelectItem
+                    key={font.value}
+                    value={font.value}
+                    style={{ fontFamily: font.value }}
+                  >
+                    {font.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">Text Color</label>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
+              <div
+                className="h-6 w-20 cursor-pointer rounded"
+                style={{
+                  backgroundColor: style.color,
+                }}
+                onClick={() => {
+                  setShowFontColorPicker(!showFontColorPicker);
+                  setShowBackgroundColorPicker(false);
+                }}
+              />
+              {showFontColorPicker && (
+                <div className="absolute z-10">
+                  <SketchPicker
+                    color={style.color}
+                    onChangeComplete={(color) =>
+                      handleButtonStyleChange("color", color.hex)
+                    }
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </>
     );
@@ -1163,7 +1188,7 @@ const EditBoard = () => {
         disableRedo={redoHistory.length === 0}
       />
 
-      <div className="flex flex-col p-4">
+      <div className="mt-16 flex flex-col p-5">
         {editingType === "text"
           ? renderTextEditor()
           : editingType === "icon"

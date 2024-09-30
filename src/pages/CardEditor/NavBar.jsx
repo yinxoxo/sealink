@@ -8,99 +8,80 @@ import {
   FaRocket,
   FaBars,
 } from "react-icons/fa6";
-import { Dropdown, Menu } from "antd";
+import { FaEdit, FaIcons, FaImage, FaRegSquare } from "react-icons/fa";
 import {
-  EditOutlined,
-  AppstoreAddOutlined,
-  FileImageOutlined,
-} from "@ant-design/icons";
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
 
 const NavBar = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
   const { setEditingType } = useCardEditorContext();
 
-  const menu = (
-    <Menu
-      style={{
-        borderRadius: "8px",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <Menu.Item
-        key="1"
-        onClick={() => setEditingType("text")}
-        icon={<EditOutlined />}
-      >
-        Text
-      </Menu.Item>
-      <Menu.Item
-        key="2"
-        onClick={() => setEditingType("icon")}
-        icon={<AppstoreAddOutlined />}
-      >
-        Icons
-      </Menu.Item>
-      <Menu.Item
-        key="3"
-        onClick={() => setEditingType("button")}
-        icon={<AppstoreAddOutlined />}
-      >
-        Buttons
-      </Menu.Item>
-      <Menu.Item
-        key="4"
-        onClick={() => setEditingType("avatar")}
-        icon={<FileImageOutlined />}
-      >
-        Image
-      </Menu.Item>
-    </Menu>
-  );
-
   return (
-    <div className="flex items-center justify-between border-2 border-solid border-neutral-300 p-4 text-white">
-      <Dropdown overlay={menu} trigger={["click"]}>
-        <FaPlus
-          size={20}
-          className="cursor-pointer"
-          color="rgb(160, 160, 160)"
-        />
-      </Dropdown>
+    <nav className="fixed w-full bg-white">
+      <div className="border-1 relative flex items-center justify-between border-b-2 border-solid border-gray-300 p-5 text-white">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <FaPlus
+              size={20}
+              className="text-icon hover:text-icon-hover cursor-pointer"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className="rounded-lg p-2 shadow-lg"
+            side="bottom"
+            align="start"
+            sideOffset={20}
+          >
+            <DropdownMenuItem onClick={() => setEditingType("text")}>
+              <FaEdit className="text-icon mr-2" /> Text
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEditingType("icon")}>
+              <FaIcons className="text-icon mr-2" /> Icons
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEditingType("button")}>
+              <FaRegSquare className="text-icon mr-2" /> Buttons
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEditingType("avatar")}>
+              <FaImage className="text-icon mr-2" /> Image
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-      <FaAnglesLeft
-        size={20}
-        className="cursor-pointer"
-        color="rgb(160, 160, 160)"
-        onClick={onUndo}
-        disabled={disableUndo}
-      />
-      <FaAnglesRight
-        size={20}
-        className="cursor-pointer"
-        color="rgb(160, 160, 160)"
-        onClick={onRedo}
-        disabled={disableRedo}
-      />
-      <FaPlay size={20} className="cursor-pointer" color="rgb(160, 160, 160)" />
-      <FaDesktop
-        size={20}
-        className="cursor-pointer"
-        color="rgb(160, 160, 160)"
-      />
-      <FaRocket
-        size={20}
-        className="cursor-pointer"
-        color="rgb(160, 160, 160)"
-        onClick={() => {
-          setEditingType("saveProject");
-        }}
-      />
-      <FaBars
-        size={20}
-        className="cursor-pointer"
-        color="rgb(160, 160, 160)"
-        onClick={() => setEditingType("background")}
-      />
-    </div>
+        <FaAnglesLeft
+          size={20}
+          className={`text-icon hover:text-icon-hover cursor-pointer ${disableUndo ? "cursor-not-allowed opacity-50" : ""}`}
+          onClick={onUndo}
+        />
+        <FaAnglesRight
+          size={20}
+          className={`text-icon hover:text-icon-hover cursor-pointer ${disableRedo ? "cursor-not-allowed opacity-50" : ""}`}
+          onClick={onRedo}
+        />
+        <FaPlay
+          size={20}
+          className="text-icon hover:text-icon-hover cursor-pointer"
+        />
+        <FaDesktop
+          size={20}
+          className="text-icon hover:text-icon-hover cursor-pointer"
+        />
+        <FaRocket
+          size={20}
+          className="text-icon hover:text-icon-hover cursor-pointer"
+          onClick={() => {
+            setEditingType("saveProject");
+          }}
+        />
+        <FaBars
+          size={20}
+          className="text-icon hover:text-icon-hover cursor-pointer"
+          onClick={() => setEditingType("background")}
+        />
+      </div>
+    </nav>
   );
 };
 

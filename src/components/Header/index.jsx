@@ -12,7 +12,7 @@ const Header = () => {
     return <Loading />;
   }
   return (
-    <header>
+    <header className="fixed top-5 z-10 mx-auto w-[95%]">
       <div className="flex w-full items-center justify-between rounded-full bg-white p-3 shadow-md">
         <div className="relative flex items-center">
           <Link to="/">

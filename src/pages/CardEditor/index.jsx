@@ -58,7 +58,7 @@ const CardEditorContent = ({ template }) => {
   };
 
   return (
-    <section className="ml-64 flex h-full min-h-screen w-full overflow-y-auto">
+    <section className="flex h-full min-h-screen w-full overflow-y-auto">
       <div
         className="flex flex-[7] flex-col items-center"
         style={{ ...backgroundSettings, opacity: 1 }}

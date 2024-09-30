@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 
 const LayoutWithHeaderFooter = () => {
   return (
-    <div className="flex flex-col justify-center p-5">
+    <div className="flex w-full flex-col items-center justify-center p-5">
       <Header />
       <Outlet />
       <Footer />
