@@ -20,13 +20,13 @@ const NavBar = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
   const { setEditingType } = useCardEditorContext();
 
   return (
-    <nav className="fixed w-full bg-white">
+    <nav className="fixed w-[450px] bg-white">
       <div className="border-1 relative flex items-center justify-between border-b-2 border-solid border-gray-300 p-5 text-white">
         <DropdownMenu>
           <DropdownMenuTrigger>
             <FaPlus
               size={20}
-              className="text-icon hover:text-icon-hover cursor-pointer"
+              className="text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125"
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -52,32 +52,32 @@ const NavBar = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
 
         <FaAnglesLeft
           size={20}
-          className={`text-icon hover:text-icon-hover cursor-pointer ${disableUndo ? "cursor-not-allowed opacity-50" : ""}`}
+          className={`text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125 ${disableUndo ? "cursor-not-allowed opacity-50" : ""}`}
           onClick={onUndo}
         />
         <FaAnglesRight
           size={20}
-          className={`text-icon hover:text-icon-hover cursor-pointer ${disableRedo ? "cursor-not-allowed opacity-50" : ""}`}
+          className={`text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125 ${disableRedo ? "cursor-not-allowed opacity-50" : ""}`}
           onClick={onRedo}
         />
         <FaPlay
           size={20}
-          className="text-icon hover:text-icon-hover cursor-pointer"
+          className="text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125"
         />
         <FaDesktop
           size={20}
-          className="text-icon hover:text-icon-hover cursor-pointer"
+          className="text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125"
         />
         <FaRocket
           size={20}
-          className="text-icon hover:text-icon-hover cursor-pointer"
+          className="text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125"
           onClick={() => {
             setEditingType("saveProject");
           }}
         />
         <FaBars
           size={20}
-          className="text-icon hover:text-icon-hover cursor-pointer"
+          className="text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125"
           onClick={() => setEditingType("background")}
         />
       </div>

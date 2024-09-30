@@ -1,28 +1,25 @@
-import { Card, Tooltip } from "antd";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { LuPenLine } from "react-icons/lu";
+import { MdDelete } from "react-icons/md";
 import PropTypes from "prop-types";
 
 const TextCard = ({ textItem, index, onEdit, onDelete }) => (
-  <Card
-    className="flex h-fit w-full max-w-[410px] items-center justify-between"
-    style={{ body: { padding: "0px" } }}
-    actions={[
-      <Tooltip title="Edit" key="edit">
-        <EditOutlined onClick={onEdit} />
-      </Tooltip>,
-      <Tooltip title="Delete" key="delete">
-        <DeleteOutlined onClick={() => onDelete(index)} />
-      </Tooltip>,
-    ]}
-  >
-    <Card.Meta
-      title={
-        <span className="max-w-[350px] overflow-hidden text-ellipsis whitespace-normal break-words">
-          {textItem.text}
-        </span>
-      }
-    />
-  </Card>
+  <div className="] flex w-full items-center justify-between rounded-lg border border-gray-200 p-3">
+    <div>
+      <h3 className="overflow-hidden text-ellipsis whitespace-normal break-words text-lg">
+        {textItem.text}
+      </h3>
+    </div>
+
+    <div className="flex items-center space-x-3">
+      <button onClick={onEdit} aria-label="Edit">
+        <LuPenLine className="text-icon hover:text-icon-hover" />
+      </button>
+
+      <button onClick={() => onDelete(index)} aria-label="Delete">
+        <MdDelete className="text-icon hover:text-icon-hover" />
+      </button>
+    </div>
+  </div>
 );
 
 TextCard.propTypes = {

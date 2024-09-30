@@ -13,7 +13,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Input, Switch, Upload, message, Radio, Space } from "antd";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch, Upload, message } from "antd";
 import {
   ICON_LIST,
   ICON_STYLE,
@@ -27,7 +29,9 @@ import EditTextModal from "./EditorComponents/EditTextModal";
 import EditIconModal from "./EditorComponents/EditIconModal";
 import EditButtonModal from "./EditorComponents/EditButtonModal";
 import CropperModal from "./EditorComponents/CropperModal";
-import { SketchPicker } from "react-color";
+import UploadButton from "./EditorComponents/UploadButton";
+import IconSelect from "./EditorComponents/IconSelect";
+import { ChromePicker } from "react-color";
 import fontOptions from "../../cardTemplate/cardContent/fontOptions";
 
 import { storage } from "../../firebase/firebaseConfig";
@@ -39,7 +43,7 @@ import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 
 import { UploadOutlined } from "@ant-design/icons";
-import { FaBacon } from "react-icons/fa6";
+import { FaBacon, FaRegTrashCan } from "react-icons/fa6";
 
 const { Option } = Select;
 
@@ -133,6 +137,11 @@ const EditBoard = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [editableTextItem, setEditableTextItem] = useState(null);
+
+  const handleOuterClick = () => {
+    setShowBackgroundColorPicker(false);
+    setShowFontColorPicker(false);
+  };
 
   useEffect(() => {
     if (projectData) {
@@ -459,7 +468,10 @@ const EditBoard = () => {
   const renderTextEditor = () => {
     return (
       <>
-        <h1 className="mb-4 text-xl">Texts</h1>
+        <div className="mb-4 flex w-full">
+          <FaBacon />
+          <h1 className="ml-2 text-3xl font-bold">Texts</h1>
+        </div>
         {projectData.texts.map((item, index) => (
           <TextCard
             key={index}
@@ -500,8 +512,8 @@ const EditBoard = () => {
             }}
           />
         ))}
-        <button
-          className="mb-4 rounded bg-blue-500 px-4 py-2 text-white"
+        <Button
+          className="bg-button hover:bg-button-hover mt-6"
           onClick={() => {
             const newTextItem = {
               text: "New Text",
@@ -527,7 +539,7 @@ const EditBoard = () => {
           }}
         >
           Add New Text
-        </button>
+        </Button>
 
         <EditTextModal
           isTextModalVisible={isModalVisible}
@@ -555,112 +567,113 @@ const EditBoard = () => {
     <>
       {editingType === "icon" ? (
         <>
-          <h2 className="mb-4 text-xl">Icons</h2>
-          <h2 className="text-lg">Current Icons</h2>
+          <div className="mb-4 flex w-full">
+            <FaBacon />
+            <h1 className="ml-2 text-3xl font-bold">Icons</h1>
+          </div>
           {icons.map((icon) => (
             <IconCard
               key={icon.id}
               icon={icon.icon}
               iconColor="black"
               iconName={icon.name}
+              iconHref={icon.href}
               onEdit={() => handleIconEdit(icon.name)}
               onDelete={() => handleIconDelete(icon.id)}
             />
           ))}
-          <div className="my-4">
-            <label>Icon Color</label>
-            <div onClick={() => setShowFontColorPicker(!showFontColorPicker)}>
-              <div
-                style={{
-                  backgroundColor: iconColor,
-                  width: "40px",
-                  height: "40px",
-                  cursor: "pointer",
-                  borderRadius: "5px",
-                }}
-              />
+          <div className="mt-8 w-full">
+            <IconSelect
+              icons={icons}
+              setSelectedIcon={setSelectedIcon}
+              ICON_LIST={ICON_LIST}
+            />
+            <Button
+              className="bg-button hover:bg-button-hover mt-2 w-full"
+              onClick={addIcon}
+            >
+              Add Icon
+            </Button>
+          </div>
+          <div className="my-6 flex w-full">
+            <FaBacon />
+            <h1 className="ml-2 text-2xl font-bold">Appearance</h1>
+          </div>
+          <div className="mt-4 space-y-6">
+            <div className="flex flex-col space-y-2">
+              <label className="text-sm font-medium">Icon Color</label>
+              <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
+                <div
+                  className="relative h-6 w-20 cursor-pointer rounded"
+                  style={{
+                    backgroundColor: editIconData?.color,
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowFontColorPicker(!showFontColorPicker);
+                    setShowBackgroundColorPicker(false);
+                  }}
+                >
+                  {showFontColorPicker && (
+                    <div
+                      className="absolute top-10 z-10"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ChromePicker
+                        color={editIconData?.color}
+                        onChangeComplete={(color) => {
+                          setEditIconData({
+                            ...editIconData,
+                            color: color.hex,
+                          });
+                          const updatedData = {
+                            ...projectData,
+                            socialLinks: {
+                              ...projectData.socialLinks,
+                              style: {
+                                ...projectData.socialLinks.style,
+                                color: color.hex,
+                              },
+                            },
+                          };
+                          setProjectData(updatedData);
+                          updateProjectData(updatedData);
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-            {showFontColorPicker && (
-              <div style={{ position: "absolute", zIndex: 2 }}>
-                <SketchPicker
-                  color={editIconData?.color}
-                  onChangeComplete={(color) => {
-                    setEditIconData({ ...editIconData, color: color.hex });
+            <div className="flex flex-col space-y-2">
+              <label className="text-sm font-medium">Icon Size</label>
+              <span className="text-sm">{iconSize}px</span>
+              <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+                <Slider
+                  min={10}
+                  max={100}
+                  step={1}
+                  defaultValue={[iconSize]}
+                  onValueChange={(value) => {
+                    const newSize = value[0];
                     const updatedData = {
                       ...projectData,
                       socialLinks: {
                         ...projectData.socialLinks,
                         style: {
                           ...projectData.socialLinks.style,
-                          color: color.hex,
+                          size: newSize,
                         },
                       },
                     };
                     setProjectData(updatedData);
                     updateProjectData(updatedData);
                   }}
+                  className="w-full"
                 />
               </div>
-            )}
+            </div>
           </div>
-          <div className="my-4 flex flex-col">
-            <label>Icon Size</label>
-            <input
-              type="range"
-              min="10"
-              max="100"
-              value={iconSize}
-              onChange={(e) => {
-                const newSize = parseInt(e.target.value, 10);
-                const updatedData = {
-                  ...projectData,
-                  socialLinks: {
-                    ...projectData.socialLinks,
-                    style: {
-                      ...projectData.socialLinks.style,
-                      size: newSize,
-                    },
-                  },
-                };
-                setProjectData(updatedData);
-                updateProjectData(updatedData);
-              }}
-              className="slider"
-            />
-            <span>{iconSize}px</span>
-          </div>
-
-          <h2 className="my-2 text-lg">Add Icons</h2>
-          <Select
-            className="w-full"
-            placeholder="Select an icon"
-            onChange={(value) => setSelectedIcon(value)}
-          >
-            {ICON_LIST.map((icon) => {
-              const IconComponent = icon.icon;
-              const isIconAdded = icons.some(
-                (existingIcon) => existingIcon.name === icon.name,
-              );
-
-              return (
-                <Option
-                  key={icon.name}
-                  value={icon.name}
-                  disabled={isIconAdded}
-                >
-                  <div
-                    className={`flex items-center ${isIconAdded ? "opacity-50" : "opacity-100"}`}
-                  >
-                    <IconComponent size={20} className="mr-2" />
-                    <span>{icon.name}</span>
-                  </div>
-                </Option>
-              );
-            })}
-          </Select>
-          <Button className="mt-4" type="default" onClick={addIcon}>
-            Add Icon
-          </Button>
         </>
       ) : null}
       {editIconData && (
@@ -736,32 +749,37 @@ const EditBoard = () => {
 
         <div className="mt-6 flex w-full">
           <FaBacon />
-          <h1 className="ml-2 text-2xl font-bold">Apperence</h1>
+          <h1 className="ml-2 text-2xl font-bold">Appearance</h1>
         </div>
         <div className="mt-4 space-y-6">
           <div className="flex flex-col space-y-2">
             <label className="text-sm font-medium">Background Color</label>
             <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
               <div
-                className="h-6 w-20 cursor-pointer rounded"
+                className="relative h-6 w-20 cursor-pointer rounded"
                 style={{
                   backgroundColor: style.backgroundColor,
                 }}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setShowBackgroundColorPicker(!showBackgroundColorPicker);
                   setShowFontColorPicker(false);
                 }}
-              />
-              {showBackgroundColorPicker && (
-                <div className="absolute z-10">
-                  <SketchPicker
-                    color={style.backgroundColor}
-                    onChangeComplete={(color) =>
-                      handleButtonStyleChange("backgroundColor", color.hex)
-                    }
-                  />
-                </div>
-              )}
+              >
+                {showBackgroundColorPicker && (
+                  <div
+                    className="absolute top-10 z-10"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ChromePicker
+                      color={style.backgroundColor}
+                      onChangeComplete={(color) =>
+                        handleButtonStyleChange("backgroundColor", color.hex)
+                      }
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -888,25 +906,30 @@ const EditBoard = () => {
             <label className="text-sm font-medium">Text Color</label>
             <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
               <div
-                className="h-6 w-20 cursor-pointer rounded"
+                className="relative h-6 w-20 cursor-pointer rounded"
                 style={{
                   backgroundColor: style.color,
                 }}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setShowFontColorPicker(!showFontColorPicker);
                   setShowBackgroundColorPicker(false);
                 }}
-              />
-              {showFontColorPicker && (
-                <div className="absolute z-10">
-                  <SketchPicker
-                    color={style.color}
-                    onChangeComplete={(color) =>
-                      handleButtonStyleChange("color", color.hex)
-                    }
-                  />
-                </div>
-              )}
+              >
+                {showFontColorPicker && (
+                  <div
+                    className="absolute top-10 z-10"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ChromePicker
+                      color={style.color}
+                      onChangeComplete={(color) =>
+                        handleButtonStyleChange("color", color.hex)
+                      }
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -981,9 +1004,10 @@ const EditBoard = () => {
         <div className="my-4">
           <label>Background Color</label>
           <div
-            onClick={() =>
-              setShowBackgroundColorPicker(!showBackgroundColorPicker)
-            }
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowBackgroundColorPicker(!showBackgroundColorPicker);
+            }}
           >
             <div
               style={{
@@ -997,7 +1021,7 @@ const EditBoard = () => {
           </div>
           {showBackgroundColorPicker && (
             <div className="absolute z-10">
-              <SketchPicker
+              <ChromePicker
                 color={tempBackgroundColor}
                 onChangeComplete={(color) => setTempBackgroundColor(color.hex)}
               />
@@ -1026,21 +1050,27 @@ const EditBoard = () => {
 
   const renderAvatarEditor = () => (
     <div>
-      <h2 className="mb-4">Edit Avatar</h2>
+      <div className="flex w-full">
+        <FaBacon />
+        <h1 className="ml-2 text-3xl font-bold">Avatar</h1>
+      </div>
+
       {projectData.avatar?.image && (
         <>
-          <div className="my-4">
-            <label>Adjust Avatar Size</label>
-            <Slider
-              min={50}
-              max={300}
-              value={parseInt(projectData.avatar.style.width, 10)}
-              onChange={handleAvatarSizeChange}
-            />
+          <div className="mt-4 flex flex-col space-y-2">
+            <label className="text-sm font-medium">Adjust Avatar Size</label>
+            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+              <Slider
+                min={50}
+                max={300}
+                defaultValue={[parseInt(projectData.avatar.style.width, 10)]}
+                onValueChange={(value) => handleAvatarSizeChange(value[0])}
+              />
+            </div>
           </div>
           <div className="my-4">
             <Button
-              danger
+              className="bg-button hover:bg-button-hover w-full"
               onClick={() => {
                 const updatedData = {
                   ...projectData,
@@ -1056,39 +1086,21 @@ const EditBoard = () => {
                 updateProjectData(updatedData);
               }}
             >
+              <FaRegTrashCan className="mr-2 h-4 w-4" />
               Delete Avatar
             </Button>
           </div>
         </>
       )}
-
-      <div className="my-4">
-        <Upload
-          beforeUpload={(file) =>
-            handleUpload(file, "avatars", (downloadURL) => {
-              const updatedData = {
-                ...projectData,
-                avatar: {
-                  ...projectData.avatar,
-                  image: downloadURL,
-                  style: {
-                    width: "100px",
-                    height: "100px",
-                  },
-                },
-              };
-              setProjectData(updatedData);
-              updateProjectData(updatedData);
-            })
-          }
-          showUploadList={false}
-        >
-          <Button icon={<UploadOutlined />} loading={uploading}>
-            {uploading ? "Uploading..." : "Upload New Avatar"}
-          </Button>
-        </Upload>
+      <div className="my-4 w-full">
+        <UploadButton
+          onUpload={(downloadURL) => {
+            // 不直接上傳，先將上傳的圖像傳入 CropperModal
+            setImageUrl(downloadURL); // 設定上傳的圖像 URL
+            setIsCropModalVisible(true); // 打開剪裁視窗
+          }}
+        />
       </div>
-
       <CropperModal
         isCropModalVisible={isCropModalVisible}
         setIsCropModalVisible={setIsCropModalVisible}
@@ -1102,13 +1114,19 @@ const EditBoard = () => {
         onCropComplete={onCropComplete}
         handleSaveCroppedImage={() =>
           handleSaveCroppedImage("avatars", (downloadURL) => {
-            setProjectData((prevData) => ({
-              ...prevData,
+            const updatedData = {
+              ...projectData,
               avatar: {
-                ...prevData.avatar,
+                ...projectData.avatar,
                 image: downloadURL,
+                style: {
+                  width: "100px",
+                  height: "100px",
+                },
               },
-            }));
+            };
+            setProjectData(updatedData);
+            updateProjectData(updatedData);
           })
         }
         uploading={uploading}
@@ -1126,9 +1144,10 @@ const EditBoard = () => {
             rules={{ required: "Title is required" }}
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
-                <label className="mb-1 block font-bold text-gray-700">
-                  Title (required)
-                </label>
+                <div className="mb-4 flex w-full">
+                  <FaBacon />
+                  <h1 className="ml-2 text-3xl font-bold"> Title (required)</h1>
+                </div>
                 <Input
                   {...field}
                   placeholder="Enter project title"
@@ -1145,28 +1164,38 @@ const EditBoard = () => {
             name="action"
             control={control}
             rules={{ required: "Please select an action" }}
-            defaultValue="draft"
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
-                <label className="mb-1 block font-bold text-gray-700">
-                  Action
-                </label>
-                <Radio.Group
-                  {...field}
+                <div className="my-6 flex w-full">
+                  <FaBacon />
+                  <h1 className="ml-2 text-2xl font-bold">Action</h1>
+                </div>
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
                   className={`space-y-2 ${error ? "border-red-500" : ""}`}
                 >
-                  <Space direction="vertical">
-                    <Radio value="publish">Publish to a /sealink/id URL</Radio>
-                    <Radio value="draft">Save as an offline draft</Radio>
-                  </Space>
-                </Radio.Group>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="publish" id="publish" />
+                    <label htmlFor="publish">
+                      Publish to a /sealink/id URL
+                    </label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="draft" id="draft" />
+                    <label htmlFor="draft">Save as an offline draft</label>
+                  </div>
+                </RadioGroup>
                 {error && (
                   <span className="text-sm text-red-500">{error.message}</span>
                 )}
               </div>
             )}
           />
-          <Button type="primary" htmlType="submit" className="mt-4">
+          <Button
+            type="submit"
+            className="bg-button hover:bg-button-hover mt-4 w-full"
+          >
             Save
           </Button>
         </form>
@@ -1175,7 +1204,10 @@ const EditBoard = () => {
   };
 
   return (
-    <section className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto bg-white">
+    <section
+      className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto bg-white"
+      onClick={handleOuterClick}
+    >
       <DeployModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
