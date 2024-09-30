@@ -15,7 +15,8 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Switch, Upload, message } from "antd";
+import { Switch } from "@/components/ui/switch";
+import { message } from "antd";
 import {
   ICON_LIST,
   ICON_STYLE,
@@ -939,41 +940,39 @@ const EditBoard = () => {
 
   const renderBackgroundEditor = () => (
     <div>
-      <h2 className="mb-4">Edit Background</h2>
-      <div className="my-4">
-        <label>Use Background Image</label>
+      <div className="mb-4 flex w-full">
+        <FaBacon />
+        <h1 className="ml-2 text-3xl font-bold">Background</h1>
+      </div>
+
+      <div className="my-4 flex h-fit w-full items-center justify-between">
+        <label className="font-medium">Use Background Image</label>
         <Switch
           checked={useBackgroundImage}
-          onChange={(checked) => setUseBackgroundImage(checked)}
+          onCheckedChange={(checked) => setUseBackgroundImage(checked)}
         />
       </div>
 
       {useBackgroundImage ? (
-        <div>
-          <label>Background Image URL</label>
+        <div className="mt-2 space-y-2">
+          <label className="text-sm font-medium">Background Image URL</label>
           <Input
             value={tempBackgroundImage}
+            onChange={(e) => setTempBackgroundImage(e.target.value)}
             placeholder="Enter image URL or upload"
           />
-          <Upload
-            beforeUpload={(file) =>
-              handleUpload(file, "backgroundimage", (downloadURL) => {
-                setTempBackgroundImage(downloadURL);
-                updateProjectData((prevData) => ({
-                  ...prevData,
-                  background: {
-                    ...prevData.background,
-                    backgroundImage: downloadURL,
-                  },
-                }));
-              })
-            }
-            showUploadList={false}
-          >
-            <Button icon={<UploadOutlined />} loading={uploading}>
-              {uploading ? "Uploading..." : "Upload Image"}
-            </Button>
-          </Upload>
+          <UploadButton
+            onUpload={(downloadURL) => {
+              setTempBackgroundImage(downloadURL);
+              updateProjectData((prevData) => ({
+                ...prevData,
+                background: {
+                  ...prevData.background,
+                  backgroundImage: downloadURL,
+                },
+              }));
+            }}
+          />
 
           <CropperModal
             isCropModalVisible={isCropModalVisible}
@@ -1001,48 +1000,70 @@ const EditBoard = () => {
           />
         </div>
       ) : (
-        <div className="my-4">
-          <label>Background Color</label>
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowBackgroundColorPicker(!showBackgroundColorPicker);
-            }}
-          >
+        <div className="flex flex-col space-y-2">
+          <label className="text-sm font-medium">Background Color</label>
+          <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
             <div
+              className="relative h-6 w-20 cursor-pointer rounded"
               style={{
                 backgroundColor: tempBackgroundColor,
-                width: "40px",
-                height: "40px",
-                cursor: "pointer",
-                borderRadius: "5px",
               }}
-            />
-          </div>
-          {showBackgroundColorPicker && (
-            <div className="absolute z-10">
-              <ChromePicker
-                color={tempBackgroundColor}
-                onChangeComplete={(color) => setTempBackgroundColor(color.hex)}
-              />
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowBackgroundColorPicker(!showBackgroundColorPicker);
+                setShowFontColorPicker(false);
+              }}
+            >
+              {showBackgroundColorPicker && (
+                <div
+                  className="absolute top-10 z-10"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ChromePicker
+                    color={tempBackgroundColor}
+                    onChangeComplete={(color) => {
+                      setTempBackgroundColor(color.hex);
+                      const updatedData = {
+                        ...projectData,
+                        background: {
+                          ...projectData.background,
+                          backgroundColor: color.hex,
+                        },
+                      };
+                      setProjectData(updatedData);
+                      updateProjectData(updatedData);
+                    }}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       )}
 
-      <div className="my-4">
-        <label>Background Opacity</label>
-        <Slider
-          min={0.1}
-          max={1}
-          step={0.1}
-          value={tempOpacity}
-          onChange={(value) => setTempOpacity(value)}
-        />
-        <span>{tempOpacity}</span>
+      <div className="mb-2 mt-6 space-y-2">
+        <div className="flex w-full justify-between">
+          <label htmlFor="background-opacity" className="text-sm font-medium">
+            Background Opacity
+          </label>
+          <span className="text-graySpan text-sm">{tempOpacity}</span>
+        </div>
+        <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+          <Slider
+            id="background-opacity"
+            min={0.1}
+            max={1}
+            step={0.1}
+            value={[tempOpacity]}
+            onValueChange={(value) => setTempOpacity(value[0])}
+          />
+        </div>
       </div>
 
-      <Button type="primary" onClick={handleSaveBackgroundSettings}>
+      <Button
+        className="bg-button hover:bg-button-hover w-full"
+        onClick={handleSaveBackgroundSettings}
+      >
         Save Background Settings
       </Button>
     </div>
@@ -1095,9 +1116,8 @@ const EditBoard = () => {
       <div className="my-4 w-full">
         <UploadButton
           onUpload={(downloadURL) => {
-            // 不直接上傳，先將上傳的圖像傳入 CropperModal
-            setImageUrl(downloadURL); // 設定上傳的圖像 URL
-            setIsCropModalVisible(true); // 打開剪裁視窗
+            setImageUrl(downloadURL);
+            setIsCropModalVisible(true);
           }}
         />
       </div>

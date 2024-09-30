@@ -12,10 +12,7 @@ const UploadButton = ({ onUpload }) => {
     setUploading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Replace this with your actual upload logic
       const downloadURL = URL.createObjectURL(file);
-
       onUpload(downloadURL);
     } catch (error) {
       console.error("Error uploading file:", error);
