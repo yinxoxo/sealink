@@ -1,6 +1,13 @@
-import { Modal, Button } from "antd";
-import PropTypes from "prop-types";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Cropper from "react-easy-crop";
+import PropTypes from "prop-types";
 
 const CropperModal = ({
   isCropModalVisible,
@@ -12,43 +19,49 @@ const CropperModal = ({
   setZoom,
   onCropComplete,
   handleSaveCroppedImage,
-  uploading,
   aspect,
   cropShape = "rect",
 }) => (
-  <Modal
-    className="h-full w-full"
-    open={isCropModalVisible}
-    onCancel={() => setIsCropModalVisible(false)}
-    footer={[
-      <Button key="back" onClick={() => setIsCropModalVisible(false)}>
-        Cancel
-      </Button>,
-      <Button
-        key="submit"
-        type="primary"
-        loading={uploading}
-        onClick={handleSaveCroppedImage}
-      >
-        Confirm and Upload
-      </Button>,
-    ]}
-  >
-    <div style={{ height: 400, width: "100%" }}>
-      {imageUrl && (
-        <Cropper
-          image={imageUrl}
-          crop={crop}
-          zoom={zoom}
-          aspect={aspect}
-          cropShape={cropShape}
-          onCropChange={setCrop}
-          onZoomChange={setZoom}
-          onCropComplete={onCropComplete}
-        />
-      )}
-    </div>
-  </Modal>
+  <Dialog open={isCropModalVisible} onOpenChange={setIsCropModalVisible}>
+    <DialogContent className="h-auto p-0">
+      <VisuallyHidden>
+        <DialogTitle>Crop Your Image</DialogTitle>
+        <DialogDescription>
+          This is where you can crop your image.
+        </DialogDescription>
+      </VisuallyHidden>
+      <div className="relative" style={{ height: 600, width: "100%" }}>
+        {imageUrl && (
+          <Cropper
+            image={imageUrl}
+            crop={crop}
+            zoom={zoom}
+            aspect={aspect}
+            cropShape={cropShape}
+            onCropChange={setCrop}
+            onZoomChange={setZoom}
+            onCropComplete={onCropComplete}
+            style={{
+              containerStyle: {
+                position: "relative",
+                height: "100%",
+                width: "100%",
+              },
+            }}
+          />
+        )}
+        <div className="absolute bottom-0 right-0 flex justify-end space-x-2 p-2">
+          <Button onClick={handleSaveCroppedImage}>Upload</Button>
+          <Button
+            variant="outline"
+            onClick={() => setIsCropModalVisible(false)}
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
 );
 
 CropperModal.propTypes = {
@@ -56,12 +69,13 @@ CropperModal.propTypes = {
   setIsCropModalVisible: PropTypes.func.isRequired,
   imageUrl: PropTypes.string,
   crop: PropTypes.object.isRequired,
+  cropShape: PropTypes.string.isRequired,
   setCrop: PropTypes.func.isRequired,
   zoom: PropTypes.number.isRequired,
+  aspect: PropTypes.number.isRequired,
   setZoom: PropTypes.func.isRequired,
   onCropComplete: PropTypes.func.isRequired,
   handleSaveCroppedImage: PropTypes.func.isRequired,
-  uploading: PropTypes.bool.isRequired,
 };
 
 export default CropperModal;
