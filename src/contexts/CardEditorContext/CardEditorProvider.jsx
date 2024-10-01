@@ -8,6 +8,7 @@ import initialBreadCardContent from "../../cardTemplate/cardContent/initialBread
 import initialJiaCardContent from "../../cardTemplate/cardContent/initialJiaCardContent";
 import initialForestCardContent from "../../cardTemplate/cardContent/initialForestCardContent";
 import initialGalaxyCardContent from "../../cardTemplate/cardContent/initialGalaxyCardContent";
+import initialNinaWishCardContent from "../../cardTemplate/cardContent/initialNinaWishCardContent";
 import { useParams, useLocation } from "react-router-dom";
 
 export const CardEditorContext = createContext();
@@ -45,6 +46,8 @@ export const CardEditorProvider = ({ children }) => {
       setProjectData({ ...initialForestCardContent });
     } else if (template === "GalaxyCard") {
       setProjectData({ ...initialGalaxyCardContent });
+    } else if (template === "NinaWishCard") {
+      setProjectData({ ...initialNinaWishCardContent });
     } else {
       console.error("找不到對應的模板資料");
       return;

@@ -6,6 +6,7 @@ import BreadCard from "../../cardTemplate/BreadCard";
 import JiaCard from "../../cardTemplate/JiaCard";
 import GalaxyCard from "../../cardTemplate/GalaxyCard";
 import ForestCard from "../../cardTemplate/ForestCard";
+import NinaWishCard from "../../cardTemplate/NinaWishCard";
 import initialSimpleCardContent from "../../cardTemplate/cardContent/initialSimpleCardContent";
 import initialWoodCardContent from "../../cardTemplate/cardContent/initialWoodCardContent";
 import initialArtCardContent from "../../cardTemplate/cardContent/initialArtCardContent";
@@ -13,6 +14,7 @@ import initialBreadCardContent from "../../cardTemplate/cardContent/initialBread
 import initialJiaCardContent from "../../cardTemplate/cardContent/initialJiaCardContent";
 import initialForestCardContent from "../../cardTemplate/cardContent/initialForestCardContent";
 import initialGalaxyCardContent from "../../cardTemplate/cardContent/initialGalaxyCardContent";
+import initialNinaWishCardContent from "../../cardTemplate/cardContent/initialNinaWishCardContent";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { CardEditorProvider } from "../../contexts/CardEditorContext/CardEditorProvider";
 
@@ -71,6 +73,11 @@ const Template = () => {
       component: GalaxyCard,
       data: initialGalaxyCardContent,
       name: "GalaxyCard",
+    },
+    {
+      component: NinaWishCard,
+      data: initialNinaWishCardContent,
+      name: "NinaWishCard",
     },
   ];
 

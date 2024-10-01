@@ -8,6 +8,7 @@ import GalaxyCard from "../../cardTemplate/GalaxyCard";
 import JiaCard from "../../cardTemplate/JiaCard";
 import WoodCard from "../../cardTemplate/WoodCard";
 import Loading from "../../components/Loading";
+import NinaWishCard from "../../cardTemplate/NinaWishCard";
 
 const Deploy = () => {
   const { template } = useParams();
@@ -21,6 +22,7 @@ const Deploy = () => {
     JiaCard,
     SimpleCard,
     WoodCard,
+    NinaWishCard,
   };
 
   const CardComponent = cardComponents[template];
