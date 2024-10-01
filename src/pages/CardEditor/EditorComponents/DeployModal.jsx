@@ -1,4 +1,10 @@
-import { Modal, Button } from "antd";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const DeployModal = ({ isOpen, onClose, projectUrl }) => {
@@ -11,46 +17,35 @@ const DeployModal = ({ isOpen, onClose, projectUrl }) => {
 
   const handleViewSite = () => {
     window.open(projectUrl, "_blank");
+    onClose();
     navigate("/dashboard");
   };
 
   return (
-    <Modal
-      title="Done!"
-      open={isOpen}
-      onCancel={onClose}
-      footer={[
-        <Button key="cancel" onClick={handleOkay}>
-          Okay
-        </Button>,
-        <Button key="view" type="primary" onClick={handleViewSite}>
-          View Site
-        </Button>,
-      ]}
-      styles={{
-        body: {
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        },
-        mask: {
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          backdropFilter: "blur(10px)",
-        },
-      }}
-      style={{
-        top: "50%",
-        transform: "translateY(-50%)",
-      }}
-    >
-      <p>
-        Site successfully published to{" "}
-        <a href={projectUrl} target="_blank" rel="noopener noreferrer">
-          {projectUrl}
-        </a>
-      </p>
-    </Modal>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="flex flex-col items-center justify-center">
+        <DialogTitle className="text-xl font-bold">Done!</DialogTitle>
+        <p>
+          Site successfully published to{" "}
+          <a
+            href={projectUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sea"
+          >
+            {projectUrl}
+          </a>
+        </p>
+        <DialogFooter className="flex justify-end">
+          <Button variant="outline" onClick={handleOkay}>
+            Okay
+          </Button>
+          <Button variant="outline" onClick={handleViewSite}>
+            View Site
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

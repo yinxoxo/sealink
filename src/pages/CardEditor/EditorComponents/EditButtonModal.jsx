@@ -1,4 +1,12 @@
-import { Modal, Input } from "antd";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import PropTypes from "prop-types";
 
 const EditButtonModal = ({
@@ -8,33 +16,44 @@ const EditButtonModal = ({
   setEditButtonData,
   handleSaveButtonEdit,
 }) => (
-  <Modal
-    title="Edit Button"
-    open={isButtonModalVisible}
-    onOk={handleSaveButtonEdit}
-    onCancel={() => setIsButtonModalVisible(false)}
-  >
-    <div>
-      <label>Button Text</label>
-      <Input
-        type="text"
-        value={editButtonData?.text}
-        onChange={(e) =>
-          setEditButtonData({ ...editButtonData, text: e.target.value })
-        }
-      />
-    </div>
-    <div className="mt-4">
-      <label>Button URL</label>
-      <Input
-        type="text"
-        value={editButtonData?.url}
-        onChange={(e) =>
-          setEditButtonData({ ...editButtonData, url: e.target.value })
-        }
-      />
-    </div>
-  </Modal>
+  <Dialog open={isButtonModalVisible} onOpenChange={setIsButtonModalVisible}>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Edit Button</DialogTitle>
+      </DialogHeader>
+      <div>
+        <label>Button Text</label>
+        <Input
+          type="text"
+          value={editButtonData?.text}
+          onChange={(e) =>
+            setEditButtonData({ ...editButtonData, text: e.target.value })
+          }
+        />
+      </div>
+      <div className="mt-4">
+        <label>Button URL</label>
+        <Input
+          type="text"
+          value={editButtonData?.url}
+          onChange={(e) =>
+            setEditButtonData({ ...editButtonData, url: e.target.value })
+          }
+        />
+      </div>
+      <DialogFooter>
+        <Button
+          variant="outline"
+          onClick={() => setIsButtonModalVisible(false)}
+        >
+          Cancel
+        </Button>
+        <Button onClick={handleSaveButtonEdit} className="bg-button">
+          Save
+        </Button>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 );
 
 EditButtonModal.propTypes = {

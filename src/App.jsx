@@ -21,6 +21,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { CardEditorProvider } from "./contexts/CardEditorContext/CardEditorProvider";
 
+import { Toaster } from "@/components/ui/toaster";
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -68,6 +70,7 @@ function App() {
                   <Route path="analytics" element={<Analytics />} />
                 </Route>
               </Routes>
+              <Toaster />
             </Router>
           </ProjectsProvider>
         </AuthProvider>

@@ -64,17 +64,11 @@ const CardEditorContent = ({ template }) => {
   return (
     <section className="flex h-fit min-h-screen w-full items-center overflow-y-auto">
       <div
-        className={`flex max-h-screen flex-[7] flex-col items-center ${
-          isMobile ? "" : "pb-[120px] pt-[120px]"
-        }`}
+        className="flex h-screen flex-grow flex-col items-center"
         style={{ ...backgroundSettings, opacity: 1 }}
       >
         <div
-          className={`my-auto overflow-y-auto pr-[450px] ${
-            isMobile
-              ? "aspect-[9/16] max-h-screen w-[70%] min-w-[300px]"
-              : "aspect-[16/9] max-h-screen w-full"
-          }`}
+          className={`my-auto overflow-y-auto rounded-3xl ${isMobile ? "h-[700px] w-[400px]" : "h-[530px] w-[900px]"}`}
         >
           {renderTemplate()}
         </div>

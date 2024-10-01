@@ -32,7 +32,7 @@ const Deploy = () => {
   }
 
   return (
-    <div className="w- h-full min-h-screen">
+    <div className="h-full min-h-screen w-full">
       <CardComponent />
     </div>
   );

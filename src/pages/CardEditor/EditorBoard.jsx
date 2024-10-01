@@ -16,7 +16,8 @@ import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import { message } from "antd";
+import { useToast } from "@/hooks/use-toast";
+
 import {
   ICON_LIST,
   ICON_STYLE,
@@ -45,9 +46,8 @@ import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEd
 
 import { FaBacon, FaRegTrashCan } from "react-icons/fa6";
 
-const { Option } = Select;
-
 const EditBoard = ({ isMobile, setIsMobile }) => {
+  const { toast } = useToast();
   const {
     projectId,
     projectData,
@@ -245,7 +245,11 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         "state_changed",
         (snapshot) => {},
         (error) => {
-          message.error(`Upload failed: ${error.message}`);
+          toast({
+            title: "Upload failed",
+            description: `Upload failed: ${error.message}`,
+            variant: "destructive",
+          });
           reject(error);
         },
         async () => {
@@ -265,17 +269,23 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       const downloadURL = await uploadImageToFirebase(blob, folderName);
 
       setImageUrl(downloadURL);
-      // setTempBackgroundImage(downloadURL);
       onSuccessCallback(downloadURL);
       setUploading(false);
-      message.success("Image uploaded successfully!");
+
+      toast({
+        title: "Image uploaded",
+        description: "Image uploaded successfully!",
+      });
     } catch (error) {
       console.error(error);
-      message.error("Failed to crop and upload the image.");
       setUploading(false);
+      toast({
+        title: "Error",
+        description: "Failed to crop and upload the image.",
+        variant: "destructive",
+      });
     }
   };
-
   const handleAvatarSizeChange = (value) => {
     const updatedData = {
       ...projectData,
@@ -1192,7 +1202,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   return (
     <section
-      className="fixed right-0 flex h-screen w-full max-w-[450px] flex-[3] flex-col overflow-y-auto bg-white"
+      className="right-0 flex h-screen w-full max-w-[450px] flex-col overflow-y-auto bg-white"
       onClick={handleOuterClick}
     >
       <DeployModal
