@@ -47,7 +47,7 @@ import { FaBacon, FaRegTrashCan } from "react-icons/fa6";
 
 const { Option } = Select;
 
-const EditBoard = () => {
+const EditBoard = ({ isMobile, setIsMobile }) => {
   const {
     projectId,
     projectData,
@@ -1032,13 +1032,6 @@ const EditBoard = () => {
           />
         </div>
       </div>
-
-      {/* <Button
-        className="bg-button hover:bg-button-hover w-full"
-        onClick={handleSaveBackgroundSettings}
-      >
-        Save Background Settings
-      </Button> */}
     </div>
   );
 
@@ -1199,7 +1192,7 @@ const EditBoard = () => {
 
   return (
     <section
-      className="fixed right-0 flex h-screen w-[450px] flex-[3] flex-col overflow-y-auto bg-white"
+      className="fixed right-0 flex h-screen w-full max-w-[450px] flex-[3] flex-col overflow-y-auto bg-white"
       onClick={handleOuterClick}
     >
       <DeployModal
@@ -1208,6 +1201,8 @@ const EditBoard = () => {
         projectUrl={newProjectUrl}
       />
       <NavBar
+        isMobile={isMobile}
+        setIsMobile={setIsMobile}
         onUndo={handleUndo}
         onRedo={handleRedo}
         disableUndo={currentStep === 0}

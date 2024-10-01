@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ArtCard from "../../cardTemplate/ArtCard";
 import SimpleCard from "../../cardTemplate/SimpleCard";
@@ -17,6 +18,7 @@ const CardEditor = () => {
 };
 
 const CardEditorContent = ({ template }) => {
+  const [isMobile, setIsMobile] = useState(true);
   const { projectData } = useCardEditorContext();
 
   if (!projectData) return null;
@@ -60,16 +62,24 @@ const CardEditorContent = ({ template }) => {
   };
 
   return (
-    <section className="flex h-full min-h-screen w-full overflow-y-auto">
+    <section className="flex h-fit min-h-screen w-full items-center overflow-y-auto">
       <div
-        className="flex flex-[7] flex-col items-center"
+        className={`flex max-h-screen flex-[7] flex-col items-center ${
+          isMobile ? "" : "pb-[120px] pt-[120px]"
+        }`}
         style={{ ...backgroundSettings, opacity: 1 }}
       >
-        <div className="mr-[450px] w-[560px] flex-grow rounded-3xl">
+        <div
+          className={`my-auto overflow-y-auto pr-[450px] ${
+            isMobile
+              ? "aspect-[9/16] max-h-screen w-[70%] min-w-[300px]"
+              : "aspect-[16/9] max-h-screen w-full"
+          }`}
+        >
           {renderTemplate()}
         </div>
       </div>
-      <EditBoard />
+      <EditBoard isMobile={isMobile} setIsMobile={setIsMobile} />
     </section>
   );
 };
