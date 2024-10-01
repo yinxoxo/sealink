@@ -265,7 +265,7 @@ const EditBoard = () => {
       const downloadURL = await uploadImageToFirebase(blob, folderName);
 
       setImageUrl(downloadURL);
-      setTempBackgroundImage(downloadURL);
+      // setTempBackgroundImage(downloadURL);
       onSuccessCallback(downloadURL);
       setUploading(false);
       message.success("Image uploaded successfully!");
@@ -413,29 +413,6 @@ const EditBoard = () => {
     updateProjectData(updatedData);
   };
 
-  // const handleSaveBackgroundSettings = () => {
-  //   if (useBackgroundImage && !tempBackgroundImage) {
-  //     console.error(
-  //       "Error: No background image available while useBackgroundImage is true",
-  //     );
-  //     return;
-  //   }
-
-  //   const updatedData = {
-  //     ...projectData,
-  //     background: {
-  //       backgroundImage: useBackgroundImage
-  //         ? `url(${tempBackgroundImage})`
-  //         : null,
-  //       backgroundColor: useBackgroundImage ? null : tempBackgroundColor,
-  //       opacity: tempOpacity,
-  //     },
-  //   };
-  //   setProjectData(updatedData);
-  //   updateProjectData(updatedData);
-  //   message.success("Background settings saved successfully!");
-  // };
-
   const renderTextEditor = () => {
     return (
       <>
@@ -577,7 +554,7 @@ const EditBoard = () => {
                 <div
                   className="relative h-6 w-20 cursor-pointer rounded"
                   style={{
-                    backgroundColor: editIconData?.color,
+                    backgroundColor: projectData.socialLinks.style.color,
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -916,7 +893,10 @@ const EditBoard = () => {
       </div>
 
       <div className="my-4 flex h-fit w-full items-center justify-between">
-        <label className="font-medium">Use Background Image</label>
+        <div className="flex w-full">
+          <FaBacon />
+          <h1 className="ml-2 text-lg font-medium">Use Background Image ?</h1>
+        </div>
         <Switch
           checked={useBackgroundImage}
           onCheckedChange={(checked) => setUseBackgroundImage(checked)}
@@ -925,7 +905,7 @@ const EditBoard = () => {
 
       {useBackgroundImage ? (
         <div className="mt-2 space-y-2">
-          <label className="text-sm font-medium">Background Image URL</label>
+          <label className="text-sm font-medium">Background Image </label>
           <Input
             value={projectData.background.backgroundImage}
             placeholder="Enter image URL or upload"

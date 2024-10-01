@@ -16,6 +16,7 @@ import GalaxyCard from "../../cardTemplate/GalaxyCard";
 import JiaCard from "../../cardTemplate/JiaCard";
 import SimpleCard from "../../cardTemplate/SimpleCard";
 import WoodCard from "../../cardTemplate/WoodCard";
+import NinaWishCard from "../../cardTemplate/NinaWishCard";
 
 const Dashboard = () => {
   const { projects, loading } = useProjects();
@@ -28,6 +29,7 @@ const Dashboard = () => {
     JiaCard,
     SimpleCard,
     WoodCard,
+    NinaWishCard,
   };
 
   if (loading) {

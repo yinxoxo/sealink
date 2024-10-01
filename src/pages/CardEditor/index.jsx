@@ -6,6 +6,7 @@ import BreadCard from "../../cardTemplate/BreadCard";
 import JiaCard from "../../cardTemplate/JiaCard";
 import ForestCard from "../../cardTemplate/ForestCard";
 import GalaxyCard from "../../cardTemplate/GalaxyCard";
+import NinaWishCard from "../../cardTemplate/NinaWishCard";
 import EditBoard from "./EditorBoard";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
@@ -50,6 +51,8 @@ const CardEditorContent = ({ template }) => {
         return <ForestCard />;
       case "GalaxyCard":
         return <GalaxyCard />;
+      case "NinaWishCard":
+        return <NinaWishCard />;
 
       default:
         return <ErrorMessage message="No matching template found." />;

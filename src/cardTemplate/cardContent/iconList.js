@@ -10,16 +10,12 @@ import {
   FaImagePortrait,
   FaDev,
   FaLinkedin,
+  FaSpotify,
+  FaPinterest,
+  FaDiscord,
 } from "react-icons/fa6";
 
 const ICON_LIST = [
-  { id: "X", name: "X", icon: FaTwitter, href: "https://twitter.com" },
-  {
-    id: "Instagram",
-    name: "Instagram",
-    icon: FaInstagram,
-    href: "https://instagram.com",
-  },
   {
     id: "Threads",
     name: "Threads",
@@ -50,11 +46,24 @@ const ICON_LIST = [
     icon: FaYoutube,
     href: "https://youtube.com",
   },
+  { id: "X", name: "X", icon: FaTwitter, href: "https://twitter.com" },
   {
     id: "Snapchat",
     name: "Snapchat",
     icon: FaSnapchat,
     href: "https://snapchat.com",
+  },
+  {
+    id: "Discord",
+    name: "Discord",
+    icon: FaDiscord,
+    href: "https://discord.com/",
+  },
+  {
+    id: "Spotify",
+    name: "Spotify",
+    icon: FaSpotify,
+    href: "https://open.spotify.com/",
   },
   { id: "Portrait", name: "Portrait", icon: FaImagePortrait, href: "#" },
   { id: "Dev", name: "Dev", icon: FaDev, href: "https://dev.to" },
@@ -63,6 +72,12 @@ const ICON_LIST = [
     name: "Linkedin",
     icon: FaLinkedin,
     href: "https://linkedin.com",
+  },
+  {
+    id: "Pinterest",
+    name: "Pinterest",
+    icon: FaPinterest,
+    href: "https://www.pinterest.com/",
   },
 ];
 
@@ -78,6 +93,9 @@ const ICON_MAP = {
   Portrait: FaImagePortrait,
   Dev: FaDev,
   Linkedin: FaLinkedin,
+  Spotify: FaSpotify,
+  Discord: FaDiscord,
+  Pinterest: FaPinterest,
 };
 
 const ICON_STYLE = {

@@ -21,7 +21,7 @@ const NavBar = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
 
   return (
     <nav className="fixed w-[450px] bg-white">
-      <div className="border-1 relative flex items-center justify-between border-b-2 border-solid border-gray-300 p-5 text-white">
+      <div className="relative flex items-center justify-between border-b-2 border-solid border-gray-300 p-5 text-white">
         <DropdownMenu>
           <DropdownMenuTrigger>
             <FaPlus
@@ -30,10 +30,9 @@ const NavBar = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
             />
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="rounded-lg p-2 shadow-lg"
+            className="absolute left-[-30px] top-[22px] rounded-lg p-2 shadow-lg"
             side="bottom"
-            align="start"
-            sideOffset={20}
+            sideOffset={0}
           >
             <DropdownMenuItem onClick={() => setEditingType("text")}>
               <FaEdit className="text-icon mr-2" /> Text
@@ -52,12 +51,16 @@ const NavBar = ({ onUndo, onRedo, disableUndo, disableRedo }) => {
 
         <FaAnglesLeft
           size={20}
-          className={`text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125 ${disableUndo ? "cursor-not-allowed opacity-50" : ""}`}
+          className={`text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125 ${
+            disableUndo ? "cursor-not-allowed opacity-50" : ""
+          }`}
           onClick={onUndo}
         />
         <FaAnglesRight
           size={20}
-          className={`text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125 ${disableRedo ? "cursor-not-allowed opacity-50" : ""}`}
+          className={`text-icon hover:text-icon-hover cursor-pointer transition-transform duration-300 hover:scale-125 ${
+            disableRedo ? "cursor-not-allowed opacity-50" : ""
+          }`}
           onClick={onRedo}
         />
         <FaPlay

@@ -12,7 +12,7 @@ const IconCard = ({
   <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-3">
     <div className="flex flex-col">
       <div className="flex items-center space-x-3">
-        <IconComponent size={24} className="text-icon" />
+        <IconComponent size={24} />
         <span>{iconName}</span>
       </div>
       <p className="text-sm text-gray-400">{iconHref}</p>
