@@ -261,7 +261,7 @@ const WoodCard = ({ data }) => {
   };
 
   return (
-    <div className="card-container relative bg-white p-6 text-center">
+    <div className="card-container p-6 text-center">
       <div
         className="absolute inset-0"
         style={{
