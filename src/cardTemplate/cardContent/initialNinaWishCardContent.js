@@ -3,18 +3,18 @@ const initialNinaWishCardContent = {
     {
       text: "Wish Upon a Star",
       style: {
-        color: "#F7FFF7", // 使用 Mint cream 顏色
+        color: "#F7FFF7",
         fontWeight: 700,
-        fontSize: "40px", // 調整標題大小
+        fontSize: "40px",
         fontFamily: "Chewy, sans-serif",
       },
     },
     {
       text: "Making your dreams come true",
       style: {
-        color: "#FFE66D", // 使用 Naples yellow 顏色
+        color: "#FFE66D",
         fontWeight: 700,
-        fontSize: "18px", // 調整副標題大小
+        fontSize: "18px",
         fontFamily: "Share Tech Mono, sans-serif",
       },
     },
@@ -45,10 +45,10 @@ const initialNinaWishCardContent = {
       },
     ],
     style: {
-      backgroundColor: "#6CA6C1", // 使用 Air superiority blue 顏色
+      backgroundColor: "#6CA6C1",
       width: "90%",
-      color: "#343434", // 使用 Jet 顏色
-      borderRadius: "12px", // 調整按鈕圓角
+      color: "#343434",
+      borderRadius: "12px",
       padding: "14px",
       fontSize: "16px",
       fontWeight: 600,
@@ -58,8 +58,8 @@ const initialNinaWishCardContent = {
 
   background: {
     backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/sealink-4b0fd.appspot.com/o/backgroundimage%2F1727718758364.png?alt=media&token=bc0b7736-3434-4bf2-8862-519e48ff77ee)`,
-    opacity: 0.9, // 調整背景透明度
-    backgroundColor: "#2F3061", // 使用 Delft Blue 作為背景色
+    opacity: 0.9,
+    backgroundColor: "#2F3061",
     backgroundSize: "cover",
     backgroundPosition: "center",
   },
@@ -86,13 +86,13 @@ const initialNinaWishCardContent = {
       },
     ],
     style: {
-      color: "#FFE66D", // 使用 Naples yellow 顏色
+      color: "#FFE66D",
       size: 30,
     },
   },
 
   avatar: {
-    image: null, // 如果沒有圖片，這裡應該為 null
+    image: null,
     style: {
       width: "100px",
       height: "100px",
@@ -100,7 +100,6 @@ const initialNinaWishCardContent = {
   },
 };
 
-// 更新 itemsOrder 的變量名稱
 initialNinaWishCardContent.itemsOrder = [
   { id: `avatar-1`, type: "avatar" },
   ...initialNinaWishCardContent.texts.map((text, index) => ({

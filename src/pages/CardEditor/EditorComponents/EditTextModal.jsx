@@ -1,10 +1,24 @@
 import { useState } from "react";
-import { Modal, Input, Slider, Select } from "antd";
 import { SketchPicker } from "react-color";
 import PropTypes from "prop-types";
 import fontOptions from "../../../cardTemplate/cardContent/fontOptions";
-
-const { Option } = Select;
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 
 const EditTextModal = ({
   isTextModalVisible,
@@ -16,109 +30,125 @@ const EditTextModal = ({
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   return (
-    <Modal
-      title="Edit Text"
-      open={isTextModalVisible}
-      onOk={handleSaveTextEdit}
-      onCancel={() => setIsTextModalVisible(false)}
-    >
-      <div>
-        <label>Text Content</label>
-        <Input
-          type="text"
-          value={editTextData?.text}
-          onChange={(e) =>
-            setEditTextData({ ...editTextData, text: e.target.value })
-          }
-        />
-      </div>
+    <Dialog open={isTextModalVisible} onOpenChange={setIsTextModalVisible}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Text</DialogTitle>
+        </DialogHeader>
 
-      <div className="mt-4">
-        <label>Font Size</label>
-        <Slider
-          min={10}
-          max={100}
-          value={parseInt(
-            editTextData?.style?.fontSize?.toString().replace("px", ""),
-          )}
-          onChange={(value) =>
-            setEditTextData({
-              ...editTextData,
-              style: { ...editTextData.style, fontSize: value },
-            })
-          }
-        />
-        <span>{editTextData?.style?.fontSize}</span>
-      </div>
-
-      <div className="mt-4">
-        <label>Font Color</label>
-        <div onClick={() => setShowColorPicker(!showColorPicker)}>
-          <div
-            style={{
-              backgroundColor: editTextData?.style?.color,
-              width: "40px",
-              height: "40px",
-              cursor: "pointer",
-              borderRadius: "5px",
-            }}
+        <div>
+          <label>Text Content</label>
+          <Input
+            type="text"
+            value={editTextData?.text}
+            onChange={(e) =>
+              setEditTextData({ ...editTextData, text: e.target.value })
+            }
           />
         </div>
-        {showColorPicker && (
-          <div style={{ position: "absolute", zIndex: 2 }}>
-            <SketchPicker
-              onChangeComplete={(color) =>
-                setEditTextData({
-                  ...editTextData,
-                  style: { ...editTextData.style, color: color.hex },
-                })
-              }
+
+        <div className="mt-4">
+          <label>Font Size</label>
+          <Slider
+            defaultValue={[
+              parseInt(
+                editTextData?.style?.fontSize?.toString().replace("px", ""),
+                10,
+              ),
+            ]}
+            max={100}
+            step={1}
+            onValueChange={(value) =>
+              setEditTextData({
+                ...editTextData,
+                style: { ...editTextData.style, fontSize: value[0] },
+              })
+            }
+            className="w-full"
+          />
+          <span>{editTextData?.style?.fontSize}</span>
+        </div>
+
+        <div className="mt-4">
+          <label>Font Color</label>
+          <div onClick={() => setShowColorPicker(!showColorPicker)}>
+            <div
+              style={{
+                backgroundColor: editTextData?.style?.color,
+                width: "40px",
+                height: "40px",
+                cursor: "pointer",
+                borderRadius: "5px",
+              }}
             />
           </div>
-        )}
-      </div>
+          {showColorPicker && (
+            <div style={{ position: "absolute", zIndex: 2 }}>
+              <SketchPicker
+                onChangeComplete={(color) =>
+                  setEditTextData({
+                    ...editTextData,
+                    style: { ...editTextData.style, color: color.hex },
+                  })
+                }
+              />
+            </div>
+          )}
+        </div>
 
-      <div className="mt-4">
-        <label>Font Weight</label>
-        <Slider
-          min={300}
-          max={700}
-          step={100}
-          value={editTextData?.style?.fontWeight}
-          onChange={(value) =>
-            setEditTextData({
-              ...editTextData,
-              style: { ...editTextData.style, fontWeight: value },
-            })
-          }
-        />
-        <span>{editTextData?.style?.fontWeight}</span>
-      </div>
+        <div className="mt-4">
+          <label>Font Weight</label>
+          <Slider
+            defaultValue={[editTextData?.style?.fontWeight]}
+            min={300}
+            max={700}
+            step={100}
+            onValueChange={(value) =>
+              setEditTextData({
+                ...editTextData,
+                style: { ...editTextData.style, fontWeight: value[0] },
+              })
+            }
+            className="w-full"
+          />
+          <span>{editTextData?.style?.fontWeight}</span>
+        </div>
 
-      <div className="mt-4">
-        <label>Font Family</label>
-        <Select
-          value={editTextData?.style?.fontFamily}
-          onChange={(value) =>
-            setEditTextData({
-              ...editTextData,
-              style: { ...editTextData.style, fontFamily: value },
-            })
-          }
-          style={{ width: "100%" }}
-        >
-          {fontOptions.map((font) => (
-            <Select.Option
-              key={font.value}
-              value={font.value}
-              style={{ fontFamily: font.value }}
-            >
-              {font.label}
-            </Select.Option>
-          ))}
-        </Select>
-      </div>
-    </Modal>
+        <div className="mt-4">
+          <label>Font Family</label>
+          <Select
+            value={editTextData?.style?.fontFamily}
+            onValueChange={(value) =>
+              setEditTextData({
+                ...editTextData,
+                style: { ...editTextData.style, fontFamily: value },
+              })
+            }
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue></SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {fontOptions.map((font) => (
+                <SelectItem key={font.value} value={font.value}>
+                  <span style={{ fontFamily: font.value }}>{font.label}</span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => setIsTextModalVisible(false)}
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleSaveTextEdit}>Save</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
