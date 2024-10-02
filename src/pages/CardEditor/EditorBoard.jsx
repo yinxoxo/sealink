@@ -1202,7 +1202,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   return (
     <section
-      className="right-0 flex h-screen w-full max-w-[450px] flex-col overflow-y-auto bg-white"
+      className="right-0 z-20 flex h-screen w-full max-w-[450px] flex-col overflow-y-auto bg-white"
       onClick={handleOuterClick}
     >
       <DeployModal

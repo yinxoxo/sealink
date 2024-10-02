@@ -28,6 +28,7 @@ const CardEditorContent = ({ template }) => {
     backgroundImage,
     backgroundSize,
     backgroundPosition,
+    opacity,
   } = projectData.background || {};
 
   const backgroundSettings = {
@@ -35,6 +36,7 @@ const CardEditorContent = ({ template }) => {
     backgroundImage: backgroundImage ? backgroundImage : "none",
     backgroundSize: backgroundSize || "cover",
     backgroundPosition: backgroundPosition || "center",
+    opacity: opacity,
   };
 
   const renderTemplate = () => {
@@ -62,17 +64,22 @@ const CardEditorContent = ({ template }) => {
   };
 
   return (
-    <section className="flex h-fit min-h-screen w-full items-center overflow-y-auto">
+    <section className="relative flex h-fit min-h-screen w-full items-center overflow-y-auto">
       <div
-        className="flex h-screen flex-grow flex-col items-center"
-        style={{ ...backgroundSettings, opacity: 1 }}
-      >
+        className="absolute inset-0 z-0"
+        style={{
+          ...backgroundSettings,
+        }}
+      />
+
+      <div className="relative z-10 flex h-screen flex-grow flex-col items-center">
         <div
-          className={`my-auto overflow-y-auto rounded-3xl ${isMobile ? "h-[700px] w-[400px]" : "h-[530px] w-[900px]"}`}
+          className={`shadow-3xl my-auto overflow-y-auto rounded-3xl ${isMobile ? "h-[700px] w-[400px]" : "h-[530px] w-[900px]"}`}
         >
           {renderTemplate()}
         </div>
       </div>
+
       <EditBoard isMobile={isMobile} setIsMobile={setIsMobile} />
     </section>
   );
