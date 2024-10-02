@@ -108,6 +108,15 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     }
   };
 
+  const handleReset = () => {
+    if (history.length > 0) {
+      setProjectData(history[0]);
+      setCurrentStep(0);
+      setRedoHistory([]);
+      console.log("Project reset to initial state");
+    }
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProjectUrl, setNewProjectUrl] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("");
@@ -471,7 +480,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           />
         ))}
         <Button
-          className="bg-button hover:bg-button-hover mt-6"
+          className="mt-6 bg-button hover:bg-button-hover"
           onClick={() => {
             const newTextItem = {
               text: "New Text",
@@ -547,13 +556,13 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
               ICON_LIST={ICON_LIST}
             />
             <Button
-              className="bg-button hover:bg-button-hover mt-2 w-full"
+              className="mt-2 w-full bg-button hover:bg-button-hover"
               onClick={addIcon}
             >
               Add Icon
             </Button>
           </div>
-          <div className="my-6 flex w-full">
+          <div className="mt-6 flex w-full">
             <FaBacon />
             <h1 className="ml-2 text-2xl font-bold">Appearance</h1>
           </div>
@@ -669,7 +678,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         </div>
 
         <Button
-          className="bg-button hover:bg-button-hover mt-6"
+          className="mt-6 bg-button hover:bg-button-hover"
           onClick={() => {
             const newButtonId = `button-${buttonList.length + 1}`;
             const newButton = {
@@ -1016,7 +1025,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           <label htmlFor="background-opacity" className="text-sm font-medium">
             Background Opacity
           </label>
-          <span className="text-graySpan text-sm">
+          <span className="text-sm text-graySpan">
             {projectData.background.opacity}
           </span>
         </div>
@@ -1067,7 +1076,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           </div>
           <div className="my-4">
             <Button
-              className="bg-button hover:bg-button-hover w-full"
+              className="w-full bg-button hover:bg-button-hover"
               onClick={() => {
                 const updatedData = {
                   ...projectData,
@@ -1191,7 +1200,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           />
           <Button
             type="submit"
-            className="bg-button hover:bg-button-hover mt-4 w-full"
+            className="mt-4 w-full bg-button hover:bg-button-hover"
           >
             Save
           </Button>
@@ -1217,6 +1226,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         onRedo={handleRedo}
         disableUndo={currentStep === 0}
         disableRedo={redoHistory.length === 0}
+        onReset={handleReset}
       />
 
       <div className="mt-16 flex flex-col p-5">
