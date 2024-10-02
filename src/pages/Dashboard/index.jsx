@@ -44,12 +44,7 @@ const Dashboard = () => {
         </button>
       </Link>
 
-      <div
-        className="grid gap-3 p-5"
-        style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
-        }}
-      >
+      <div className="grid grid-cols-[repeat(auto-fit,_minmax(360px,_1fr))] gap-3 p-4">
         {projects.map((project) => {
           const CardComponent = cardComponents[project.templateId];
 
