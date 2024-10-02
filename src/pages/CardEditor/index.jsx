@@ -28,7 +28,6 @@ const CardEditorContent = ({ template }) => {
     backgroundImage,
     backgroundSize,
     backgroundPosition,
-    opacity,
   } = projectData.background || {};
 
   const backgroundSettings = {
@@ -36,7 +35,6 @@ const CardEditorContent = ({ template }) => {
     backgroundImage: backgroundImage ? backgroundImage : "none",
     backgroundSize: backgroundSize || "cover",
     backgroundPosition: backgroundPosition || "center",
-    opacity: opacity,
   };
 
   const renderTemplate = () => {
@@ -66,7 +64,7 @@ const CardEditorContent = ({ template }) => {
   return (
     <section className="relative flex h-fit min-h-screen w-full items-center overflow-y-auto">
       <div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 opacity-30"
         style={{
           ...backgroundSettings,
         }}
@@ -74,7 +72,7 @@ const CardEditorContent = ({ template }) => {
 
       <div className="relative z-10 flex h-screen flex-grow flex-col items-center">
         <div
-          className={`shadow-3xl my-auto overflow-y-auto rounded-3xl ${isMobile ? "h-[700px] w-[400px]" : "h-[530px] w-[900px]"}`}
+          className={`my-auto overflow-y-auto rounded-3xl shadow-2xl ${isMobile ? "h-[700px] w-[400px]" : "h-[530px] w-[900px]"}`}
         >
           {renderTemplate()}
         </div>
