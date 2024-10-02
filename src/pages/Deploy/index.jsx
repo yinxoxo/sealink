@@ -9,6 +9,7 @@ import JiaCard from "../../cardTemplate/JiaCard";
 import WoodCard from "../../cardTemplate/WoodCard";
 import Loading from "../../components/Loading";
 import NinaWishCard from "../../cardTemplate/NinaWishCard";
+import NotFound from "@/components/ErrorMessage/NotFound";
 
 const Deploy = () => {
   const { template } = useParams();
@@ -29,6 +30,10 @@ const Deploy = () => {
 
   if (!projectData) {
     return <Loading />;
+  }
+
+  if (!projectData.isPublished) {
+    return <NotFound />;
   }
 
   return (
