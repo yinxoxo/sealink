@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SketchPicker } from "react-color";
+import { ChromePicker } from "react-color";
 import PropTypes from "prop-types";
 import fontOptions from "../../../cardTemplate/cardContent/fontOptions";
 import {
@@ -29,6 +29,10 @@ const EditTextModal = ({
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
 
+  if (!editTextData) {
+    return;
+  }
+
   return (
     <Dialog open={isTextModalVisible} onOpenChange={setIsTextModalVisible}>
       <DialogContent>
@@ -36,88 +40,98 @@ const EditTextModal = ({
           <DialogTitle>Edit Text</DialogTitle>
         </DialogHeader>
 
-        <div>
-          <label>Text Content</label>
+        <div className="flex flex-col space-y-2">
+          <label className="text-sm font-medium">Text Content</label>
           <Input
             type="text"
-            value={editTextData?.text}
+            value={editTextData.text}
             onChange={(e) =>
               setEditTextData({ ...editTextData, text: e.target.value })
             }
           />
         </div>
 
-        <div className="mt-4">
-          <label>Font Size</label>
-          <Slider
-            defaultValue={[
-              parseInt(
-                editTextData?.style?.fontSize?.toString().replace("px", ""),
-                10,
-              ),
-            ]}
-            max={100}
-            step={1}
-            onValueChange={(value) =>
-              setEditTextData({
-                ...editTextData,
-                style: { ...editTextData.style, fontSize: value[0] },
-              })
-            }
-            className="w-full"
-          />
-          <span>{editTextData?.style?.fontSize}</span>
-        </div>
-
-        <div className="mt-4">
-          <label>Font Color</label>
-          <div onClick={() => setShowColorPicker(!showColorPicker)}>
-            <div
-              style={{
-                backgroundColor: editTextData?.style?.color,
-                width: "40px",
-                height: "40px",
-                cursor: "pointer",
-                borderRadius: "5px",
-              }}
+        <div className="flex flex-col space-y-2">
+          <label className="text-sm font-medium">Font Size</label>
+          <span className="text-sm">{editTextData.style.fontSize}</span>
+          <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+            <Slider
+              defaultValue={[
+                parseInt(
+                  editTextData.style.fontSize.toString().replace("px", ""),
+                  10,
+                ),
+              ]}
+              max={100}
+              step={1}
+              onValueChange={(value) =>
+                setEditTextData({
+                  ...editTextData,
+                  style: { ...editTextData.style, fontSize: value[0] },
+                })
+              }
+              className="w-full"
             />
           </div>
-          {showColorPicker && (
-            <div style={{ position: "absolute", zIndex: 2 }}>
-              <SketchPicker
-                onChangeComplete={(color) =>
-                  setEditTextData({
-                    ...editTextData,
-                    style: { ...editTextData.style, color: color.hex },
-                  })
-                }
-              />
-            </div>
-          )}
         </div>
 
-        <div className="mt-4">
-          <label>Font Weight</label>
-          <Slider
-            defaultValue={[editTextData?.style?.fontWeight]}
-            min={300}
-            max={700}
-            step={100}
-            onValueChange={(value) =>
-              setEditTextData({
-                ...editTextData,
-                style: { ...editTextData.style, fontWeight: value[0] },
-              })
-            }
-            className="w-full"
-          />
-          <span>{editTextData?.style?.fontWeight}</span>
+        <div className="flex flex-col space-y-2">
+          <label className="text-sm font-medium">Font Color</label>
+          <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
+            <div
+              onClick={() => setShowColorPicker(!showColorPicker)}
+              className="relative"
+            >
+              <div
+                className="h-6 w-20 cursor-pointer rounded-md"
+                style={{
+                  backgroundColor: editTextData.style.color,
+                }}
+              />
+            </div>
+            {showColorPicker && (
+              <div
+                className="top-100 absolute z-10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ChromePicker
+                  color={editTextData.style.color}
+                  onChangeComplete={(color) =>
+                    setEditTextData({
+                      ...editTextData,
+                      style: { ...editTextData.style, color: color.hex },
+                    })
+                  }
+                />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-col space-y-2">
+          <label className="text-sm font-medium">Font Weight</label>
+          <span className="text-sm">{editTextData.style.fontWeight}</span>
+          <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
+            <Slider
+              defaultValue={[editTextData.style.fontWeight]}
+              min={300}
+              max={700}
+              step={100}
+              onValueChange={(value) =>
+                setEditTextData({
+                  ...editTextData,
+                  style: { ...editTextData.style, fontWeight: value[0] },
+                })
+              }
+              className="w-full"
+            />
+          </div>
         </div>
 
         <div className="mt-4">
           <label>Font Family</label>
           <Select
-            value={editTextData?.style?.fontFamily}
+            value={editTextData.style.fontFamily}
             onValueChange={(value) =>
               setEditTextData({
                 ...editTextData,
@@ -126,7 +140,7 @@ const EditTextModal = ({
             }
           >
             <SelectTrigger className="w-full">
-              <SelectValue></SelectValue>
+              <SelectValue placeholder="Select Font Family" />
             </SelectTrigger>
             <SelectContent>
               {fontOptions.map((font) => (
@@ -145,7 +159,12 @@ const EditTextModal = ({
           >
             Cancel
           </Button>
-          <Button onClick={handleSaveTextEdit}>Save</Button>
+          <Button
+            onClick={handleSaveTextEdit}
+            className="bg-button hover:bg-button-hover"
+          >
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
