@@ -1076,7 +1076,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           </div>
           <div className="my-4">
             <Button
-              className="w-full bg-button hover:bg-button-hover"
+              className="w-full bg-[#8992a3] hover:bg-[#595f6b]"
               onClick={() => {
                 const updatedData = {
                   ...projectData,

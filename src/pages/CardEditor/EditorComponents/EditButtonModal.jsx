@@ -48,7 +48,10 @@ const EditButtonModal = ({
         >
           Cancel
         </Button>
-        <Button onClick={handleSaveButtonEdit} className="bg-button">
+        <Button
+          onClick={handleSaveButtonEdit}
+          className="bg-button hover:bg-button-hover"
+        >
           Save
         </Button>
       </DialogFooter>
