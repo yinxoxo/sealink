@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useProjects } from "../../contexts/ProjectContext/useProjects";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -17,9 +18,12 @@ import JiaCard from "../../cardTemplate/JiaCard";
 import SimpleCard from "../../cardTemplate/SimpleCard";
 import WoodCard from "../../cardTemplate/WoodCard";
 import NinaWishCard from "../../cardTemplate/NinaWishCard";
+import ProjectSetting from "./ProjectSetting";
 
 const Dashboard = () => {
   const { projects, loading } = useProjects();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   const cardComponents = {
     ArtCard,
@@ -32,6 +36,15 @@ const Dashboard = () => {
     NinaWishCard,
   };
 
+  const openModal = (project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -39,7 +52,7 @@ const Dashboard = () => {
   return (
     <div className="flex h-full w-full flex-col p-7">
       <Link to="/templates" className="self-end">
-        <button className="bg-sea hover:bg-sea-hover w-fit rounded-lg p-2 text-white">
+        <button className="w-fit rounded-lg bg-sea p-2 text-white hover:bg-sea-hover">
           Create New SeaLink
         </button>
       </Link>
@@ -71,7 +84,7 @@ const Dashboard = () => {
                     href={project.publishedUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-sea hover:bg-sea-hover mt-3 block w-full max-w-[80%] rounded-lg py-2 text-center text-white"
+                    className="mt-3 block w-full max-w-[80%] rounded-lg bg-sea py-2 text-center text-white hover:bg-sea-hover"
                   >
                     Check Out SeaLink
                   </a>
@@ -88,14 +101,17 @@ const Dashboard = () => {
               <div className="my-4 border-t border-gray-200"></div>
 
               <div className="mb-4 flex items-center">
-                <button className="hover:text-sea-hover flex w-1/2 items-center justify-center text-gray-600">
+                <button
+                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover"
+                  onClick={() => openModal(project)}
+                >
                   <IoSettingsOutline />
                 </button>
                 <div className="h-6 border-l border-gray-200"></div>
 
                 <Link
                   to={`/dashboard/card-editor/${project.templateId}/${project.id}`}
-                  className="hover:text-sea-hover flex w-1/2 items-center justify-center text-gray-600"
+                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover"
                 >
                   <LuPenLine />
                 </Link>
@@ -104,6 +120,13 @@ const Dashboard = () => {
           );
         })}
       </div>
+      {selectedProject && (
+        <ProjectSetting
+          project={selectedProject}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 };
