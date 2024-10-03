@@ -159,6 +159,7 @@ const NinaWishCard = ({ data }) => {
                 <button
                   className="max-w-[540px]"
                   style={getItemStyle(item.type)}
+                  data-url={buttonItem.url}
                   onClick={() => handleButtonClick(buttonItem.url)}
                 >
                   {buttonItem.text}
