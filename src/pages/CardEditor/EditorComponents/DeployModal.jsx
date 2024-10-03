@@ -23,24 +23,25 @@ const DeployModal = ({ isOpen, onClose, projectUrl }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="flex flex-col items-center justify-center">
+      <DialogContent className="flex max-w-md flex-col items-center justify-center">
         <DialogTitle className="text-xl font-bold">Done!</DialogTitle>
-        <p>
-          Site successfully published to
-          <a
-            href={projectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sea"
-          >
-            {projectUrl}
-          </a>
-        </p>
+        <p className="w-full break-words">Site successfully published to</p>
+        <a
+          href={projectUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 w-full break-words text-sea"
+        >
+          {projectUrl}
+        </a>
         <DialogFooter className="flex justify-end">
           <Button variant="outline" onClick={handleOkay}>
             Okay
           </Button>
-          <Button variant="outline" onClick={handleViewSite}>
+          <Button
+            className="bg-button hover:bg-button-hover"
+            onClick={handleViewSite}
+          >
             View Site
           </Button>
         </DialogFooter>
