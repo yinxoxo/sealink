@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useVisitorProject } from "../../firebase/useVisitorProject"; // 引入 useVisitorProject hook
+import { useVisitorProject } from "../../firebase/useVisitorProject";
+import useRecordVisitorData from "@/firebase/useRecordVisitorData";
 import Loading from "../../components/Loading";
 import NotFound from "@/components/ErrorMessage/NotFound";
 import ArtCard from "../../cardTemplate/ArtCard";
@@ -31,6 +32,8 @@ const Deploy = () => {
   };
 
   const CardComponent = cardComponents[template];
+
+  useRecordVisitorData(userId, projectId);
 
   if (isLoading) {
     return <Loading />;
