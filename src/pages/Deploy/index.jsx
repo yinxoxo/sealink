@@ -39,7 +39,7 @@ const Deploy = () => {
     return <Loading />;
   }
 
-  if (isError || !projectData) {
+  if (isError || !projectData || !projectData.isPublished) {
     return <NotFound />;
   }
 
