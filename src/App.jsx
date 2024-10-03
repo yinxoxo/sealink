@@ -40,7 +40,7 @@ function App() {
                 </Route>
                 <Route path="/signup" element={<SignUp />} />
                 <Route
-                  path="/sealink/:template/:projectId"
+                  path="/sealink/:userId/:template/:projectId"
                   element={
                     <CardEditorProvider>
                       <Deploy />

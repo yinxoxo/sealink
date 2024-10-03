@@ -73,8 +73,14 @@ const WoodCard = ({ data }) => {
   } = useCardEditorContext();
 
   const isTemplatesPage = location.pathname === "/templates";
+  const isDashboardPage = location.pathname === "/dashboard";
+  const isDeployPage = location.pathname.includes("/sealink");
 
-  const projectData = isTemplatesPage ? data : contextProjectData;
+  const projectData =
+    isTemplatesPage || isDashboardPage || isDeployPage
+      ? data
+      : contextProjectData;
+
   if (!projectData) return <div>No project data available</div>;
 
   const icons = projectData.socialLinks.iconList.map((link) => ({

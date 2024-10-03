@@ -74,8 +74,11 @@ const ArtCard = ({ data }) => {
 
   const isTemplatesPage = location.pathname === "/templates";
   const isDashboardPage = location.pathname === "/dashboard";
+  const isDeployPage = location.pathname.includes("/sealink");
   const projectData =
-    isTemplatesPage || isDashboardPage ? data : contextProjectData;
+    isTemplatesPage || isDashboardPage || isDeployPage
+      ? data
+      : contextProjectData;
 
   if (!projectData) return <div>No project data available</div>;
 

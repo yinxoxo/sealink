@@ -26,7 +26,7 @@ const DeployModal = ({ isOpen, onClose, projectUrl }) => {
       <DialogContent className="flex flex-col items-center justify-center">
         <DialogTitle className="text-xl font-bold">Done!</DialogTitle>
         <p>
-          Site successfully published to{" "}
+          Site successfully published to
           <a
             href={projectUrl}
             target="_blank"

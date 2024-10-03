@@ -16,7 +16,7 @@ export const saveProjectToFirestore = async (
   try {
     if (projectId) {
       if (projectData.isPublished) {
-        projectData.publishedUrl = `/sealink/${projectData.templateId}/${projectId}`;
+        projectData.publishedUrl = `/sealink/${userId}/${projectData.templateId}/${projectId}`;
       }
       const projectRef = doc(db, `users/${userId}/projects/${projectId}`);
       await setDoc(
@@ -60,7 +60,7 @@ export const saveProjectToFirestore = async (
       );
       let publishedUrl = null;
       if (projectData.isPublished) {
-        const publishedUrl = `/sealink/${projectData.templateId}/${newProjectId}`;
+        const publishedUrl = `/sealink/${userId}/${projectData.templateId}/${newProjectId}`;
         await setDoc(
           doc(db, `users/${userId}/projects/${newProjectId}`),
           { publishedUrl },

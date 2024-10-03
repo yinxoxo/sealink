@@ -1,19 +1,23 @@
 import { useParams } from "react-router-dom";
-import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
-import SimpleCard from "../../cardTemplate/SimpleCard";
+import { useVisitorProject } from "../../firebase/useVisitorProject"; // 引入 useVisitorProject hook
+import Loading from "../../components/Loading";
+import NotFound from "@/components/ErrorMessage/NotFound";
 import ArtCard from "../../cardTemplate/ArtCard";
 import BreadCard from "../../cardTemplate/BreadCard";
 import ForestCard from "../../cardTemplate/ForestCard";
 import GalaxyCard from "../../cardTemplate/GalaxyCard";
 import JiaCard from "../../cardTemplate/JiaCard";
+import SimpleCard from "../../cardTemplate/SimpleCard";
 import WoodCard from "../../cardTemplate/WoodCard";
-import Loading from "../../components/Loading";
 import NinaWishCard from "../../cardTemplate/NinaWishCard";
-import NotFound from "@/components/ErrorMessage/NotFound";
 
 const Deploy = () => {
-  const { template } = useParams();
-  const { projectData } = useCardEditorContext();
+  const { userId, template, projectId } = useParams();
+  const {
+    data: projectData,
+    isLoading,
+    isError,
+  } = useVisitorProject(userId, projectId);
 
   const cardComponents = {
     ArtCard,
@@ -28,17 +32,17 @@ const Deploy = () => {
 
   const CardComponent = cardComponents[template];
 
-  if (!projectData) {
+  if (isLoading) {
     return <Loading />;
   }
 
-  if (!projectData.isPublished) {
+  if (isError || !projectData) {
     return <NotFound />;
   }
 
   return (
     <div className="h-full min-h-screen w-full">
-      <CardComponent />
+      {CardComponent ? <CardComponent data={projectData} /> : <NotFound />}
     </div>
   );
 };
