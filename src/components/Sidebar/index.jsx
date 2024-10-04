@@ -1,26 +1,21 @@
-import { useState } from "react";
 import sealinkLogo from "../../images/logo.png";
-
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
-import {
-  FaChildReaching,
-  FaBars,
-  FaChartColumn,
-  FaChessQueen,
-} from "react-icons/fa6";
+import { FaBars, FaChartColumn, FaCircleLeft } from "react-icons/fa6";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen); // Update state from parent component
+    setIsOpen(!isOpen);
   };
 
   return (
     <div className="relative">
       <nav
-        className={`fixed flex h-full ${isOpen ? "w-64 px-6" : "w-20 px-2"} flex-col justify-between bg-white shadow-lg transition-all duration-300`}
+        className={`fixed flex h-full ${
+          isOpen ? "w-64" : "w-20"
+        } flex-col justify-between bg-white shadow-lg transition-all duration-300`}
       >
         <button
           onClick={toggleSidebar}
@@ -42,35 +37,31 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </Link>
         </div>
 
-        <div className="flex flex-col items-center space-y-2 pb-10">
-          <button
-            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} w-full space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center`}
+        <div className="flex flex-col items-center space-y-1 pb-10">
+          <div
+            className={`relative flex w-full items-center justify-center p-2 transition-all duration-300 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:bg-transparent hover:bg-gray-200 hover:before:bg-sea`}
           >
-            <FaChartColumn className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`} />
-            {isOpen && (
-              <span className="text-sm font-medium">Data Analyze</span>
-            )}
-          </button>
+            <button
+              className={`flex w-[85%] items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full bg-white px-4 py-3 text-center shadow-md hover:text-sea`}
+            >
+              <FaChartColumn className={`text-lg hover:fill-sea`} />
+              {isOpen && (
+                <span className="text-sm font-medium">Data Analyze</span>
+              )}
+            </button>
+          </div>
 
-          <button
-            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} w-full space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center`}
+          <div
+            className={`relative flex w-full items-center justify-center p-2 transition-all duration-300 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:bg-transparent hover:bg-gray-200 hover:before:bg-sea`}
           >
-            <FaChessQueen className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`} />
-            {isOpen && <span className="text-sm font-medium">PRO</span>}
-          </button>
-
-          <button
-            className={`flex w-4/5 items-center ${isOpen ? "justify-start" : "justify-center"} w-full space-x-3 rounded-full border border-gray-300 bg-white px-4 py-3 text-center font-bold shadow-md`}
-          >
-            <FaChildReaching
-              className={`${isOpen ? "ml-2 mr-9" : ""} text-lg`}
-            />
-            {isOpen && (
-              <span className="text-sm font-medium">
-                {user?.displayName || "USER"}
-              </span>
-            )}
-          </button>
+            <button
+              onClick={logout}
+              className={`flex w-[85%] items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full bg-white px-4 py-3 text-center font-bold shadow-md hover:text-sea`}
+            >
+              <FaCircleLeft className={`text-lg hover:fill-sea`} />
+              {isOpen && <span className="text-sm font-medium">Logout</span>}
+            </button>
+          </div>
         </div>
       </nav>
     </div>

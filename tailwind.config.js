@@ -51,6 +51,10 @@ export default {
         graySpan: {
           DEFAULT: "#8992a3",
         },
+        lightGray: {
+          DEFAULT: "#f1f2f3",
+          dark: "#e1e2e3",
+        },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
