@@ -11,10 +11,28 @@ export const fetchUserProjects = async (user) => {
     const q = query(collection(db, `users/${user.uid}/projects`));
     const querySnapshot = await getDocs(q);
 
-    const userProjects = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const userProjects = await Promise.all(
+      querySnapshot.docs.map(async (doc) => {
+        const projectData = doc.data();
+
+        const visitorDataCollectionRef = collection(
+          db,
+          `users/${user.uid}/projects/${doc.id}/visitorData`,
+        );
+        const visitorDataSnapshot = await getDocs(visitorDataCollectionRef);
+
+        const visitorData = visitorDataSnapshot.docs.map((visitorDoc) => ({
+          id: visitorDoc.id,
+          ...visitorDoc.data(),
+        }));
+
+        return {
+          id: doc.id,
+          ...projectData,
+          visitorData,
+        };
+      }),
+    );
 
     return userProjects;
   } catch (error) {
