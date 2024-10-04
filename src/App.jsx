@@ -10,6 +10,7 @@ import Templates from "./pages/Templates";
 import Dashboard from "./pages/Dashboard";
 import CardEditor from "./pages/CardEditor";
 import Analytics from "./pages/Analytics";
+import ProjectAnalysis from "./pages/ProjectAnalysis";
 import Deploy from "./pages/Deploy";
 import LayoutWithHeaderFooter from "./layouts/LayoutWithHeaderFooter";
 import LayoutWithSidebar from "./layouts/LayoutWithSidebar";
@@ -68,6 +69,10 @@ function App() {
                     }
                   />
                   <Route path="analytics" element={<Analytics />} />
+                  <Route
+                    path="analytics/:projectId"
+                    element={<ProjectAnalysis />}
+                  />
                 </Route>
               </Routes>
               <Toaster />
