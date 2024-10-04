@@ -95,6 +95,7 @@ const useRecordVisitorData = (userId, projectId) => {
         const elementInfo = {
           tagName: anchorElement.tagName,
           href: anchorElement.href || null,
+          id: anchorElement.id,
         };
 
         try {

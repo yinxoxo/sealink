@@ -1,10 +1,16 @@
 import sealinkLogo from "../../images/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
-import { FaBars, FaChartColumn, FaCircleLeft } from "react-icons/fa6";
+import {
+  FaBars,
+  FaChartColumn,
+  FaCircleLeft,
+  FaFolderOpen,
+} from "react-icons/fa6";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { user, logout } = useAuth();
+  const location = useLocation();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -39,16 +45,68 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
         <div className="flex flex-col items-center space-y-1 pb-10">
           <div
-            className={`relative flex w-full items-center justify-center p-2 transition-all duration-300 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:bg-transparent hover:bg-gray-200 hover:before:bg-sea`}
+            className={`relative flex w-full items-center justify-center p-2 transition-all duration-300 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 ${
+              location.pathname === "/dashboard"
+                ? "bg-gray-200 before:bg-sea"
+                : "before:bg-transparent hover:bg-gray-200 hover:before:bg-sea"
+            }`}
           >
-            <button
-              className={`flex w-[85%] items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full bg-white px-4 py-3 text-center shadow-md hover:text-sea`}
+            <Link to="/dashboard" className="flex w-full justify-center">
+              <button
+                className={`flex w-[85%] items-center ${
+                  isOpen ? "justify-start" : "justify-center"
+                } space-x-3 rounded-full bg-white px-4 py-3 text-center shadow-md ${
+                  location.pathname === "/dashboard"
+                    ? "text-sea"
+                    : "hover:text-sea"
+                }`}
+              >
+                <FaFolderOpen
+                  className={`text-lg ${
+                    location.pathname === "/dashboard"
+                      ? "fill-sea"
+                      : "hover:fill-sea"
+                  }`}
+                />
+                {isOpen && (
+                  <span className="text-sm font-medium">Projects</span>
+                )}
+              </button>
+            </Link>
+          </div>
+
+          <div
+            className={`relative flex w-full items-center justify-center p-2 transition-all duration-300 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 ${
+              location.pathname === "/dashboard/analytics"
+                ? "bg-gray-200 before:bg-sea"
+                : "before:bg-transparent hover:bg-gray-200 hover:before:bg-sea"
+            }`}
+          >
+            <Link
+              to="/dashboard/analytics"
+              className="flex w-full justify-center"
             >
-              <FaChartColumn className={`text-lg hover:fill-sea`} />
-              {isOpen && (
-                <span className="text-sm font-medium">Data Analyze</span>
-              )}
-            </button>
+              <button
+                className={`flex w-[85%] items-center ${
+                  isOpen ? "justify-start" : "justify-center"
+                } space-x-3 rounded-full bg-white px-4 py-3 text-center shadow-md ${
+                  location.pathname === "/dashboard/analytics"
+                    ? "text-sea"
+                    : "hover:text-sea"
+                }`}
+              >
+                <FaChartColumn
+                  className={`text-lg ${
+                    location.pathname === "/dashboard/analytics"
+                      ? "fill-sea"
+                      : "hover:fill-sea"
+                  }`}
+                />
+                {isOpen && (
+                  <span className="text-sm font-medium">Data Analyze</span>
+                )}
+              </button>
+            </Link>
           </div>
 
           <div
@@ -56,7 +114,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           >
             <button
               onClick={logout}
-              className={`flex w-[85%] items-center ${isOpen ? "justify-start" : "justify-center"} space-x-3 rounded-full bg-white px-4 py-3 text-center font-bold shadow-md hover:text-sea`}
+              className={`flex w-[85%] items-center ${
+                isOpen ? "justify-start" : "justify-center"
+              } space-x-3 rounded-full bg-white px-4 py-3 text-center font-bold shadow-md hover:text-sea`}
             >
               <FaCircleLeft className={`text-lg hover:fill-sea`} />
               {isOpen && <span className="text-sm font-medium">Logout</span>}

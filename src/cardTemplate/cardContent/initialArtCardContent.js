@@ -68,13 +68,13 @@ const initialArtCardContent = {
       {
         id: "Facebook",
         name: "Facebook",
-        href: "#",
+        href: "https://facebook.com",
         icon: "FaFacebook",
       },
       {
         id: "Github",
         name: "Github",
-        href: "#",
+        href: "https://github.com",
         icon: "FaGithub",
       },
       {

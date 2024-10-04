@@ -60,13 +60,13 @@ const initialJiaCardContent = {
       {
         id: "Facebook",
         name: "Facebook",
-        href: "#",
+        href: "https://facebook.com",
         icon: "FaFacebook",
       },
       {
         id: "Instagram",
         name: "Instagram",
-        href: "#",
+        href: "https://instagram.com",
         icon: "FaInstagram",
       },
       {

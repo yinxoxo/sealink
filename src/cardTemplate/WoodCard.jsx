@@ -194,6 +194,7 @@ const WoodCard = ({ data }) => {
                     icon.name === "Email" ? `mailto:${icon.href}` : icon.href;
                   return (
                     <a
+                      id={icon.id}
                       key={icon.id}
                       href={href}
                       target={icon.name === "email" ? "_self" : "_blank"}
