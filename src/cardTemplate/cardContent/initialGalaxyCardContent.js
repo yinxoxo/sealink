@@ -64,13 +64,13 @@ const initialGalaxyCardContent = {
       {
         id: "Instagram",
         name: "Instagram",
-        href: "#",
+        href: "https://instagram.com",
         icon: "FaInstagram",
       },
       {
         id: "Linkedin",
         name: "Linkedin",
-        href: "#",
+        href: "https://linkedin.com",
         icon: "FaLinkedin",
       },
       {
