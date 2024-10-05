@@ -16,6 +16,8 @@ const ProjectAnalysis = () => {
     to: new Date(),
   });
 
+  const [selectedRange, setSelectedRange] = useState("last7days");
+
   useEffect(() => {
     if (projectId) {
       loadVisitorData(projectId, selectedDateRange);
@@ -37,6 +39,8 @@ const ProjectAnalysis = () => {
           setShowCalendar={setShowCalendar}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
+          selectedRange={selectedRange}
+          setSelectedRange={setSelectedRange}
         />
       </div>
 

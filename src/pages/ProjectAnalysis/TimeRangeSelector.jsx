@@ -13,9 +13,9 @@ const TimeRangeSelector = ({
   showCalendar,
   setShowCalendar,
   setSelectedDateRange,
+  selectedRange,
+  setSelectedRange,
 }) => {
-  const [selectedRange, setSelectedRange] = useState("last7days");
-
   const [date, setDate] = useState({
     from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     to: new Date(),
