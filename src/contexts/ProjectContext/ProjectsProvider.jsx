@@ -1,6 +1,7 @@
+import { useCallback } from "react";
 import { createContext, useState } from "react";
 import { useUserProjects } from "../../firebase/fetchUserProjects";
-import { fetchVisitorData } from "../../firebase/fetchVisitorData"; // 新增這個引用
+import { fetchVisitorData } from "../../firebase/fetchVisitorData";
 import { useAuth } from "../AuthContext/useAuth";
 
 export const ProjectsContext = createContext();
@@ -15,20 +16,35 @@ export const ProjectsProvider = ({ children }) => {
     console.error("Failed to load projects");
   }
 
-  const loadVisitorData = async (projectId) => {
-    setLoadingVisitorData(true);
-    try {
-      const data = await fetchVisitorData(user, projectId);
-      setVisitorData((prev) => ({
-        ...prev,
-        [projectId]: data,
-      }));
-    } catch (error) {
-      console.error("Failed to load visitor data", error);
-    } finally {
-      setLoadingVisitorData(false);
-    }
-  };
+  const loadVisitorData = useCallback(
+    async (projectId, selectedDateRange) => {
+      setLoadingVisitorData(true);
+      try {
+        const { from: startDate, to: endDate } = selectedDateRange;
+        console.log(
+          "project provide: Loading visitor data for range:",
+          startDate,
+          "to",
+          endDate,
+        );
+        const data = await fetchVisitorData(
+          user,
+          projectId,
+          startDate,
+          endDate,
+        );
+        setVisitorData((prev) => ({
+          ...prev,
+          [projectId]: data,
+        }));
+      } catch (error) {
+        console.error("Failed to load visitor data", error);
+      } finally {
+        setLoadingVisitorData(false);
+      }
+    },
+    [user],
+  );
 
   return (
     <ProjectsContext.Provider

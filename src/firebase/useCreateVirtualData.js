@@ -1,15 +1,8 @@
-import { useEffect } from "react";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { ICON_LIST } from "../cardTemplate/cardContent/iconList";
 
-const useCreateVirtualData = (userId, projectId) => {
-  useEffect(() => {
-    if (userId && projectId) {
-      generateFakeVisitorDataForYear();
-    }
-  }, [userId, projectId]);
-
+const useCreateVirtualData = () => {
   const getRandomInt = (min, max) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -48,11 +41,11 @@ const useCreateVirtualData = (userId, projectId) => {
     return clickEvents;
   };
 
-  const generateFakeVisitorDataForYear = async () => {
+  const generateFakeVisitorDataForMonth = async (userId, projectId) => {
     try {
       const today = new Date();
-      const oneYearAgo = new Date(today);
-      oneYearAgo.setFullYear(today.getFullYear() - 1);
+      const oneMonthAgo = new Date(today);
+      oneMonthAgo.setMonth(today.getMonth() - 1);
 
       const visitorDataCollection = collection(
         db,
@@ -60,7 +53,7 @@ const useCreateVirtualData = (userId, projectId) => {
       );
 
       for (
-        let d = new Date(oneYearAgo);
+        let d = new Date(oneMonthAgo);
         d <= today;
         d.setDate(d.getDate() + 1)
       ) {
@@ -88,11 +81,13 @@ const useCreateVirtualData = (userId, projectId) => {
         }
       }
 
-      console.log("Successfully added fake data for the past year!");
+      console.log("Successfully added fake data for the past month!");
     } catch (error) {
       console.error("Error generating fake data:", error);
     }
   };
+
+  return { generateFakeVisitorDataForMonth };
 };
 
 export default useCreateVirtualData;

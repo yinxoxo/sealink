@@ -1,7 +1,13 @@
-import { collection, getDocs } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
-export const fetchVisitorData = async (user, projectId) => {
+export const fetchVisitorData = async (user, projectId, startDate, endDate) => {
   if (!user?.uid || !projectId) {
     throw new Error("User ID and Project ID are required");
   }
@@ -11,12 +17,27 @@ export const fetchVisitorData = async (user, projectId) => {
       db,
       `users/${user.uid}/projects/${projectId}/visitorData`,
     );
-    const visitorDataSnapshot = await getDocs(visitorDataCollectionRef);
+
+    const startTimestamp = Timestamp.fromDate(startDate);
+    const endTimestamp = Timestamp.fromDate(endDate);
+
+    console.log("Timestamp start:", startTimestamp);
+    console.log("Timestamp end:", endTimestamp);
+
+    const q = query(
+      visitorDataCollectionRef,
+      where("visitTime", ">=", startTimestamp),
+      where("visitTime", "<=", endTimestamp),
+    );
+
+    const visitorDataSnapshot = await getDocs(q);
 
     const visitorData = visitorDataSnapshot.docs.map((visitorDoc) => ({
       id: visitorDoc.id,
       ...visitorDoc.data(),
     }));
+
+    console.log("Fetched visitor data:", visitorData);
 
     return visitorData;
   } catch (error) {
