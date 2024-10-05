@@ -21,9 +21,6 @@ export const fetchVisitorData = async (user, projectId, startDate, endDate) => {
     const startTimestamp = Timestamp.fromDate(startDate);
     const endTimestamp = Timestamp.fromDate(endDate);
 
-    console.log("Timestamp start:", startTimestamp);
-    console.log("Timestamp end:", endTimestamp);
-
     const q = query(
       visitorDataCollectionRef,
       where("visitTime", ">=", startTimestamp),

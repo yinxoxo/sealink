@@ -16,7 +16,6 @@ const TimeRangeSelector = ({
 }) => {
   const [selectedRange, setSelectedRange] = useState("last7days");
 
-  // 使用單一的日期狀態，移除 tempDate
   const [date, setDate] = useState({
     from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     to: new Date(),
@@ -38,22 +37,21 @@ const TimeRangeSelector = ({
       };
     } else if (value === "custom") {
       setShowCalendar(true);
-      return; // 不更新日期範圍
+      return;
     }
 
     setDate(newDateRange);
-    setSelectedDateRange(newDateRange); // 立即通知父組件
+    setSelectedDateRange(newDateRange);
   };
 
   const handleDateRangeChange = (selectedDate) => {
     if (!selectedDate || !selectedDate.from || !selectedDate.to) return;
 
     setDate(selectedDate);
-    // 在日曆選擇時不立即更新父組件，等待 Apply 按鈕點擊
   };
 
   const handleApply = () => {
-    setSelectedDateRange(date); // 更新父組件的日期範圍
+    setSelectedDateRange(date);
     setShowCalendar(false);
   };
 
