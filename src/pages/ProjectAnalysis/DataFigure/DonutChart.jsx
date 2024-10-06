@@ -5,8 +5,8 @@ import Loading from "@/components/Loading";
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
-const DonutChart = ({ visitorData }) => {
-  if (!visitorData) {
+const DonutChart = ({ loading, visitorData }) => {
+  if (loading || !visitorData) {
     return <Loading />;
   }
 

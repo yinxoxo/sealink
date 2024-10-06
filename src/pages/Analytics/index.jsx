@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useProjects } from "../../contexts/ProjectContext/useProjects";
 import dayjs from "dayjs";
+import Loading from "../../components/Loading/index";
 
 const Analytics = () => {
   const { projects, loading } = useProjects();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (

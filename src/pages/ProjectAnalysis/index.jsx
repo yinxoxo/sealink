@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import { ProjectsContext } from "../../contexts/ProjectContext/ProjectsProvider";
+import Loading from "../../components/Loading/index";
 import TimeRangeSelector from "./TimeRangeSelector";
 import DonutChart from "./DataFigure/DonutChart";
 import LifetimeChart from "./DataFigure/LifetimeChart";
+import CalHeatmap from "./DataFigure/CalHeatmap";
 
 const ProjectAnalysis = () => {
   const { projectId } = useParams();
@@ -25,11 +27,21 @@ const ProjectAnalysis = () => {
     }
   }, [projectId, selectedDateRange, loadVisitorData]);
 
-  if (loading || loadingVisitorData) {
-    return <div>Loading...</div>;
+  const projectVisitorData = visitorData[projectId];
+
+  if (loading || loadingVisitorData || !projectVisitorData) {
+    return <Loading />;
   }
 
-  const projectVisitorData = visitorData[projectId];
+  if (projectVisitorData.length === 0) {
+    return (
+      <div className="bg-lightGray flex h-full min-h-screen items-center justify-center">
+        <h1 className="text-3xl font-bold text-gray-700">
+          No visitor data available for analysis.
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-lightGray h-fit min-h-svh w-full p-7">
@@ -46,11 +58,23 @@ const ProjectAnalysis = () => {
       </div>
       <div className="grid w-full grid-cols-2 grid-rows-[150px_auto_1fr] gap-4">
         <div className="col-span-2 row-span-1 max-h-[150px] w-full min-w-[300px] rounded-lg bg-white p-4">
-          <LifetimeChart visitorData={projectVisitorData} />
+          <LifetimeChart
+            loading={loadingVisitorData}
+            visitorData={projectVisitorData}
+          />
         </div>
         <div className="col-span-1 row-span-2 h-fit max-h-[600px] min-h-[300px] w-full min-w-[300px] rounded-lg bg-white p-4">
           <h1 className="h-fit w-fit p-3 text-2xl font-semibold">Devices</h1>
-          <DonutChart visitorData={projectVisitorData} />
+          <DonutChart
+            loading={loadingVisitorData}
+            visitorData={projectVisitorData}
+          />
+        </div>
+        <div className="row-span- col-span-2 max-h-[150px] w-full min-w-[300px] rounded-lg bg-white p-4">
+          <CalHeatmap
+            loading={loadingVisitorData}
+            visitorData={projectVisitorData}
+          />
         </div>
       </div>
     </div>

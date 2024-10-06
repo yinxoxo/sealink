@@ -1,6 +1,10 @@
 import { FiEye, FiLink, FiPercent } from "react-icons/fi";
+import Loading from "../../../components/Loading";
 
-const LifetimeChart = ({ visitorData }) => {
+const LifetimeChart = ({ loading, visitorData }) => {
+  if (loading || !visitorData) {
+    return <Loading />;
+  }
   const views = visitorData.length || 0;
   const clicks = visitorData.reduce(
     (acc, cur) => acc + (cur.clickEvents.length || 0),
