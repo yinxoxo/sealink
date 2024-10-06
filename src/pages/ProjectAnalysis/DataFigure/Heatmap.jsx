@@ -11,6 +11,10 @@ const DailyHeatmap = ({ loading, visitorData }) => {
     "20:00-24:00",
   ];
 
+  const getMonthAbbr = (date) => {
+    return date.toLocaleString("en-US", { month: "short" });
+  };
+
   const processData = () => {
     const dateVisits = {};
     visitorData.forEach((visitor) => {
@@ -26,10 +30,15 @@ const DailyHeatmap = ({ loading, visitorData }) => {
     });
 
     const sortedDates = Object.keys(dateVisits).sort();
-    return sortedDates.map((date) => ({
-      date,
-      slots: dateVisits[date],
-    }));
+    return sortedDates.map((date) => {
+      const dateObj = new Date(date);
+      return {
+        date,
+        month: getMonthAbbr(dateObj),
+        dayOfMonth: dateObj.getDate(),
+        slots: dateVisits[date],
+      };
+    });
   };
 
   const heatmapData = useMemo(() => processData(), [visitorData]);
@@ -48,6 +57,10 @@ const DailyHeatmap = ({ loading, visitorData }) => {
     return "bg-[#f1f2f3]";
   };
 
+  const shouldShowDate = (dayOfMonth) => {
+    return dayOfMonth === 7 || dayOfMonth === 14 || dayOfMonth === 21;
+  };
+
   const Legend = () => {
     const colors = [
       { color: "bg-[#f1f2f3]", label: "0" },
@@ -58,8 +71,10 @@ const DailyHeatmap = ({ loading, visitorData }) => {
       { color: "bg-[#5296a6]", label: ">6" },
     ];
     return (
-      <div className="mt-4 flex flex-col items-center">
-        <h3 className="mb-2 text-sm font-semibold text-gray-600">Views</h3>
+      <div className="mt-auto flex min-h-full flex-col justify-end">
+        <h3 className="mb-2 text-center text-sm font-semibold text-gray-600">
+          Views
+        </h3>
         <div className="flex items-center">
           <span className="mr-2 text-xs text-gray-500">Less</span>
           {colors.map((item, index) => (
@@ -75,36 +90,45 @@ const DailyHeatmap = ({ loading, visitorData }) => {
     );
   };
 
+  let lastMonth = null;
+
   return (
-    <div className="flex flex-col items-center p-4">
+    <div className="flex h-full flex-row items-center space-x-12 p-4">
       <div className="flex">
-        {/* Time slots column */}
-        <div className="mr-2 flex flex-col justify-between text-xs text-gray-500">
-          {timeSlots.map((slot) => (
-            <div key={slot} className="flex h-6 items-center">
-              {slot}
-            </div>
-          ))}
+        <div className="mr-2 flex flex-col justify-between pb-5 text-gray-500">
+          <span className="text-[10px]">00:00</span>
+          <span className="text-center">|</span>
+          <span className="text-[10px]">24:00</span>
         </div>
 
-        {/* Heatmap grid */}
         <div className="flex gap-1">
-          {heatmapData.map((dayData) => (
-            <div key={dayData.date} className="flex flex-col gap-1">
-              {dayData.slots.map((value, slotIndex) => (
-                <div
-                  key={`${dayData.date}-${slotIndex}`}
-                  className={`${getColor(value)} h-[1/10] max-h-[20px] min-h-[13px] w-[1/10] min-w-[13px] max-w-[20px]`}
-                  title={`${dayData.date} ${timeSlots[slotIndex]}: ${value} visits`}
-                />
-              ))}
-              <div className="mt-1 text-center text-xs text-gray-500">
-                {new Date(dayData.date).getDate()}
+          {heatmapData.map((dayData) => {
+            const showMonth = lastMonth !== dayData.month;
+            lastMonth = dayData.month;
+
+            return (
+              <div key={dayData.date} className="flex flex-col gap-1">
+                {dayData.slots.map((value, slotIndex) => (
+                  <div
+                    key={`${dayData.date}-${slotIndex}`}
+                    className={`${getColor(value)} h-[1/10] max-h-[25px] min-h-[18px] w-[1/10] min-w-[18px] max-w-[25px]`}
+                    title={`${dayData.date} ${timeSlots[slotIndex]}: ${value} visits`}
+                  />
+                ))}
+                <div className="mt-1 text-center text-xs text-gray-500">
+                  {showMonth && (
+                    <div className="text-[10px]">{dayData.month}</div>
+                  )}
+                  {shouldShowDate(dayData.dayOfMonth) && (
+                    <div className="text-[10px]">{dayData.dayOfMonth}</div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
+
       <Legend />
     </div>
   );

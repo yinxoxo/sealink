@@ -63,15 +63,18 @@ const ProjectAnalysis = () => {
             visitorData={projectVisitorData}
           />
         </div>
-        <div className="col-span-1 row-span-2 h-fit max-h-[600px] min-h-[300px] w-full min-w-[300px] rounded-lg bg-white p-4">
-          <h1 className="h-fit w-fit p-3 text-2xl font-semibold">Devices</h1>
-          <DonutChart
+        <div className="row-span- col-span-2 h-fit w-full min-w-[300px] rounded-lg bg-white p-4">
+          <h1 className="h-fit w-fit p-3 text-2xl font-semibold">
+            Visitor Activity Heatmap
+          </h1>
+          <Heatmap
             loading={loadingVisitorData}
             visitorData={projectVisitorData}
           />
         </div>
-        <div className="row-span- col-span-2 max-h-[200px] w-full min-w-[300px] rounded-lg bg-white p-4">
-          <Heatmap
+        <div className="col-span-1 row-span-2 h-fit max-h-[600px] min-h-[300px] w-full min-w-[300px] rounded-lg bg-white p-4">
+          <h1 className="h-fit w-fit p-3 text-2xl font-semibold">Devices</h1>
+          <DonutChart
             loading={loadingVisitorData}
             visitorData={projectVisitorData}
           />
