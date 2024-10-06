@@ -41,6 +41,15 @@ const useCreateVirtualData = () => {
     return clickEvents;
   };
 
+  const getRandomTime = (date) => {
+    const randomHour = getRandomInt(0, 23);
+    const randomMinute = getRandomInt(0, 59);
+    const randomSecond = getRandomInt(0, 59);
+    const newDate = new Date(date);
+    newDate.setHours(randomHour, randomMinute, randomSecond);
+    return newDate;
+  };
+
   const generateFakeVisitorDataForMonth = async (userId, projectId) => {
     try {
       const today = new Date();
@@ -66,7 +75,7 @@ const useCreateVirtualData = () => {
           ];
 
           const visitorDocRef = await addDoc(visitorDataCollection, {
-            visitTime: d,
+            visitTime: getRandomTime(d),
             clickEvents: clickEvents,
             deviceType: getRandomDeviceType(),
           });
