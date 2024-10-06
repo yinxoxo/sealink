@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
+import { LuCalendarRange } from "react-icons/lu";
 
 const TimeRangeSelector = ({
   showCalendar,
@@ -63,6 +64,7 @@ const TimeRangeSelector = ({
     <div className="relative">
       <Select value={selectedRange} onValueChange={handleRangeChange}>
         <SelectTrigger className="w-[300px] border-none">
+          <LuCalendarRange className="mr-2" />
           {selectedRange === "custom"
             ? date?.from && date?.to
               ? `${format(date.from, "PPP")} - ${format(date.to, "PPP")}`

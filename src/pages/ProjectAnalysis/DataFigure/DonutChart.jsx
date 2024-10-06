@@ -3,7 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import Loading from "@/components/Loading";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 const DonutChart = ({ visitorData }) => {
   if (!visitorData) {
@@ -25,8 +25,8 @@ const DonutChart = ({ visitorData }) => {
       {
         label: "Device Type Distribution",
         data: Object.values(deviceData),
-        backgroundColor: ["#5d9ab6", "#d8dfe9", "#f7d785"],
-        hoverBackgroundColor: ["#4a798f", "#a2b0c4", "#f9cd60"],
+        backgroundColor: ["#4a798f", "#a2b0c4", "#f9cd60"],
+        hoverBackgroundColor: ["#5d9ab6", "#d8dfe9", "#f7d785"],
       },
     ],
   };
@@ -41,20 +41,22 @@ const DonutChart = ({ visitorData }) => {
       tooltip: {
         enabled: true,
       },
-      //   datalabels: {
-      //     color: "#000",
-      //     font: {
-      //       size: 16,
-      //     },
-      //     formatter: (value, context) => {
-      //       return value;
-      //     },
-      //   },
+      datalabels: {
+        display: true,
+        color: "#fff",
+        font: {
+          weight: "bold",
+          size: "20px",
+        },
+        formatter: (value) => {
+          return value;
+        },
+      },
     },
   };
 
   return (
-    <div className="h-1/3 max-h-[500px] w-1/3 max-w-[500px] rounded-lg bg-white p-2">
+    <div className="mx-auto h-[300px] max-h-full w-[300px] max-w-full">
       <Doughnut data={chartData} options={options} />
     </div>
   );
