@@ -21,12 +21,6 @@ export const ProjectsProvider = ({ children }) => {
       setLoadingVisitorData(true);
       try {
         const { from: startDate, to: endDate } = selectedDateRange;
-        console.log(
-          "project provide: Loading visitor data for range:",
-          startDate,
-          "to",
-          endDate,
-        );
         const data = await fetchVisitorData(
           user,
           projectId,
