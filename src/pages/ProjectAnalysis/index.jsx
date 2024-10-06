@@ -6,7 +6,7 @@ import Loading from "../../components/Loading/index";
 import TimeRangeSelector from "./TimeRangeSelector";
 import DonutChart from "./DataFigure/DonutChart";
 import LifetimeChart from "./DataFigure/LifetimeChart";
-import CalHeatmap from "./DataFigure/CalHeatmap";
+import Heatmap from "./DataFigure/Heatmap";
 
 const ProjectAnalysis = () => {
   const { projectId } = useParams();
@@ -70,8 +70,8 @@ const ProjectAnalysis = () => {
             visitorData={projectVisitorData}
           />
         </div>
-        <div className="row-span- col-span-2 max-h-[150px] w-full min-w-[300px] rounded-lg bg-white p-4">
-          <CalHeatmap
+        <div className="row-span- col-span-2 max-h-[200px] w-full min-w-[300px] rounded-lg bg-white p-4">
+          <Heatmap
             loading={loadingVisitorData}
             visitorData={projectVisitorData}
           />
