@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import {
   loginWithGoogle,
   loginWithEmail,
@@ -8,6 +8,7 @@ import {
   saveUserToFirestore,
 } from "./auth";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
+import sealinkLogo from "../../images/logo.png";
 import { FaGoogle } from "react-icons/fa6";
 
 const SignUp = () => {
@@ -118,7 +119,12 @@ const SignUp = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <div className="flex flex-1 items-center justify-center bg-white p-10">
+      <div className="absolute left-0 top-0 ml-9 mt-8">
+        <Link to="/">
+          <img src={sealinkLogo} alt="Logo" className="logo" />
+        </Link>
+      </div>
+      <div className="flex flex-1 items-center justify-center bg-white p-8">
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
             <h1 className="text-3xl font-bold">
