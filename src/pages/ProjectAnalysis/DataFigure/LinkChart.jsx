@@ -1,9 +1,43 @@
 import { useState } from "react";
-const LinkChart = () => {
+import Loading from "../../../components/Loading";
+import { ICON_MAP } from "../../../cardTemplate/cardContent/iconList";
+
+const LinkChart = ({ loading, visitorData }) => {
+  if (loading || !visitorData) {
+    return <Loading />;
+  }
+
   const [activeTab, setActiveTab] = useState("socialIcons");
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+  const iconCountsArray = Object.entries(
+    visitorData.reduce((acc, visitor) => {
+      visitor.clickEvents
+        .filter((event) => event.tagName === "A")
+        .forEach((event) => {
+          acc[event.id] = (acc[event.id] || 0) + 1;
+        });
+      return acc;
+    }, {}),
+  ).sort(([, countA], [, countB]) => countB - countA);
+
+  const totalIconClicks = iconCountsArray.reduce(
+    (acc, [, count]) => acc + count,
+    0,
+  );
+
+  const getIconComponent = (iconId) => {
+    const IconComponent = ICON_MAP[iconId];
+    return IconComponent ? (
+      <IconComponent className="text-[20px] text-gray-700" />
+    ) : (
+      <></>
+    );
+  };
+
   return (
     <div className="w-full p-3">
       <div className="relative flex w-full">
@@ -30,16 +64,37 @@ const LinkChart = () => {
           }}
         />
       </div>
-
-      <div className="mt-4">
+      <div className="mr-auto flex justify-end">
+        <div className="text-right">
+          <span className="text-lg font-bold">
+            Total Clicks: {totalIconClicks}
+          </span>
+        </div>
+      </div>
+      <div className="mt-4 max-h-[300px] overflow-y-auto">
         {activeTab === "socialIcons" && (
-          <div>
-            <p>Displaying Social Icons data here.</p>
+          <div className="space-y-2">
+            {iconCountsArray.map(([iconId, count]) => (
+              <div
+                key={iconId}
+                className="flex items-center justify-between rounded-lg border-2 p-4"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="rounded-full bg-gray-100 p-3">
+                    {getIconComponent(iconId)}
+                  </div>
+                  <span className="text-sm">{iconId}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-right">{count} Clicks</span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
         {activeTab === "buttons" && (
           <div>
-            <p>Displaying Buttons data here.</p>
+            <p>button data</p>
           </div>
         )}
       </div>
