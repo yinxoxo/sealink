@@ -17,7 +17,7 @@ export const CardEditorProvider = ({ children }) => {
   const { projectId, template } = useParams();
   const { projects } = useProjects();
   const [projectData, setProjectData] = useState(null);
-  const [editingType, setEditingType] = useState(null);
+  const [editingType, setEditingType] = useState("text");
   const [selectedText, setSelectedText] = useState(null);
 
   const isDashboardPage = location.pathname === "/dashboard";
