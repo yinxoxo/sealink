@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useProjects } from "../../contexts/ProjectContext/useProjects";
 import { IoSettingsOutline } from "react-icons/io5";
-import { LuPenLine } from "react-icons/lu";
+import { HiOutlineQrCode, HiOutlinePencilSquare } from "react-icons/hi2";
 import {
   Card,
   CardHeader,
@@ -18,11 +18,14 @@ import JiaCard from "../../cardTemplate/JiaCard";
 import SimpleCard from "../../cardTemplate/SimpleCard";
 import WoodCard from "../../cardTemplate/WoodCard";
 import NinaWishCard from "../../cardTemplate/NinaWishCard";
+import QrcodeModal from "./QrcodeModal";
 import ProjectSetting from "./ProjectSetting";
+import Loading from "../../components/Loading/index";
 
 const Dashboard = () => {
   const { projects, loading } = useProjects();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isQrcodeModalOpen, setIsQrcodeModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
   const cardComponents = {
@@ -45,8 +48,18 @@ const Dashboard = () => {
     setSelectedProject(null);
   };
 
+  const openQrcodeModal = (project) => {
+    setSelectedProject(project);
+    setIsQrcodeModalOpen(true);
+  };
+
+  const closeQrcodeModal = () => {
+    setIsQrcodeModalOpen(false);
+    setSelectedProject(null);
+  };
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -98,7 +111,7 @@ const Dashboard = () => {
                 )}
               </div>
 
-              <div className="my-4 border-t border-gray-200"></div>
+              <div className="my-4 border-t border-gray-200" />
 
               <div className="mb-4 flex items-center">
                 <button
@@ -107,13 +120,20 @@ const Dashboard = () => {
                 >
                   <IoSettingsOutline />
                 </button>
-                <div className="h-6 border-l border-gray-200"></div>
+                <div className="h-6 border-l border-gray-200" />
+                <button
+                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover"
+                  onClick={() => openQrcodeModal(project)}
+                >
+                  <HiOutlineQrCode />
+                </button>
+                <div className="h-6 border-l border-gray-200" />
 
                 <Link
                   to={`/dashboard/card-editor/${project.templateId}/${project.id}`}
                   className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover"
                 >
-                  <LuPenLine />
+                  <HiOutlinePencilSquare />
                 </Link>
               </div>
             </Card>
@@ -125,6 +145,13 @@ const Dashboard = () => {
           project={selectedProject}
           isOpen={isModalOpen}
           onClose={closeModal}
+        />
+      )}
+      {selectedProject && (
+        <QrcodeModal
+          project={selectedProject}
+          isOpen={isQrcodeModalOpen}
+          onClose={closeQrcodeModal}
         />
       )}
     </div>

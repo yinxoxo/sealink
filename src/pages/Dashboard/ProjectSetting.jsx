@@ -104,7 +104,7 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
                     href={`https://sealink-4b0fd.web.app${project.publishedUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 block w-full overflow-x-auto whitespace-nowrap rounded-md border border-gray-300 p-2 text-blue-500 underline"
+                    className="mt-2 block w-full overflow-x-auto whitespace-nowrap rounded-md border border-gray-300 p-2 text-sea underline hover:text-sea-hover"
                   >
                     {`https://sealink-4b0fd.web.app${project.publishedUrl}`}
                   </a>
