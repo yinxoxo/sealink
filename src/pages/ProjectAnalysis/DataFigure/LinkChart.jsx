@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Loading from "../../../components/Loading";
 import { ICON_MAP } from "../../../cardTemplate/cardContent/iconList";
+import { RxButton } from "react-icons/rx";
 
 const LinkChart = ({ loading, visitorData }) => {
+  const [activeTab, setActiveTab] = useState("socialIcons");
   if (loading || !visitorData) {
     return <Loading />;
   }
-
-  const [activeTab, setActiveTab] = useState("socialIcons");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -25,6 +25,22 @@ const LinkChart = ({ loading, visitorData }) => {
   ).sort(([, countA], [, countB]) => countB - countA);
 
   const totalIconClicks = iconCountsArray.reduce(
+    (acc, [, count]) => acc + count,
+    0,
+  );
+
+  const buttonCountsArray = Object.entries(
+    visitorData.reduce((acc, visitor) => {
+      visitor.clickEvents
+        .filter((event) => event.tagName === "BUTTON")
+        .forEach((event) => {
+          acc[event.href] = (acc[event.href] || 0) + 1;
+        });
+      return acc;
+    }, {}),
+  ).sort(([, countA], [, countB]) => countB - countA);
+
+  const totalButtonClicks = buttonCountsArray.reduce(
     (acc, [, count]) => acc + count,
     0,
   );
@@ -67,7 +83,8 @@ const LinkChart = ({ loading, visitorData }) => {
       <div className="mr-auto flex justify-end">
         <div className="text-right">
           <span className="text-lg font-bold">
-            Total Clicks: {totalIconClicks}
+            Total Clicks:{" "}
+            {activeTab === "socialIcons" ? totalIconClicks : totalButtonClicks}
           </span>
         </div>
       </div>
@@ -93,8 +110,23 @@ const LinkChart = ({ loading, visitorData }) => {
           </div>
         )}
         {activeTab === "buttons" && (
-          <div>
-            <p>button data</p>
+          <div className="space-y-2">
+            {buttonCountsArray.map(([href, count]) => (
+              <div
+                key={href}
+                className="flex items-center justify-between rounded-lg border-2 p-4"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="rounded-full bg-gray-100 p-3">
+                    <RxButton />
+                  </div>
+                  <span className="text-sm">{href}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-right">{count} Clicks</span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
