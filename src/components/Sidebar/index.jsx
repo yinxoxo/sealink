@@ -77,7 +77,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
           <div
             className={`relative flex w-full items-center justify-center p-2 transition-all duration-300 before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 ${
-              location.pathname === "/dashboard/analytics"
+              location.pathname.startsWith("/dashboard/analytics")
                 ? "bg-gray-200 before:bg-sea"
                 : "before:bg-transparent hover:bg-gray-200 hover:before:bg-sea"
             }`}
@@ -90,14 +90,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 className={`flex w-[85%] items-center ${
                   isOpen ? "justify-start" : "justify-center"
                 } space-x-3 rounded-full bg-white px-4 py-3 text-center shadow-md ${
-                  location.pathname === "/dashboard/analytics"
+                  location.pathname.startsWith("/dashboard/analytics")
                     ? "text-sea"
                     : "hover:text-sea"
                 }`}
               >
                 <FaChartColumn
                   className={`text-lg ${
-                    location.pathname === "/dashboard/analytics"
+                    location.pathname.startsWith("/dashboard/analytics")
                       ? "fill-sea"
                       : "hover:fill-sea"
                   }`}
