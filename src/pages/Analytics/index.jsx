@@ -11,7 +11,7 @@ const Analytics = () => {
   }
 
   return (
-    <div className="p-7">
+    <div className="bg-lightGray h-fit min-h-svh w-full p-7">
       <h1 className="mb-10 text-3xl font-bold">
         Select a Project to <span className="text-sea-hover">Analyze</span>
       </h1>
