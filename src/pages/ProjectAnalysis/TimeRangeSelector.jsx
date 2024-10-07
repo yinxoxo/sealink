@@ -22,15 +22,16 @@ const TimeRangeSelector = ({
     to: new Date(),
   });
 
+  const defaultRange = {
+    from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    to: new Date(),
+  };
+
   const handleRangeChange = (value) => {
     setSelectedRange(value);
-
     let newDateRange;
     if (value === "last7days") {
-      newDateRange = {
-        from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-        to: new Date(),
-      };
+      newDateRange = defaultRange;
     } else if (value === "last28days") {
       newDateRange = {
         from: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
@@ -57,6 +58,9 @@ const TimeRangeSelector = ({
   };
 
   const handleCancel = () => {
+    setSelectedRange("last7days");
+    setDate(defaultRange);
+    setSelectedDateRange(defaultRange);
     setShowCalendar(false);
   };
 
