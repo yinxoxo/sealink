@@ -1,6 +1,5 @@
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 import {
-  FaPlus,
   FaAnglesLeft,
   FaAnglesRight,
   FaPlay,
@@ -12,6 +11,7 @@ import {
 } from "react-icons/fa6";
 import {
   FaEdit,
+  FaTextHeight,
   FaIcons,
   FaImage,
   FaRegSquare,
@@ -47,7 +47,7 @@ const NavBar = ({
       <div className="relative flex items-center justify-between border-b-2 border-solid border-gray-300 p-5 text-white">
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <FaPlus
+            <FaEdit
               size={20}
               className="cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover"
             />
@@ -58,7 +58,7 @@ const NavBar = ({
             sideOffset={0}
           >
             <DropdownMenuItem onClick={() => setEditingType("text")}>
-              <FaEdit className="mr-2 text-icon" /> Text
+              <FaTextHeight className="mr-2 text-icon" /> Text
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setEditingType("icon")}>
               <FaIcons className="mr-2 text-icon" /> Icons
