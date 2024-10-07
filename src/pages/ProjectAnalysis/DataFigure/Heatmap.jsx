@@ -94,14 +94,14 @@ const DailyHeatmap = ({ loading, visitorData }) => {
 
   return (
     <div className="flex h-full flex-row items-center space-x-12 p-4">
-      <div className="flex">
+      <div className="flex overflow-x-auto">
         <div className="mr-2 flex flex-col justify-between pb-5 text-gray-500">
           <span className="text-[10px]">00:00</span>
           <span className="text-center">|</span>
           <span className="text-[10px]">24:00</span>
         </div>
 
-        <div className="flex gap-1">
+        <div className="flex w-full gap-1 px-2">
           {heatmapData.map((dayData) => {
             const showMonth = lastMonth !== dayData.month;
             lastMonth = dayData.month;
@@ -127,9 +127,8 @@ const DailyHeatmap = ({ loading, visitorData }) => {
             );
           })}
         </div>
+        <Legend />
       </div>
-
-      <Legend />
     </div>
   );
 };
