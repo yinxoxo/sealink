@@ -12,7 +12,9 @@ const Analytics = () => {
 
   return (
     <div className="p-7">
-      <h1 className="mb-10 text-3xl font-bold">Select a project to analyze</h1>
+      <h1 className="mb-10 text-3xl font-bold">
+        Select a Project to <span className="text-sea-hover">Analyze</span>
+      </h1>
       <div className="grid w-full grid-cols-[repeat(auto-fill,_minmax(200px,200px))] gap-5">
         {projects.map((project) => (
           <Link
