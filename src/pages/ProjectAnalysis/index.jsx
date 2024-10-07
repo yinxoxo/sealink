@@ -7,6 +7,7 @@ import TimeRangeSelector from "./TimeRangeSelector";
 import DonutChart from "./DataFigure/DonutChart";
 import LifetimeChart from "./DataFigure/LifetimeChart";
 import Heatmap from "./DataFigure/Heatmap";
+import LinkChart from "./DataFigure/LinkChart";
 
 const ProjectAnalysis = () => {
   const { projectId } = useParams();
@@ -68,6 +69,13 @@ const ProjectAnalysis = () => {
             Visitor Activity Heatmap
           </h1>
           <Heatmap
+            loading={loadingVisitorData}
+            visitorData={projectVisitorData}
+          />
+        </div>
+        <div className="col-span-2 row-span-2 h-fit max-h-[600px] min-h-[300px] w-full min-w-[300px] rounded-lg bg-white p-4">
+          <h1 className="h-fit w-fit p-3 text-2xl font-semibold">Content</h1>
+          <LinkChart
             loading={loadingVisitorData}
             visitorData={projectVisitorData}
           />

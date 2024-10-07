@@ -41,8 +41,8 @@ export default {
           hover: "#46758a",
         },
         button: {
-          DEFAULT: "#a2c4d4",
-          hover: "#46758a",
+          DEFAULT: "#5d9ab6",
+          hover: " #46758a",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
