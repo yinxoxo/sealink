@@ -10,6 +10,7 @@ import {
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import sealinkLogo from "../../images/logo.png";
 import { FaGoogle } from "react-icons/fa6";
+import { Button } from "@/components/ui/button";
 
 const SignUp = () => {
   const { login } = useAuth();
@@ -152,12 +153,9 @@ const SignUp = () => {
                   <p className="text-red-500">User name is required</p>
                 )}
               </div>
-              <button
-                type="submit"
-                className="w-full rounded-lg bg-gray-300 py-3 text-white"
-              >
+              <Button type="submit" className="w-full">
                 Save User Name
-              </button>
+              </Button>
             </form>
           ) : (
             <form
@@ -202,22 +200,23 @@ const SignUp = () => {
                   )}
                 </div>
 
-                <button
+                <Button
                   type="submit"
-                  className="w-full rounded-lg bg-gray-300 py-3 text-white hover:bg-gray-500"
+                  className="w-full bg-button hover:bg-button-hover"
                 >
                   {isLogin ? "Log in" : "Sign up"}
-                </button>
+                </Button>
               </div>
               <div className="space-y-4">
-                <button
+                <Button
+                  variant="outline"
                   type="button"
                   onClick={handleGoogleLogin}
-                  className="flex w-full items-center justify-center rounded-lg border border-gray-300 bg-gray-100 py-3 hover:bg-gray-200"
+                  className="flex w-full items-center justify-center"
                 >
                   <FaGoogle className="mr-2" />
                   {isLogin ? "Log in with Google" : "Sign up with Google"}
-                </button>
+                </Button>
               </div>
             </form>
           )}
@@ -225,7 +224,7 @@ const SignUp = () => {
             <span className="text-sm text-gray-600">
               {isLogin ? "Don't have an account?" : "Already have an account?"}
               <button
-                className="ml-2 text-blue-600 hover:underline"
+                className="ml-2 text-sea hover:underline"
                 onClick={() => setIsLogin(!isLogin)}
               >
                 {isLogin ? "Sign up" : "Log in"}
