@@ -32,7 +32,7 @@ const Header = () => {
                 Hello, {user.displayName || "User"}
               </span>
               <Link to="/dashboard">
-                <button className="mr-1 bg-gray-100 px-4 py-5 text-gray-600 hover:bg-gray-200">
+                <button className="mr-1 rounded-lg bg-gray-100 px-4 py-5 text-gray-600 hover:bg-gray-200">
                   Dashboard
                 </button>
               </Link>
