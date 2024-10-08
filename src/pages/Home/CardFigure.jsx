@@ -16,13 +16,13 @@ export const CardContainer = () => {
           </p>
         </div>
         <div className="mb-4 flex flex-col space-y-2">
-          <button className="rounded-full bg-white px-6 py-3 text-[#264F1A]">
+          <button className="cursor-default rounded-full bg-white px-6 py-3 text-[#264F1A]">
             Daily Fresh Picks
           </button>
-          <button className="rounded-full bg-white px-6 py-3 text-[#264F1A]">
+          <button className="cursor-default rounded-full bg-white px-6 py-3 text-[#264F1A]">
             Our Best Sellers
           </button>
-          <button className="rounded-full bg-white px-6 py-3 text-[#264F1A]">
+          <button className="cursor-default rounded-full bg-white px-6 py-3 text-[#264F1A]">
             Special Offers
           </button>
         </div>
@@ -34,13 +34,13 @@ export const CardContainer = () => {
 export const SocialLinksSection = () => {
   return (
     <div className="flex justify-center space-x-4 py-4">
-      <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-white p-2 shadow-md hover:bg-gray-200">
+      <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-white p-2 shadow-md hover:scale-150">
         <FaFacebook className="text-3xl text-[#061592]" />
       </div>
-      <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-white p-2 shadow-md hover:bg-gray-200">
+      <div className="hover: flex h-[50px] w-[50px] items-center justify-center rounded-full bg-white p-2 shadow-md hover:scale-150">
         <FaInstagram className="text-3xl text-[#061592]" />
       </div>
-      <div className="flex h-[50px] w-[50px] items-center justify-center rounded-full bg-white p-2 shadow-md hover:bg-gray-200">
+      <div className="hover: flex h-[50px] w-[50px] items-center justify-center rounded-full bg-white p-2 shadow-md hover:scale-150">
         <FaTwitter className="text-3xl text-[#061592]" />
       </div>
     </div>
