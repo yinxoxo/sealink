@@ -40,13 +40,13 @@ const Template = () => {
         {!user ? (
           <div
             onClick={() => handleNavigate("/login", "/templates")}
-            className="text-sea mt-4 px-4 py-2 text-[68px] font-bold opacity-70 shadow-md"
+            className="mt-4 px-4 py-2 text-[68px] font-bold text-sea opacity-70 shadow-md"
           >
             Sign up <br />
             or <br /> Log in
           </div>
         ) : (
-          <div className="text-sea mt-4 px-4 py-2 text-[68px] font-bold opacity-70 shadow-md">
+          <div className="mt-4 px-4 py-2 text-[68px] font-bold text-sea opacity-70 shadow-md">
             Build <br /> Your <br /> SeaLink
           </div>
         )}
@@ -82,7 +82,7 @@ const Template = () => {
   ];
 
   return (
-    <section className="mt-[90px] flex flex-wrap justify-center py-5">
+    <section className="mt-[10rem] flex flex-wrap justify-center py-5">
       {cardTemplates.map(({ component: CardComponent, data, name }) => (
         <div
           key={name}
