@@ -28,7 +28,7 @@ const Home = () => {
               </div>
 
               <button className="rounded-full bg-[#E8C0E9] p-5 text-black">
-                Claim your Linktree
+                Claim your SeaLink
               </button>
             </div>
           </div>
@@ -45,13 +45,13 @@ const Home = () => {
               </div>
               <div
                 className="absolute top-[22em] mr-[150px]"
-                style={{ transform: "translateZ(30px)" }}
+                style={{ transform: "translateZ(40px)" }}
               >
                 <SocialLinksSection />
               </div>
               <div
                 className="absolute bottom-[-7rem] ml-[180px]"
-                style={{ transform: "translateZ(-30px)" }}
+                style={{ transform: "translateZ(-40px)" }}
               >
                 <img
                   src={pickleImg}
@@ -65,11 +65,17 @@ const Home = () => {
       </section>
 
       {/* Sticky Bottom Section */}
-      <section className="sticky bottom-0 -z-10 min-h-svh w-full bg-[#F3F3F1]">
-        <div className="flex items-center justify-between p-6">
-          <span>back</span>
-        </div>
-      </section>
+      <div className="font-pop sticky bottom-0 -z-10 min-h-svh w-full">
+        <section className="h-screen w-full items-center justify-center bg-[#F3F3F1]">
+          <div className="flex w-[90%]">
+            <div className="w-1/2">
+              <div className="mt-[15rem] text-left text-[72px] font-[700] leading-[1.05] tracking-[-0.02em] text-[#D2E722]">
+                Everything you are. In one, simple link in bio.
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   );
 };
