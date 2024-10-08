@@ -935,6 +935,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 background: {
                   ...projectData.background,
                   backgroundImage: newImage,
+                  backgroundColor: null,
                 },
               };
               setProjectData(updatedData);
@@ -957,6 +958,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             zoom={zoom}
             setZoom={setZoom}
             aspect={9 / 16}
+            cropShape="rect"
             onCropComplete={onCropComplete}
             handleSaveCroppedImage={() =>
               handleSaveCroppedImage("backgroundimage", (downloadURL) => {
@@ -997,7 +999,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <ChromePicker
-                    color={projectData.background.backgroundColor}
+                    color={projectData.background.backgroundColor || "#fff"}
                     onChange={(color) => {
                       // setTempBackgroundColor(color.hex);
                       const updatedData = {

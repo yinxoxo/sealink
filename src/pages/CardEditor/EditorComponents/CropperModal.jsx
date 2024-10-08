@@ -51,12 +51,17 @@ const CropperModal = ({
           />
         )}
         <div className="absolute bottom-0 right-0 flex justify-end space-x-2 p-2">
-          <Button onClick={handleSaveCroppedImage}>Upload</Button>
           <Button
             variant="outline"
             onClick={() => setIsCropModalVisible(false)}
           >
             Cancel
+          </Button>
+          <Button
+            onClick={handleSaveCroppedImage}
+            className="bg-button hover:bg-button-hover"
+          >
+            Upload
           </Button>
         </div>
       </div>
@@ -69,7 +74,7 @@ CropperModal.propTypes = {
   setIsCropModalVisible: PropTypes.func.isRequired,
   imageUrl: PropTypes.string,
   crop: PropTypes.object.isRequired,
-  cropShape: PropTypes.string.isRequired,
+  cropShape: PropTypes.string,
   setCrop: PropTypes.func.isRequired,
   zoom: PropTypes.number.isRequired,
   aspect: PropTypes.number.isRequired,
