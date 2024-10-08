@@ -12,7 +12,7 @@ const Header = () => {
     return <Loading />;
   }
   return (
-    <header className="fixed top-5 z-10 mx-auto w-[95%]">
+    <header className="fixed top-12 z-10 mx-auto w-[90%]">
       <div className="flex w-full items-center justify-between rounded-full bg-white p-3 shadow-md">
         <div className="relative flex items-center">
           <Link to="/">
@@ -32,13 +32,13 @@ const Header = () => {
                 Hello, {user.displayName || "User"}
               </span>
               <Link to="/dashboard">
-                <button className="mr-1 bg-gray-100 px-4 py-2 text-gray-600 hover:bg-gray-200">
+                <button className="mr-1 bg-gray-100 px-4 py-5 text-gray-600 hover:bg-gray-200">
                   Dashboard
                 </button>
               </Link>
               <button
                 onClick={logout}
-                className="rounded-full bg-black px-4 py-2 text-white hover:bg-gray-900"
+                className="rounded-full bg-black px-4 py-5 text-white hover:bg-gray-900"
               >
                 Log out
               </button>
