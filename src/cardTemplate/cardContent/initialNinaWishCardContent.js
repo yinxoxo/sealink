@@ -1,6 +1,7 @@
 const initialNinaWishCardContent = {
   texts: [
     {
+      id: "text-1",
       text: "Wish Upon a Star",
       style: {
         color: "#F7FFF7",
@@ -10,6 +11,7 @@ const initialNinaWishCardContent = {
       },
     },
     {
+      id: "text-2",
       text: "Making your dreams come true",
       style: {
         color: "#FFE66D",
@@ -19,6 +21,7 @@ const initialNinaWishCardContent = {
       },
     },
     {
+      id: "text-3",
       text: "By little angle - Nina",
       style: {
         color: "#FFE66D",
@@ -32,17 +35,12 @@ const initialNinaWishCardContent = {
   buttons: {
     buttonList: [
       {
+        id: "button-1",
         text: "Make a Wish",
         url: "#",
       },
-      {
-        text: "Your Wishes",
-        url: "#",
-      },
-      {
-        text: "Wish Stories",
-        url: "#",
-      },
+      { id: "button-2", text: "Your Wishes", url: "#" },
+      { id: "button-3", text: "Wish Stories", url: "#" },
     ],
     style: {
       backgroundColor: "#6CA6C1",
@@ -65,6 +63,7 @@ const initialNinaWishCardContent = {
   },
 
   socialLinks: {
+    id: "icon-1",
     iconList: [
       {
         id: "Facebook",
@@ -92,6 +91,7 @@ const initialNinaWishCardContent = {
   },
 
   avatar: {
+    id: "avatar-1",
     image: null,
     style: {
       width: "100px",
@@ -101,16 +101,14 @@ const initialNinaWishCardContent = {
 };
 
 initialNinaWishCardContent.itemsOrder = [
-  { id: `avatar-1`, type: "avatar" },
-  ...initialNinaWishCardContent.texts.map((text, index) => ({
-    id: `text-${index + 1}`,
-    type: "text",
-  })),
-  { id: `icons-1`, type: "icons" },
-  ...initialNinaWishCardContent.buttons.buttonList.map((button, index) => ({
-    id: `button-${index + 1}`,
-    type: "button",
-  })),
+  { id: "avatar-1", type: "avatar" },
+  { id: "text-1", type: "text" },
+  { id: "text-2", type: "text" },
+  { id: "text-3", type: "text" },
+  { id: "icons-1", type: "icons" },
+  { id: "button-1", type: "button" },
+  { id: "button-2", type: "button" },
+  { id: "button-3", type: "button" },
 ];
 
 export default initialNinaWishCardContent;
