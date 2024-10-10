@@ -122,9 +122,7 @@ const NinaWishCard = ({ data }) => {
       }
 
       if (item.type === "text") {
-        const textItem = projectData.texts.find(
-          (text, index) => `text-${index + 1}` === item.id,
-        );
+        const textItem = projectData.texts.find((text) => text.id == item.id);
         if (!textItem) return null;
         return (
           <DraggableItem

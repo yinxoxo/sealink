@@ -146,7 +146,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   useEffect(() => {
     if (projectData) {
-      setValue("title", projectData.title || "");
+      setValue("title", projectData.title);
     }
   }, [projectData, setValue]);
 
@@ -444,23 +444,22 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           <FaBacon />
           <h1 className="ml-2 text-3xl font-bold">Texts</h1>
         </div>
-        {projectData.texts.map((item, index) => (
+        {projectData.texts.map((item) => (
           <TextCard
-            key={index}
+            key={item.id}
             textItem={item}
-            index={index}
             onEdit={() => {
-              setSelectedText(index);
+              setSelectedText(item.id);
               setEditableTextItem(item);
               setIsModalVisible(true);
             }}
             onDelete={() => {
               const updatedTexts = projectData.texts.filter(
-                (_, idx) => idx !== index,
+                (textItem) => textItem.id !== item.id,
               );
 
               const updatedItemsOrder = itemsOrder.filter(
-                (orderItem) => orderItem.id !== `text-${index + 1}`,
+                (orderItem) => orderItem.id !== item.id,
               );
 
               const updatedData = {
@@ -471,9 +470,9 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
               setProjectData(updatedData);
               updateProjectData(updatedData);
             }}
-            onUpdate={(index, updatedItem) => {
-              const updatedTexts = projectData.texts.map((item, idx) =>
-                idx === index ? updatedItem : item,
+            onUpdate={(updatedItem) => {
+              const updatedTexts = projectData.texts.map((textItem) =>
+                textItem.id === item.id ? updatedItem : textItem,
               );
               const updatedData = {
                 ...projectData,
@@ -487,9 +486,14 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         <Button
           className="mt-6 bg-button hover:bg-button-hover"
           onClick={() => {
-            const newId = `text-${projectData.texts.length + 1}`;
+            const maxId = projectData.texts.reduce((max, text) => {
+              const idNumber = parseInt(text.id.split("-")[1]);
+              return idNumber > max ? idNumber : max;
+            }, 0);
+
+            const newTextId = `text-${maxId + 1}`;
             const newTextItem = {
-              id: newId,
+              id: newTextId,
               text: "New Text",
               style: {
                 fontSize: "16px",
@@ -503,7 +507,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
               texts: [...projectData.texts, newTextItem],
               itemsOrder: [
                 ...projectData.itemsOrder,
-                { id: newId, type: "text" },
+                { id: newTextId, type: "text" },
               ],
             };
             setProjectData(updatedData);
@@ -519,9 +523,10 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           editTextData={editableTextItem}
           setEditTextData={setEditableTextItem}
           handleSaveTextEdit={() => {
-            const updatedTexts = projectData.texts.map((item, idx) =>
-              idx === selectedText ? editableTextItem : item,
+            const updatedTexts = projectData.texts.map((item) =>
+              item.id === selectedText ? editableTextItem : item,
             );
+            console.log(updatedTexts);
             const updatedData = {
               ...projectData,
               texts: updatedTexts,
