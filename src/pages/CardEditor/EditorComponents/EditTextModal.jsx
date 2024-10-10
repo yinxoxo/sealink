@@ -68,7 +68,7 @@ const EditTextModal = ({
               ]}
               max={100}
               step={1}
-              onValueChange={(value) =>
+              onValueCommit={(value) =>
                 setEditTextData({
                   ...editTextData,
                   style: { ...editTextData.style, fontSize: value[0] },

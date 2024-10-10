@@ -631,7 +631,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                   max={100}
                   step={1}
                   defaultValue={[iconSize]}
-                  onValueChange={(value) => {
+                  onValueCommit={(value) => {
                     const newSize = value[0];
                     const updatedData = {
                       ...projectData,
@@ -778,7 +778,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 max={100}
                 step={1}
                 defaultValue={[parseInt(style.width, 10)]}
-                onValueChange={(value) =>
+                onValueCommit={(value) =>
                   handleButtonStyleChange("width", `${value[0]}%`)
                 }
                 className="w-full"
@@ -794,7 +794,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 max={50}
                 step={1}
                 defaultValue={[parseInt(style.borderRadius, 10)]}
-                onValueChange={(value) =>
+                onValueCommit={(value) =>
                   handleButtonStyleChange("borderRadius", `${value[0]}px`)
                 }
                 className="w-full"
@@ -810,7 +810,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 max={50}
                 step={1}
                 defaultValue={[parseInt(style.padding, 10) || 20]}
-                onValueChange={(value) =>
+                onValueCommit={(value) =>
                   handleButtonStyleChange("padding", `${value[0]}px`)
                 }
                 className="w-full"
@@ -826,7 +826,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 max={50}
                 step={1}
                 defaultValue={[parseInt(style.fontSize, 10) || 18]}
-                onValueChange={(value) =>
+                onValueCommit={(value) =>
                   handleButtonStyleChange("fontSize", `${value[0]}px`)
                 }
                 className="w-full"
@@ -851,7 +851,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                         ? 3
                         : 4,
                 ]}
-                onValueChange={(value) => {
+                onValueCommit={(value) => {
                   const weightMap = {
                     1: 300,
                     2: 400,
@@ -1057,8 +1057,8 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             min={0.1}
             max={1}
             step={0.1}
-            value={[projectData.background.opacity]}
-            onValueChange={(value) => {
+            defaultValue={[projectData.background.opacity]}
+            onValueCommit={(value) => {
               const newOpacity = value[0];
               const updatedData = {
                 ...projectData,
@@ -1092,7 +1092,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 min={50}
                 max={300}
                 defaultValue={[parseInt(projectData.avatar.style.width, 10)]}
-                onValueChange={(value) => handleAvatarSizeChange(value[0])}
+                onValueCommit={(value) => handleAvatarSizeChange(value[0])}
               />
             </div>
           </div>
