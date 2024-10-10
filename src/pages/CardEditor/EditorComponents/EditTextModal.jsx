@@ -29,13 +29,18 @@ const EditTextModal = ({
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
 
+  const handleDialogClick = () => {
+    setShowColorPicker(false);
+    console.log("outside click");
+  };
+
   if (!editTextData) {
     return;
   }
 
   return (
     <Dialog open={isTextModalVisible} onOpenChange={setIsTextModalVisible}>
-      <DialogContent>
+      <DialogContent onClick={handleDialogClick}>
         <DialogHeader>
           <DialogTitle>Edit Text</DialogTitle>
         </DialogHeader>
@@ -77,7 +82,10 @@ const EditTextModal = ({
 
         <div className="flex flex-col space-y-2">
           <label className="text-sm font-medium">Font Color</label>
-          <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
+          <div
+            className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div
               onClick={() => setShowColorPicker(!showColorPicker)}
               className="relative"
@@ -90,10 +98,7 @@ const EditTextModal = ({
               />
             </div>
             {showColorPicker && (
-              <div
-                className="top-100 absolute z-10"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <div className="top-100 absolute z-10">
                 <ChromePicker
                   color={editTextData.style.color}
                   onChangeComplete={(color) =>
