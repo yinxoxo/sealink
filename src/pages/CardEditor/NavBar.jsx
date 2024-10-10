@@ -89,10 +89,10 @@ const NavBar = ({
           }`}
           onClick={onRedo}
         />
-        <FaPlay
+        {/* <FaPlay
           size={20}
           className="cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover"
-        />
+        /> */}
         {isMobile ? (
           <FaDesktop
             size={20}
