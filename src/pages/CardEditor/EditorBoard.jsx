@@ -867,6 +867,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           <div className="flex flex-col space-y-2">
             <label className="text-sm font-medium">Font Family</label>
             <Select
+              value={projectData.buttons.style.fontFamily.split(",")[0]}
               onValueChange={(value) =>
                 handleButtonStyleChange("fontFamily", value)
               }

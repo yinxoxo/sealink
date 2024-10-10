@@ -31,7 +31,6 @@ const EditTextModal = ({
 
   const handleDialogClick = () => {
     setShowColorPicker(false);
-    console.log("outside click");
   };
 
   if (!editTextData) {
@@ -136,7 +135,7 @@ const EditTextModal = ({
         <div className="mt-4">
           <label>Font Family</label>
           <Select
-            value={editTextData.style.fontFamily}
+            value={editTextData.style.fontFamily.split(",")[0]}
             onValueChange={(value) =>
               setEditTextData({
                 ...editTextData,
