@@ -2,7 +2,7 @@ import { LuPenLine } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
 import PropTypes from "prop-types";
 
-const ButtonCard = ({ button, index, onEdit, onDelete }) => (
+const ButtonCard = ({ button, onEdit, onDelete }) => (
   <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-3">
     <div>
       <h3 className="text-lg">{button.text}</h3>
@@ -14,7 +14,7 @@ const ButtonCard = ({ button, index, onEdit, onDelete }) => (
         <LuPenLine className="text-icon hover:text-icon-hover" />
       </button>
 
-      <button onClick={() => onDelete(index)} aria-label="Delete">
+      <button onClick={() => onDelete(button.id)} aria-label="Delete">
         <MdDelete className="text-icon hover:text-icon-hover" />
       </button>
     </div>
@@ -23,10 +23,10 @@ const ButtonCard = ({ button, index, onEdit, onDelete }) => (
 
 ButtonCard.propTypes = {
   button: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
-  index: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };

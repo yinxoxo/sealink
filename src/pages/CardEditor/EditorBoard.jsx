@@ -385,9 +385,12 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setIsButtonModalVisible(false);
   };
 
-  const handleButtonDelete = (index) => {
+  const handleButtonDelete = (buttonId) => {
     const updatedButtons = projectData.buttons.buttonList.filter(
-      (_, i) => i !== index,
+      (button) => button.id !== buttonId,
+    );
+    const updatedItemsOrder = projectData.itemsOrder.filter(
+      (orderItem) => orderItem.id !== buttonId,
     );
 
     const updatedData = {
@@ -396,7 +399,9 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         ...projectData.buttons,
         buttonList: updatedButtons,
       },
+      itemsOrder: updatedItemsOrder,
     };
+
     setProjectData(updatedData);
     updateProjectData(updatedData);
   };
@@ -482,7 +487,9 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         <Button
           className="mt-6 bg-button hover:bg-button-hover"
           onClick={() => {
+            const newId = `text-${projectData.texts.length + 1}`;
             const newTextItem = {
+              id: newId,
               text: "New Text",
               style: {
                 fontSize: "16px",
@@ -491,8 +498,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 fontFamily: "Arial",
               },
             };
-            const newId = `text-${projectData.texts.length + 1}`;
-
             const updatedData = {
               ...projectData,
               texts: [...projectData.texts, newTextItem],
@@ -668,11 +673,11 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         <div className="mt-4">
           {buttonList.map((button, index) => (
             <ButtonCard
-              key={index}
+              key={button.id}
               button={button}
-              index={index}
+              // index={index}
               onEdit={() => handleButtonEdit(button, index)}
-              onDelete={() => handleButtonDelete(index)}
+              onDelete={() => handleButtonDelete(button.id)}
             />
           ))}
         </div>
@@ -680,8 +685,17 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         <Button
           className="mt-6 bg-button hover:bg-button-hover"
           onClick={() => {
-            const newButtonId = `button-${buttonList.length + 1}`;
+            const maxId = projectData.buttons.buttonList.reduce(
+              (max, button) => {
+                const idNumber = parseInt(button.id.split("-")[1]);
+                return idNumber > max ? idNumber : max;
+              },
+              0,
+            );
+
+            const newButtonId = `button-${maxId + 1}`;
             const newButton = {
+              id: newButtonId,
               text: "New Button",
               url: "https://example.com/new-button",
             };
