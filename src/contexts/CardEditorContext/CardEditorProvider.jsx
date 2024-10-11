@@ -16,48 +16,59 @@ export const CardEditorProvider = ({ children }) => {
   const location = useLocation();
   const { projectId, template } = useParams();
   const { projects } = useProjects();
+
   const [editingType, setEditingType] = useState("text");
   const [selectedText, setSelectedText] = useState(null);
+  const [projectData, setProjectData] = useState(null);
 
   const isCardEditorPage = location.pathname.startsWith(
     "/dashboard/card-editor",
   );
 
-  const projectData = useMemo(() => {
+  useMemo(() => {
     if (projects && projects.length > 0 && projectId) {
       const project = projects.find((p) => p.id === projectId);
-      return project || null;
+      setProjectData(project || null);
     } else if (isCardEditorPage && !projectId) {
+      let templateData;
       switch (template) {
         case "WoodCard":
-          return { ...initialWoodCardContent };
+          templateData = { ...initialWoodCardContent };
+          break;
         case "SimpleCard":
-          return { ...initialSimpleCardContent };
+          templateData = { ...initialSimpleCardContent };
+          break;
         case "ArtCard":
-          return { ...initialArtCardContent };
+          templateData = { ...initialArtCardContent };
+          break;
         case "BreadCard":
-          return { ...initialBreadCardContent };
+          templateData = { ...initialBreadCardContent };
+          break;
         case "JiaCard":
-          return { ...initialJiaCardContent };
+          templateData = { ...initialJiaCardContent };
+          break;
         case "ForestCard":
-          return { ...initialForestCardContent };
+          templateData = { ...initialForestCardContent };
+          break;
         case "GalaxyCard":
-          return { ...initialGalaxyCardContent };
+          templateData = { ...initialGalaxyCardContent };
+          break;
         case "NinaWishCard":
-          return { ...initialNinaWishCardContent };
+          templateData = { ...initialNinaWishCardContent };
+          break;
         default:
           console.error(
             "The corresponding template information cannot be found",
           );
-          return null;
+          templateData = null;
       }
-    } else {
-      return null;
+      setProjectData(templateData);
     }
   }, [projects, projectId, template, isCardEditorPage]);
 
   const contextValue = {
     projectData,
+    setProjectData,
     projectId,
     editingType,
     setEditingType,
