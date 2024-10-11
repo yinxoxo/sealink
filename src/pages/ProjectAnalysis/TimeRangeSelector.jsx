@@ -11,14 +11,13 @@ import { Button } from "@/components/ui/button";
 import { LuCalendarRange } from "react-icons/lu";
 
 const TimeRangeSelector = ({
-  showCalendar,
-  setShowCalendar,
   selectedDateRange,
   setSelectedDateRange,
   selectedRange,
   setSelectedRange,
 }) => {
   const [tempDateRange, setTempDateRange] = useState(selectedDateRange);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const defaultRange = {
     from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
@@ -31,16 +30,20 @@ const TimeRangeSelector = ({
 
     if (value === "last7days") {
       setSelectedDateRange(defaultRange);
+      setShowCalendar(false);
     } else if (value === "last28days") {
       const newDateRange = {
         from: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
         to: new Date(),
       };
       setSelectedDateRange(newDateRange);
-    } else if (value === "custom") {
-      setShowCalendar(true);
-      setTempDateRange(selectedDateRange);
+      setShowCalendar(false);
     }
+  };
+
+  const handleCustomClick = () => {
+    setShowCalendar(true);
+    setTempDateRange(selectedDateRange);
   };
 
   const handleDateRangeChange = (selectedDate) => {
@@ -60,8 +63,7 @@ const TimeRangeSelector = ({
   };
 
   const handleCancel = () => {
-    setSelectedRange("last7days");
-    setSelectedDateRange(defaultRange);
+    setTempDateRange(selectedDateRange);
     setShowCalendar(false);
   };
 
@@ -72,7 +74,10 @@ const TimeRangeSelector = ({
           <LuCalendarRange className="mr-2" />
           {selectedRange === "custom"
             ? selectedDateRange?.from && selectedDateRange?.to
-              ? `${format(selectedDateRange.from, "PPP")} - ${format(selectedDateRange.to, "PPP")}`
+              ? `${format(selectedDateRange.from, "PPP")} - ${format(
+                  selectedDateRange.to,
+                  "PPP",
+                )}`
               : "Custom range"
             : selectedRange === "last7days"
               ? "Last 7 days"
@@ -81,7 +86,7 @@ const TimeRangeSelector = ({
         <SelectContent>
           <SelectItem value="last7days">Last 7 days</SelectItem>
           <SelectItem value="last28days">Last 28 days</SelectItem>
-          <SelectItem value="custom" onClick={() => setShowCalendar(true)}>
+          <SelectItem value="custom" onFocus={handleCustomClick}>
             Custom range
           </SelectItem>
         </SelectContent>
@@ -89,7 +94,7 @@ const TimeRangeSelector = ({
 
       {showCalendar && (
         <div className="absolute top-14 w-[300px] bg-white">
-          <div className="p-3">
+          <div className="border-2 p-3">
             <Calendar
               initialFocus
               mode="range"

@@ -14,7 +14,6 @@ const ProjectAnalysis = () => {
   const { loading, visitorData, loadVisitorData, loadingVisitorData } =
     useContext(ProjectsContext);
 
-  const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState({
     from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     to: new Date(),
@@ -24,6 +23,12 @@ const ProjectAnalysis = () => {
 
   useEffect(() => {
     if (projectId) {
+      console.log(
+        "Loading data for project:",
+        projectId,
+        "with date range:",
+        selectedDateRange,
+      );
       loadVisitorData(projectId, selectedDateRange);
     }
   }, [projectId, selectedDateRange, loadVisitorData]);
@@ -34,29 +39,22 @@ const ProjectAnalysis = () => {
     return <Loading />;
   }
 
-  if (projectVisitorData.length === 0) {
-    return (
-      <div className="bg-lightGray flex h-full min-h-screen items-center justify-center">
-        <h1 className="text-3xl font-bold text-gray-700">
-          No visitor data available for analysis.
-        </h1>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-lightGray h-fit min-h-svh w-full p-7">
+    <div className="h-fit min-h-svh w-full bg-lightGray p-7">
       <div className="flex w-full justify-between">
         <h1 className="mb-10 text-4xl font-bold">Data Analyze</h1>
         <TimeRangeSelector
-          showCalendar={showCalendar}
-          setShowCalendar={setShowCalendar}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
           selectedRange={selectedRange}
           setSelectedRange={setSelectedRange}
         />
       </div>
+      {projectVisitorData.length === 0 && (
+        <h1 className="mb-10 text-3xl font-bold text-sea-hover">
+          No visitor data available for analysis.
+        </h1>
+      )}
       <div className="grid w-full grid-cols-2 grid-rows-[150px_auto_1fr] gap-4">
         <div className="col-span-2 row-span-1 max-h-[150px] w-full min-w-[300px] rounded-lg bg-white p-4">
           <LifetimeChart
