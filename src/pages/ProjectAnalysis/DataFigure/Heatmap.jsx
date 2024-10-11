@@ -101,7 +101,7 @@ const DailyHeatmap = ({ loading, visitorData }) => {
           <span className="text-[10px]">24:00</span>
         </div>
 
-        <div className="flex w-full gap-1 px-2">
+        <div className="flex gap-1 px-2">
           {heatmapData.map((dayData) => {
             const showMonth = lastMonth !== dayData.month;
             lastMonth = dayData.month;
