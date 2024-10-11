@@ -1,6 +1,7 @@
 const initialBreadCardContent = {
   texts: [
     {
+      id: "text-1",
       text: "Honeyed Pastry",
       style: {
         color: "#2c2f96",
@@ -10,6 +11,7 @@ const initialBreadCardContent = {
       },
     },
     {
+      id: "text-2",
       text: "Good pastry for a good day",
       style: {
         color: "#2c2f96",
@@ -22,22 +24,10 @@ const initialBreadCardContent = {
 
   buttons: {
     buttonList: [
-      {
-        text: "Menu",
-        url: "#",
-      },
-      {
-        text: "Online order",
-        url: "#",
-      },
-      {
-        text: "Our story",
-        url: "#",
-      },
-      {
-        text: "Locations",
-        url: "#",
-      },
+      { id: "button-1", text: "Menu", url: "https://example.com" },
+      { id: "button-2", text: "Online order", url: "https://example.com" },
+      { id: "button-3", text: "Our story", url: "https://example.com" },
+      { id: "button-4", text: "Locations", url: "https://example.com" },
     ],
     style: {
       backgroundColor: "#ffffff",
@@ -60,6 +50,7 @@ const initialBreadCardContent = {
   },
 
   socialLinks: {
+    id: "icon-1",
     iconList: [
       {
         id: "Facebook",
@@ -87,6 +78,7 @@ const initialBreadCardContent = {
   },
 
   avatar: {
+    id: "avatar-1",
     image: null,
     style: {
       width: "100px",
@@ -97,16 +89,13 @@ const initialBreadCardContent = {
 
 initialBreadCardContent.itemsOrder = [
   { id: `avatar-1`, type: "avatar" },
-  ...initialBreadCardContent.texts.map((text, index) => ({
-    id: `text-${index + 1}`,
-    type: "text",
-  })),
+  { id: "text-1", type: "text" },
+  { id: "text-2", type: "text" },
   { id: `icons-1`, type: "icons" },
-  ...initialBreadCardContent.buttons.buttonList.map((button, index) => ({
-    id: `button-${index + 1}`,
-    type: "button",
-  })),
-  { id: `productImage-1`, type: "productImage" },
+  { id: "button-1", type: "button" },
+  { id: "button-2", type: "button" },
+  { id: "button-3", type: "button" },
+  { id: "button-4", type: "button" },
 ];
 
 export default initialBreadCardContent;

@@ -122,9 +122,8 @@ const SimpleCard = ({ data }) => {
       }
 
       if (item.type === "text") {
-        const textItem = projectData.texts.find(
-          (text, index) => `text-${index + 1}` === item.id,
-        );
+        const textItem = projectData.texts.find((text) => text.id == item.id);
+
         if (!textItem) return null;
         return (
           <DraggableItem
@@ -147,7 +146,7 @@ const SimpleCard = ({ data }) => {
         );
       } else if (item.type === "button") {
         const buttonItem = projectData.buttons.buttonList.find(
-          (button, index) => `button-${index + 1}` === item.id,
+          (button) => button.id === item.id,
         );
         if (!buttonItem) return null;
         return (

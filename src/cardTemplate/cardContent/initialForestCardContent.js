@@ -1,6 +1,7 @@
 const initialForestCardContent = {
   texts: [
     {
+      id: "text-1",
       text: "Dale Vera",
       style: {
         color: "#3e5622",
@@ -10,6 +11,7 @@ const initialForestCardContent = {
       },
     },
     {
+      id: "text-2",
       text: "an innovative solar design practice that brings solar energy into daily life.",
       style: {
         color: "#FFFFFF",
@@ -22,19 +24,9 @@ const initialForestCardContent = {
 
   buttons: {
     buttonList: [
-      {
-        text: "Affliate Link",
-        url: "#",
-      },
-      {
-        text: "Vidcon Meet up",
-        url: "#",
-      },
-
-      {
-        text: "Contact",
-        url: "#",
-      },
+      { id: "button-1", text: "Affliate Link", url: "https://example.com" },
+      { id: "button-2", text: "Vidcon Meet up", url: "https://example.com" },
+      { id: "button-3", text: "Contact", url: "https://example.com" },
     ],
     style: {
       backgroundColor: "#acad94",
@@ -57,6 +49,7 @@ const initialForestCardContent = {
   },
 
   socialLinks: {
+    id: "icon-1",
     iconList: [
       {
         id: "Youtube",
@@ -84,6 +77,7 @@ const initialForestCardContent = {
   },
 
   avatar: {
+    id: "avatar-1",
     image:
       "https://plus.unsplash.com/premium_photo-1681207567220-e29da6ce635b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8aGlrZXJ8ZW58MHx8MHx8fDA%3D", // 頭像圖片
     style: {
@@ -95,15 +89,12 @@ const initialForestCardContent = {
 
 initialForestCardContent.itemsOrder = [
   { id: `avatar-1`, type: "avatar" },
-  ...initialForestCardContent.texts.map((text, index) => ({
-    id: `text-${index + 1}`,
-    type: "text",
-  })),
+  { id: "text-1", type: "text" },
+  { id: "text-2", type: "text" },
   { id: `icons-1`, type: "icons" },
-  ...initialForestCardContent.buttons.buttonList.map((button, index) => ({
-    id: `button-${index + 1}`,
-    type: "button",
-  })),
+  { id: "button-1", type: "button" },
+  { id: "button-2", type: "button" },
+  { id: "button-3", type: "button" },
 ];
 
 export default initialForestCardContent;

@@ -1,6 +1,7 @@
 const initialJiaCardContent = {
   texts: [
     {
+      id: "text-1",
       text: "Jia Zhou",
       style: {
         color: "#FFFFFF",
@@ -10,6 +11,7 @@ const initialJiaCardContent = {
       },
     },
     {
+      id: "text-2",
       text: "Giving clothing a second chance",
       style: {
         color: "#FFFFFF",
@@ -22,18 +24,13 @@ const initialJiaCardContent = {
 
   buttons: {
     buttonList: [
+      { id: "button-1", text: "Vintage Store", url: "https://example.com" },
       {
-        text: "Vintage Store",
-        url: "#",
-      },
-      {
+        id: "button-2",
         text: "Favourite thrift stores",
-        url: "#",
+        url: "https://example.com",
       },
-      {
-        text: "Inspiration",
-        url: "#",
-      },
+      { id: "button-3", text: "Inspiration", url: "https://example.com" },
     ],
     style: {
       backgroundColor: "#E4CDA5",
@@ -56,6 +53,7 @@ const initialJiaCardContent = {
   },
 
   socialLinks: {
+    id: "icon-1",
     iconList: [
       {
         id: "Facebook",
@@ -83,6 +81,7 @@ const initialJiaCardContent = {
   },
 
   avatar: {
+    id: "avatar-1",
     image:
       "https://cdn.pixabay.com/photo/2020/05/03/18/57/stand-5126363_1280.jpg",
     style: {
@@ -94,15 +93,12 @@ const initialJiaCardContent = {
 
 initialJiaCardContent.itemsOrder = [
   { id: `avatar-1`, type: "avatar" },
-  ...initialJiaCardContent.texts.map((text, index) => ({
-    id: `text-${index + 1}`,
-    type: "text",
-  })),
+  { id: "text-1", type: "text" },
+  { id: "text-2", type: "text" },
   { id: `icons-1`, type: "icons" },
-  ...initialJiaCardContent.buttons.buttonList.map((button, index) => ({
-    id: `button-${index + 1}`,
-    type: "button",
-  })),
+  { id: "button-1", type: "button" },
+  { id: "button-2", type: "button" },
+  { id: "button-3", type: "button" },
 ];
 
 export default initialJiaCardContent;

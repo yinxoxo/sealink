@@ -147,7 +147,6 @@ const NinaWishCard = ({ data }) => {
         const buttonItem = projectData.buttons.buttonList.find(
           (button) => button.id === item.id,
         );
-
         if (!buttonItem) return null;
         return (
           <DraggableItem

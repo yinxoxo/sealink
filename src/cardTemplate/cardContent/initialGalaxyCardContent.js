@@ -1,6 +1,7 @@
 const initialGalaxyCardContent = {
   texts: [
     {
+      id: "text-1",
       text: "Galactic Journey",
       style: {
         color: "#DDA0DD",
@@ -10,6 +11,7 @@ const initialGalaxyCardContent = {
       },
     },
     {
+      id: "text-2",
       text: "Explore the mysteries of the universe",
       style: {
         color: "#DDA0DD",
@@ -22,26 +24,14 @@ const initialGalaxyCardContent = {
 
   buttons: {
     buttonList: [
-      {
-        text: "Star Map",
-        url: "#",
-      },
-      {
-        text: "Galaxy Tours",
-        url: "#",
-      },
-      {
-        text: "Astronomy Blog",
-        url: "#",
-      },
-      {
-        text: "Contact Us",
-        url: "#",
-      },
+      { id: "button-1", text: "Star Map", url: "https://example.com" },
+      { id: "button-2", text: "Galaxy Tours", url: "https://example.com" },
+      { id: "button-3", text: "Astronomy Blog", url: "https://example.com" },
+      { id: "button-4", text: "Contact Us", url: "https://example.com" },
     ],
     style: {
       backgroundColor: "#4B0082",
-      width: "90%",
+      width: "85%",
       color: "#FFFFFF",
       borderRadius: "3px",
       padding: "14px",
@@ -60,6 +50,7 @@ const initialGalaxyCardContent = {
   },
 
   socialLinks: {
+    id: "icon-1",
     iconList: [
       {
         id: "Instagram",
@@ -87,6 +78,7 @@ const initialGalaxyCardContent = {
   },
 
   avatar: {
+    id: "avatar-1",
     image: null,
     style: {
       width: "100px",
@@ -97,15 +89,13 @@ const initialGalaxyCardContent = {
 
 initialGalaxyCardContent.itemsOrder = [
   { id: `avatar-1`, type: "avatar" },
-  ...initialGalaxyCardContent.texts.map((text, index) => ({
-    id: `text-${index + 1}`,
-    type: "text",
-  })),
+  { id: "text-1", type: "text" },
+  { id: "text-2", type: "text" },
   { id: `icons-1`, type: "icons" },
-  ...initialGalaxyCardContent.buttons.buttonList.map((button, index) => ({
-    id: `button-${index + 1}`,
-    type: "button",
-  })),
+  { id: "button-1", type: "button" },
+  { id: "button-2", type: "button" },
+  { id: "button-3", type: "button" },
+  { id: "button-4", type: "button" },
 ];
 
 export default initialGalaxyCardContent;

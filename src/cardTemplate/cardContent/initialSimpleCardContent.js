@@ -1,6 +1,7 @@
 const initialSimpleCardContent = {
   texts: [
     {
+      id: "text-1",
       text: "Hydra",
       style: {
         color: "#336a5a",
@@ -10,6 +11,7 @@ const initialSimpleCardContent = {
       },
     },
     {
+      id: "text-2",
       text: "Hydra Juice",
       style: {
         color: "#000000",
@@ -19,6 +21,7 @@ const initialSimpleCardContent = {
       },
     },
     {
+      id: "text-3",
       text: "Your daily dose of vitamin C",
       style: {
         color: "#808080",
@@ -31,18 +34,9 @@ const initialSimpleCardContent = {
 
   buttons: {
     buttonList: [
-      {
-        text: "Our drinks",
-        url: "https://example.com/our-drinks",
-      },
-      {
-        text: "Find us",
-        url: "https://example.com/find-us",
-      },
-      {
-        text: "Wellbeing",
-        url: "https://example.com/wellbeing",
-      },
+      { id: "button-1", text: "Our drinks", url: "https://example.com" },
+      { id: "button-2", text: "Find us", url: "https://example.com" },
+      { id: "button-3", text: "Wellbeing", url: "https://example.com" },
     ],
     style: {
       backgroundColor: "#F0F0F0",
@@ -63,6 +57,7 @@ const initialSimpleCardContent = {
     backgroundPosition: "center",
   },
   socialLinks: {
+    id: "icon-1",
     iconList: [
       {
         id: "Instagram",
@@ -82,6 +77,7 @@ const initialSimpleCardContent = {
     },
   },
   avatar: {
+    id: "avatar-1",
     image:
       "https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     style: {
@@ -93,15 +89,13 @@ const initialSimpleCardContent = {
 
 initialSimpleCardContent.itemsOrder = [
   { id: `avatar-1`, type: "avatar" },
-  ...initialSimpleCardContent.texts.map((text, index) => ({
-    id: `text-${index + 1}`,
-    type: "text",
-  })),
+  { id: "text-1", type: "text" },
+  { id: "text-2", type: "text" },
+  { id: "text-3", type: "text" },
   { id: `icons-1`, type: "icons" },
-  ...initialSimpleCardContent.buttons.buttonList.map((button, index) => ({
-    id: `button-${index + 1}`,
-    type: "button",
-  })),
+  { id: "button-1", type: "button" },
+  { id: "button-2", type: "button" },
+  { id: "button-3", type: "button" },
 ];
 
 export default initialSimpleCardContent;

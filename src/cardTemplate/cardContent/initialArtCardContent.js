@@ -1,6 +1,7 @@
 const initialArtCardContent = {
   texts: [
     {
+      id: "text-1",
       text: "SHEILA",
       style: {
         color: "#8d4925",
@@ -10,6 +11,7 @@ const initialArtCardContent = {
       },
     },
     {
+      id: "text-2",
       text: "HI!",
       style: {
         color: "#8d4925",
@@ -19,6 +21,7 @@ const initialArtCardContent = {
       },
     },
     {
+      id: "text-3",
       text: "I AM SHEILA",
       style: {
         color: "#554f46",
@@ -31,14 +34,8 @@ const initialArtCardContent = {
 
   buttons: {
     buttonList: [
-      {
-        text: "VISIT MY WEBSITE",
-        url: "#",
-      },
-      {
-        text: "MY SERVICES",
-        url: "#",
-      },
+      { id: "button-1", text: "VISIT MY WEBSITE", url: "https://example.com" },
+      { id: "button-2", text: "MY SERVICES", url: "https://example.com" },
     ],
     style: {
       backgroundColor: "#87794e",
@@ -64,6 +61,7 @@ const initialArtCardContent = {
   },
 
   socialLinks: {
+    id: "icon-1",
     iconList: [
       {
         id: "Facebook",
@@ -91,6 +89,7 @@ const initialArtCardContent = {
   },
 
   avatar: {
+    id: "avatar-1",
     image:
       "https://images.unsplash.com/photo-1720048171419-b515a96a73b8?q=80&w=2487&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // 頭像圖片
     style: {
@@ -102,14 +101,11 @@ const initialArtCardContent = {
 
 initialArtCardContent.itemsOrder = [
   { id: `avatar-1`, type: "avatar" },
-  ...initialArtCardContent.texts.map((text, index) => ({
-    id: `text-${index + 1}`,
-    type: "text",
-  })),
-  ...initialArtCardContent.buttons.buttonList.map((button, index) => ({
-    id: `button-${index + 1}`,
-    type: "button",
-  })),
+  { id: "text-1", type: "text" },
+  { id: "text-2", type: "text" },
+  { id: "text-3", type: "text" },
+  { id: "button-1", type: "button" },
+  { id: "button-2", type: "button" },
   { id: `icons-1`, type: "icons" },
 ];
 
