@@ -13,14 +13,12 @@ import { LuCalendarRange } from "react-icons/lu";
 const TimeRangeSelector = ({
   showCalendar,
   setShowCalendar,
+  selectedDateRange,
   setSelectedDateRange,
   selectedRange,
   setSelectedRange,
 }) => {
-  const [date, setDate] = useState({
-    from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-    to: new Date(),
-  });
+  const [tempDateRange, setTempDateRange] = useState(selectedDateRange);
 
   const defaultRange = {
     from: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
@@ -28,38 +26,41 @@ const TimeRangeSelector = ({
   };
 
   const handleRangeChange = (value) => {
+    console.log("Selected range changed to:", value);
     setSelectedRange(value);
-    let newDateRange;
+
     if (value === "last7days") {
-      newDateRange = defaultRange;
+      setSelectedDateRange(defaultRange);
     } else if (value === "last28days") {
-      newDateRange = {
+      const newDateRange = {
         from: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000),
         to: new Date(),
       };
+      setSelectedDateRange(newDateRange);
     } else if (value === "custom") {
       setShowCalendar(true);
-      return;
+      setTempDateRange(selectedDateRange);
     }
-
-    setDate(newDateRange);
-    setSelectedDateRange(newDateRange);
   };
 
   const handleDateRangeChange = (selectedDate) => {
     if (!selectedDate || !selectedDate.from || !selectedDate.to) return;
-
-    setDate(selectedDate);
+    setTempDateRange(selectedDate);
   };
 
   const handleApply = () => {
-    setSelectedDateRange(date);
-    setShowCalendar(false);
+    if (tempDateRange?.from && tempDateRange?.to) {
+      console.log("Applying custom date range:", tempDateRange);
+      setSelectedRange("custom");
+      setSelectedDateRange(tempDateRange);
+      setShowCalendar(false);
+    } else {
+      console.error("Date range is invalid");
+    }
   };
 
   const handleCancel = () => {
     setSelectedRange("last7days");
-    setDate(defaultRange);
     setSelectedDateRange(defaultRange);
     setShowCalendar(false);
   };
@@ -70,8 +71,8 @@ const TimeRangeSelector = ({
         <SelectTrigger className="w-[300px] border-none">
           <LuCalendarRange className="mr-2" />
           {selectedRange === "custom"
-            ? date?.from && date?.to
-              ? `${format(date.from, "PPP")} - ${format(date.to, "PPP")}`
+            ? selectedDateRange?.from && selectedDateRange?.to
+              ? `${format(selectedDateRange.from, "PPP")} - ${format(selectedDateRange.to, "PPP")}`
               : "Custom range"
             : selectedRange === "last7days"
               ? "Last 7 days"
@@ -80,7 +81,9 @@ const TimeRangeSelector = ({
         <SelectContent>
           <SelectItem value="last7days">Last 7 days</SelectItem>
           <SelectItem value="last28days">Last 28 days</SelectItem>
-          <SelectItem value="custom">Custom range</SelectItem>
+          <SelectItem value="custom" onClick={() => setShowCalendar(true)}>
+            Custom range
+          </SelectItem>
         </SelectContent>
       </Select>
 
@@ -90,8 +93,8 @@ const TimeRangeSelector = ({
             <Calendar
               initialFocus
               mode="range"
-              defaultMonth={date?.from}
-              selected={date}
+              defaultMonth={tempDateRange?.from}
+              selected={tempDateRange}
               onSelect={handleDateRangeChange}
               numberOfMonths={1}
             />
