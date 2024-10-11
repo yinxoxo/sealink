@@ -16,57 +16,53 @@ export const CardEditorProvider = ({ children }) => {
   const location = useLocation();
   const { projectId, template } = useParams();
   const { projects } = useProjects();
-  const [projectData, setProjectData] = useState(null);
   const [editingType, setEditingType] = useState("text");
   const [selectedText, setSelectedText] = useState(null);
 
-  const isDashboardPage = location.pathname === "/dashboard";
   const isCardEditorPage = location.pathname.startsWith(
     "/dashboard/card-editor",
   );
 
-  const currentProject = useMemo(() => {
-    return projects && projects.length > 0 && projectId
-      ? projects.find((p) => p.id === projectId)
-      : null;
-  }, [projects, projectId]);
-
-  if (!projectId && !projectData && isCardEditorPage) {
-    if (template === "WoodCard") {
-      setProjectData({ ...initialWoodCardContent });
-    } else if (template === "SimpleCard") {
-      setProjectData({ ...initialSimpleCardContent });
-    } else if (template === "ArtCard") {
-      setProjectData({ ...initialArtCardContent });
-    } else if (template === "BreadCard") {
-      setProjectData({ ...initialBreadCardContent });
-    } else if (template === "JiaCard") {
-      setProjectData({ ...initialJiaCardContent });
-    } else if (template === "ForestCard") {
-      setProjectData({ ...initialForestCardContent });
-    } else if (template === "GalaxyCard") {
-      setProjectData({ ...initialGalaxyCardContent });
-    } else if (template === "NinaWishCard") {
-      setProjectData({ ...initialNinaWishCardContent });
+  const projectData = useMemo(() => {
+    if (projects && projects.length > 0 && projectId) {
+      const project = projects.find((p) => p.id === projectId);
+      return project || null;
+    } else if (isCardEditorPage && !projectId) {
+      switch (template) {
+        case "WoodCard":
+          return { ...initialWoodCardContent };
+        case "SimpleCard":
+          return { ...initialSimpleCardContent };
+        case "ArtCard":
+          return { ...initialArtCardContent };
+        case "BreadCard":
+          return { ...initialBreadCardContent };
+        case "JiaCard":
+          return { ...initialJiaCardContent };
+        case "ForestCard":
+          return { ...initialForestCardContent };
+        case "GalaxyCard":
+          return { ...initialGalaxyCardContent };
+        case "NinaWishCard":
+          return { ...initialNinaWishCardContent };
+        default:
+          console.error(
+            "The corresponding template information cannot be found",
+          );
+          return null;
+      }
     } else {
-      console.error("找不到對應的模板資料");
-      return;
+      return null;
     }
-  }
-
-  if (currentProject && !projectData) {
-    setProjectData(currentProject);
-  }
+  }, [projects, projectId, template, isCardEditorPage]);
 
   const contextValue = {
     projectData,
-    setProjectData,
     projectId,
     editingType,
     setEditingType,
     selectedText,
     setSelectedText,
-    currentProject,
   };
 
   return (
