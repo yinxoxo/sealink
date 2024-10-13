@@ -993,6 +993,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 console.log(updatedData);
                 setProjectData(updatedData);
                 updateProjectData(updatedData);
+                setIsCropModalVisible(false);
               })
             }
             uploading={uploading}
@@ -1155,6 +1156,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             console.log(updatedData);
             setProjectData(updatedData);
             updateProjectData(updatedData);
+            setIsCropModalVisible(false);
           })
         }
         uploading={uploading}
