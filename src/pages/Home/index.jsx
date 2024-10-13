@@ -1,8 +1,8 @@
+import { Link } from "react-router-dom";
 import { CardContainer, SocialLinksSection } from "./CardFigure";
 import pickleImg from "../../images/pickle.png";
 import { useEffect, useState, useCallback } from "react";
 import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
-// import IconSlider from "./IconSlider";
 import BackgroundIcon from "./BackgroundIcon";
 import IconCarousel from "./IconCarousel";
 
@@ -52,10 +52,11 @@ const Home = () => {
                   className="ml-1 border-none text-gray-500 focus:outline-none"
                 />
               </div>
-
-              <button className="w-full rounded-full bg-[#E8C0E9] p-3 text-black lg:p-5">
-                Claim your SeaLink
-              </button>
+              <Link to="/signup" className="w-full">
+                <button className="w-full rounded-full bg-[#E8C0E9] p-3 text-black lg:p-5">
+                  Claim your SeaLink
+                </button>
+              </Link>
             </div>
           </div>
           <div
