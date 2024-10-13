@@ -1,4 +1,4 @@
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { useQuery } from "react-query";
 
@@ -8,7 +8,10 @@ export const fetchUserProjects = async (user) => {
   }
 
   try {
-    const q = query(collection(db, `users/${user.uid}/projects`));
+    const q = query(
+      collection(db, `users/${user.uid}/projects`),
+      orderBy("createdTime", "desc"),
+    );
     const querySnapshot = await getDocs(q);
 
     const userProjects = querySnapshot.docs.map((doc) => ({
