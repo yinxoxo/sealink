@@ -24,6 +24,7 @@ const SignUp = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [formError, setFormError] = useState(null);
 
   const handleRegister = async (data) => {
     const { email, password } = data;
@@ -45,7 +46,7 @@ const SignUp = () => {
       console.log("User registered successfully with UID:", user.uid);
     } catch (error) {
       console.error("Registration failed:", error.message);
-      alert("Registration failed: " + error.message);
+      setFormError(error.message);
     }
   };
 
@@ -71,7 +72,7 @@ const SignUp = () => {
       navigate("/dashboard");
     } catch (error) {
       console.error("Error saving display name:", error.message);
-      alert("Error saving display name: " + error.message);
+      setFormError(error.message);
     }
   };
 
@@ -99,7 +100,7 @@ const SignUp = () => {
       navigate(redirectTo);
     } catch (error) {
       console.error("Login failed:", error.message);
-      alert("Login failed: " + error.message);
+      setFormError(error.message);
     }
   };
 
@@ -114,7 +115,7 @@ const SignUp = () => {
       navigate(redirectTo);
     } catch (error) {
       console.error("Google Sign-in failed:", error.message);
-      alert("Google Sign-in failed: " + error.message);
+      setFormError(error.message);
     }
   };
 
@@ -145,6 +146,7 @@ const SignUp = () => {
               <div className="rounded-md shadow-sm">
                 <input
                   type="text"
+                  name="text"
                   placeholder="Enter your display name"
                   {...register("displayName", { required: true })}
                   className="w-full rounded-lg border border-gray-300 p-3"
@@ -153,7 +155,10 @@ const SignUp = () => {
                   <p className="text-red-500">User name is required</p>
                 )}
               </div>
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full bg-button hover:bg-button-hover"
+              >
                 Save User Name
               </Button>
             </form>
@@ -166,6 +171,7 @@ const SignUp = () => {
                 <div className="mb-4">
                   <input
                     type="email"
+                    name="email"
                     placeholder="Email"
                     autoComplete="current-password"
                     {...register("email", {
@@ -184,6 +190,7 @@ const SignUp = () => {
                 <div className="mb-4">
                   <input
                     type="password"
+                    name="password"
                     placeholder="Password"
                     autoComplete="current-password"
                     {...register("password", {
@@ -199,6 +206,7 @@ const SignUp = () => {
                     <p className="text-red-500">{errors.password.message}</p>
                   )}
                 </div>
+                {formError && <p className="mb-3 text-red-500">{formError}</p>}
 
                 <Button
                   type="submit"

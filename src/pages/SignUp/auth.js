@@ -75,8 +75,20 @@ export const loginWithEmail = async (email, password) => {
 
     return userCredential;
   } catch (error) {
-    console.error("Error logging in user:", error);
-    throw error;
+    switch (error.code) {
+      case "auth/wrong-password":
+        throw new Error("Incorrect password. Please try again.");
+      case "auth/user-not-found":
+        throw new Error(
+          "No user found with this email. Please check your email address.",
+        );
+      case "auth/too-many-requests":
+        throw new Error("Too many login attempts. Please try again later.");
+      default:
+        throw new Error(
+          "An error occurred during the login process. Please try again later.",
+        );
+    }
   }
 };
 
