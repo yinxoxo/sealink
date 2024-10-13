@@ -4,7 +4,7 @@
 
 @layer components {
   .logo {
-    @apply h-16 w-auto;
+    @apply h-12 min-h-12 w-auto object-contain xl:h-16;
   }
 
   .card-container {

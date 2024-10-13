@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa6";
 export const CardContainer = () => {
   return (
     <div className="relative">
-      <div className="flex h-full max-h-[675px] min-h-[450px] w-[8rem] min-w-[250px] max-w-[500px] transform flex-col items-center rounded-xl bg-[#D2E722] p-6">
+      <div className="flex h-full w-[8rem] min-w-[250px] transform flex-col items-center rounded-xl bg-[#D2E722] p-6 xl:max-h-[675px] xl:min-h-[450px] xl:max-w-[500px]">
         <div className="mb-4 flex flex-col items-center">
           <img
             src="https://plus.unsplash.com/premium_photo-1671656333460-793292581bc6?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

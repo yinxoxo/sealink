@@ -7,7 +7,7 @@ const BackgroundIcon = ({ currentIndex }) => {
   return (
     <div className="flex items-center justify-center opacity-70">
       <CurrentIcon
-        className="text-[300px]"
+        className="text-[150px] sm:text-[200px] lg:text-[400px] xl:text-[300px]"
         color={COLOR_LIST[currentIndex % COLOR_LIST.length]}
       />
     </div>

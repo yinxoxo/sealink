@@ -6,7 +6,7 @@ const IconCarousel = ({ currentIndex }) => {
   const offset = ICON_LIST.length;
 
   return (
-    <div className="flex h-[120px] w-1/2 min-w-[500px] flex-col justify-center overflow-hidden px-10">
+    <div className="flex h-[60px] w-1/2 min-w-[300px] flex-col justify-center overflow-hidden px-10 xl:h-[120px] xl:min-w-[500px]">
       <div className="w-full">
         <div
           className="flex transition-transform duration-300 ease-in-out"
@@ -25,12 +25,11 @@ const IconCarousel = ({ currentIndex }) => {
             return (
               <div
                 key={`${iconItem.id}-${index}`}
-                className="flex-shrink-0"
-                style={{ width: "160px" }}
+                className="flex-shrink-0 xl:w-[160px]"
               >
                 <button className="relative flex items-center justify-center transition-all duration-500">
                   <div
-                    className="relative flex h-[90px] w-[90px] items-center justify-center rounded-md transition-all duration-300"
+                    className="relative flex h-[40px] w-[40px] items-center justify-center rounded-md transition-all duration-300 xl:h-[90px] xl:w-[90px]"
                     style={{
                       backgroundColor:
                         COLOR_LIST[Math.abs(adjustedIndex) % COLOR_LIST.length],
