@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ArtCard from "../../CardTemplate/ArtCard";
 import SimpleCard from "../../cardTemplate/SimpleCard";
@@ -33,6 +34,10 @@ const Template = () => {
   const handleTemplateClick = (template) => {
     handleNavigate(`/dashboard/card-editor/${template}`, "templates");
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const renderBackContent = (user) => {
     return (
