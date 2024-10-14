@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import sealinkLogo from "../../images/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
@@ -15,6 +16,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
 
   return (
     <div className="relative flex flex-col">
