@@ -17,19 +17,25 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative flex flex-col">
+      <button
+        onClick={toggleSidebar}
+        className="fixed left-5 top-5 z-50 rounded-full bg-white p-2 text-[20px] shadow-md sm:hidden"
+      >
+        <FaBars />
+      </button>
       <nav
-        className={`fixed flex h-full ${
-          isOpen ? "w-64" : "w-20"
+        className={`fixed z-50 flex h-full ${
+          isOpen ? "w-full sm:w-64" : "left-[-4rem] w-0 sm:left-0 sm:w-20"
         } flex-col justify-between bg-white shadow-lg transition-all duration-300`}
       >
         <button
           onClick={toggleSidebar}
-          className="absolute left-5 top-5 z-20 rounded-full bg-white p-2"
+          className="absolute left-5 top-5 z-20 rounded-full bg-white p-2 text-[20px]"
         >
           <FaBars />
         </button>
-        <div className="p-5">
+        <div className="mt-5 sm:p-5">
           <Link to="/">
             <div className="flex justify-center">
               {isOpen && (
