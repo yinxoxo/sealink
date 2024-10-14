@@ -2,7 +2,6 @@ import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEd
 import {
   FaAnglesLeft,
   FaAnglesRight,
-  FaPlay,
   FaDesktop,
   FaRocket,
   FaBars,
@@ -43,7 +42,7 @@ const NavBar = ({
   };
 
   return (
-    <nav className="fixed top-0 z-10 w-[450px] bg-white">
+    <nav className="fixed top-0 z-10 w-full bg-white lg:w-[450px]">
       <div className="relative flex items-center justify-between border-b-2 border-solid border-gray-300 p-5 text-white">
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -67,7 +66,7 @@ const NavBar = ({
               <FaRegSquare className="mr-2 text-icon" /> Buttons
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setEditingType("avatar")}>
-              <FaImage className="mr-2 text-icon" /> Image
+              <FaImage className="mr-2 text-icon" /> Avatar
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setEditingType("background")}>
               <FaFlipboard className="mr-2 text-icon" /> Background
@@ -89,20 +88,17 @@ const NavBar = ({
           }`}
           onClick={onRedo}
         />
-        {/* <FaPlay
-          size={20}
-          className="cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover"
-        /> */}
+
         {isMobile ? (
           <FaDesktop
             size={20}
-            className="cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover"
+            className="hidden cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover sm:inline-block"
             onClick={handleToggleMobile}
           />
         ) : (
           <FaMobileScreen
             size={20}
-            className="cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover"
+            className="hidden cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover"
             onClick={handleToggleMobile}
           />
         )}

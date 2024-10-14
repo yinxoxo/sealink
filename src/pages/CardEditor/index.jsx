@@ -62,7 +62,7 @@ const CardEditorContent = ({ template }) => {
   };
 
   return (
-    <section className="relative flex h-fit min-h-screen w-full items-center overflow-y-auto">
+    <section className="relative flex w-full flex-col items-center overflow-y-auto lg:h-full lg:min-h-screen lg:flex-row">
       <div
         className="absolute inset-0 z-0 opacity-30"
         style={{
@@ -70,7 +70,7 @@ const CardEditorContent = ({ template }) => {
         }}
       />
 
-      <div className="relative z-10 flex h-screen flex-grow flex-col items-center">
+      <div className="relative z-10 mt-[60px] flex h-screen flex-grow flex-col items-center">
         <div
           className={`my-auto overflow-y-auto rounded-3xl shadow-2xl ${isMobile ? "h-[700px] w-[400px]" : "h-[530px] w-[900px]"}`}
         >

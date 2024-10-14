@@ -44,7 +44,7 @@ import getCroppedImg from "../../utils/getCroppedImg";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 
-import { FaBacon, FaRegTrashCan } from "react-icons/fa6";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const EditBoard = ({ isMobile, setIsMobile }) => {
   const { toast } = useToast();
@@ -441,7 +441,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     return (
       <>
         <div className="mb-4 flex w-full">
-          <FaBacon />
           <h1 className="ml-2 text-3xl font-bold">Texts</h1>
         </div>
         {projectData.texts.map((item) => (
@@ -545,7 +544,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       {editingType === "icon" ? (
         <>
           <div className="mb-4 flex w-full">
-            <FaBacon />
             <h1 className="ml-2 text-3xl font-bold">Icons</h1>
           </div>
           {icons.map((icon) => (
@@ -573,7 +571,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             </Button>
           </div>
           <div className="mt-6 flex w-full">
-            <FaBacon />
             <h1 className="ml-2 text-2xl font-bold">Appearance</h1>
           </div>
           <div className="mt-4 space-y-6">
@@ -671,7 +668,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     return (
       <>
         <div className="flex w-full">
-          <FaBacon />
           <h1 className="ml-2 text-3xl font-bold">Buttons</h1>
         </div>
 
@@ -734,7 +730,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         )}
 
         <div className="mt-6 flex w-full">
-          <FaBacon />
           <h1 className="ml-2 text-2xl font-bold">Appearance</h1>
         </div>
         <div className="mt-4 space-y-6">
@@ -926,15 +921,10 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   const renderBackgroundEditor = () => (
     <div>
-      <div className="mb-4 flex w-full">
-        <FaBacon />
-        <h1 className="ml-2 text-3xl font-bold">Background</h1>
-      </div>
-
+      <h1 className="text-3xl font-bold">Background</h1>
       <div className="my-4 flex h-fit w-full items-center justify-between">
         <div className="flex w-full">
-          <FaBacon />
-          <h1 className="ml-2 text-lg font-medium">Use Background Image ?</h1>
+          <h1 className="text-lg font-medium">Use Background Image ?</h1>
         </div>
         <Switch
           checked={useBackgroundImage}
@@ -1235,7 +1225,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   return (
     <section
-      className="right-0 z-20 flex h-screen w-full max-w-[450px] flex-col overflow-y-auto bg-white"
+      className="right-0 z-20 flex w-full max-w-[450px] flex-col overflow-y-auto bg-white lg:h-full lg:min-h-svh"
       onClick={handleOuterClick}
     >
       <DeployModal
@@ -1253,7 +1243,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         onReset={handleReset}
       />
 
-      <div className="mt-16 flex flex-col p-5">
+      <div className="flex flex-col p-5 lg:mt-10">
         {editingType === "text"
           ? renderTextEditor()
           : editingType === "icon"

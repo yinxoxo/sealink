@@ -21,11 +21,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     setIsOpen(false);
   }, [location]);
 
+  const hamburgerButtonPosition = location.pathname.includes(
+    "/dashboard/card-editor",
+  )
+    ? " hidden"
+    : " ";
+
   return (
     <div className="relative flex flex-col">
       <button
         onClick={toggleSidebar}
-        className="fixed left-5 top-5 z-50 rounded-full bg-white p-2 text-[25px] shadow-md sm:hidden"
+        className={`${hamburgerButtonPosition} fixed left-5 top-5 z-50 rounded-full bg-white p-2 text-[25px] shadow-md sm:hidden`}
       >
         <FaBars />
       </button>
