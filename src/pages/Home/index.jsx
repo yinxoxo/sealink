@@ -50,7 +50,7 @@ const Home = () => {
                   <input
                     type="text"
                     placeholder="yourname"
-                    className="ml-1 border-none text-gray-500 focus:outline-none"
+                    className="ml-1 w-[100px] border-none text-gray-500 focus:outline-none"
                   />
                 </div>
                 <Link to="/signup" className="w-full">
