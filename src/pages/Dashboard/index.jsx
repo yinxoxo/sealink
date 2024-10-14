@@ -70,17 +70,17 @@ const Dashboard = () => {
         </button>
       </Link>
 
-      <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(360px,360px))] gap-5 p-4">
+      <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(full,270px))] gap-5 p-4 sm:grid-cols-[repeat(auto-fill,minmax(330px,330px))]">
         {projects.map((project) => {
           const CardComponent = cardComponents[project.templateId];
 
           return (
-            <Card key={project.id} className="mx-auto min-w-[360px] pt-5">
+            <Card key={project.id} className="max-w-[300px] sm:min-w-[330px]">
               <div className="flex w-full flex-col items-center">
-                <div className="max-h-[300px] w-[280px] overflow-y-scroll rounded-lg">
+                <div className="border-1 h-[300px] w-full overflow-hidden rounded-t-lg">
                   <CardComponent data={project} />
                 </div>
-                <div className="mt-2 w-[280px] text-left">
+                <div className="mt-2 w-[80%] text-left">
                   <CardHeader>
                     <CardTitle className="p-0">{project.title}</CardTitle>
                   </CardHeader>
@@ -115,14 +115,14 @@ const Dashboard = () => {
 
               <div className="mb-4 flex items-center">
                 <button
-                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover"
+                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover sm:text-[18px]"
                   onClick={() => openModal(project)}
                 >
                   <IoSettingsOutline />
                 </button>
                 <div className="h-6 border-l border-gray-200" />
                 <button
-                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover"
+                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover sm:text-[18px]"
                   onClick={() => openQrcodeModal(project)}
                 >
                   <HiOutlineQrCode />
@@ -131,7 +131,7 @@ const Dashboard = () => {
 
                 <Link
                   to={`/dashboard/card-editor/${project.templateId}/${project.id}`}
-                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover"
+                  className="flex w-1/2 items-center justify-center text-gray-600 hover:text-sea-hover sm:text-[18px]"
                 >
                   <HiOutlinePencilSquare />
                 </Link>

@@ -70,7 +70,7 @@ const TimeRangeSelector = ({
   return (
     <div className="relative">
       <Select value={selectedRange} onValueChange={handleRangeChange}>
-        <SelectTrigger className="w-[300px] border-none">
+        <SelectTrigger className="w-full border-none sm:w-[300px]">
           <LuCalendarRange className="mr-2" />
           {selectedRange === "custom"
             ? selectedDateRange?.from && selectedDateRange?.to

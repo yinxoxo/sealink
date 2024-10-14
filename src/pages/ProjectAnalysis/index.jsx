@@ -41,8 +41,8 @@ const ProjectAnalysis = () => {
 
   return (
     <div className="h-fit min-h-svh w-full bg-lightGray p-7">
-      <div className="flex w-full justify-between">
-        <h1 className="mb-10 text-4xl font-bold">Data Analyze</h1>
+      <div className="mb-6 flex w-full flex-col justify-between sm:mb-0 sm:flex-row">
+        <h1 className="mb-6 mt-10 text-4xl font-bold sm:mt-0">Data Analyze</h1>
         <TimeRangeSelector
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
@@ -51,7 +51,7 @@ const ProjectAnalysis = () => {
         />
       </div>
       {projectVisitorData.length === 0 && (
-        <h1 className="mb-10 text-3xl font-bold text-sea-hover">
+        <h1 className="my-3 text-2xl font-bold text-sea-hover sm:mb-10 sm:text-3xl">
           No visitor data available for analysis.
         </h1>
       )}

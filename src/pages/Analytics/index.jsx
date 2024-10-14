@@ -11,11 +11,11 @@ const Analytics = () => {
   }
 
   return (
-    <div className="bg-lightGray h-fit min-h-svh w-full p-7">
-      <h1 className="mb-10 text-3xl font-bold">
+    <div className="h-fit min-h-svh w-full bg-lightGray p-7">
+      <h1 className="mb-6 mt-14 text-3xl font-bold sm:mb-10 sm:mt-0">
         Select a Project to <span className="text-sea-hover">Analyze</span>
       </h1>
-      <div className="grid w-full grid-cols-[repeat(auto-fill,_minmax(200px,200px))] gap-5">
+      <div className="grid w-full grid-cols-[repeat(auto-fill,_minmax(200px,200px))] justify-center gap-5 sm:justify-start">
         {projects.map((project) => (
           <Link
             key={project.id}

@@ -20,7 +20,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     <div className="relative flex flex-col">
       <button
         onClick={toggleSidebar}
-        className="fixed left-5 top-5 z-50 rounded-full bg-white p-2 text-[20px] shadow-md sm:hidden"
+        className="fixed left-5 top-5 z-50 rounded-full bg-white p-2 text-[25px] shadow-md sm:hidden"
       >
         <FaBars />
       </button>
@@ -31,7 +31,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       >
         <button
           onClick={toggleSidebar}
-          className="absolute left-5 top-5 z-20 rounded-full bg-white p-2 text-[20px]"
+          className="absolute left-5 top-5 z-20 rounded-full bg-white p-2 text-[25px]"
         >
           <FaBars />
         </button>
