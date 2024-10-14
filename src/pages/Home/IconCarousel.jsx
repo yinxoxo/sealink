@@ -27,7 +27,7 @@ const IconCarousel = ({ currentIndex }) => {
                 key={`${iconItem.id}-${index}`}
                 className="flex-shrink-0 xl:w-[160px]"
               >
-                <button className="relative flex items-center justify-center transition-all duration-500">
+                <button className="relative flex cursor-default items-center justify-center transition-all duration-500">
                   <div
                     className="relative flex h-[40px] w-[40px] items-center justify-center rounded-md transition-all duration-300 xl:h-[90px] xl:w-[90px]"
                     style={{
