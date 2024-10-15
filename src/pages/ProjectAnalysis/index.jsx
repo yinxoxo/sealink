@@ -23,12 +23,6 @@ const ProjectAnalysis = () => {
 
   useEffect(() => {
     if (projectId) {
-      console.log(
-        "Loading data for project:",
-        projectId,
-        "with date range:",
-        selectedDateRange,
-      );
       loadVisitorData(projectId, selectedDateRange);
     }
   }, [projectId, selectedDateRange, loadVisitorData]);
