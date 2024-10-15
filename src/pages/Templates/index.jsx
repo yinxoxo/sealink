@@ -45,13 +45,13 @@ const Template = () => {
         {!user ? (
           <div
             onClick={() => handleNavigate("/login", "/templates")}
-            className="mt-4 px-4 py-2 text-[68px] font-bold text-sea opacity-70 shadow-md"
+            className="mt-4 px-4 py-2 text-[68px] font-bold text-sea opacity-70"
           >
             Sign up <br />
             or <br /> Log in
           </div>
         ) : (
-          <div className="mt-4 px-4 py-2 text-[68px] font-bold text-sea opacity-70 shadow-md">
+          <div className="mt-4 px-4 py-2 text-[68px] font-bold text-sea opacity-70">
             Build <br /> Your <br /> SeaLink
           </div>
         )}
