@@ -30,7 +30,7 @@ const CropperModal = ({
           This is where you can crop your image.
         </DialogDescription>
       </VisuallyHidden>
-      <div className="relative" style={{ height: 600, width: "100%" }}>
+      <div className="relative h-[600px] w-full">
         {imageUrl && (
           <Cropper
             image={imageUrl}
