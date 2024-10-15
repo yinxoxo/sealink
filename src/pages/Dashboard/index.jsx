@@ -21,6 +21,7 @@ import NinaWishCard from "../../cardTemplate/NinaWishCard";
 import QrcodeModal from "./QrcodeModal";
 import ProjectSetting from "./ProjectSetting";
 import Loading from "../../components/Loading/index";
+import codingImg from "../../images/coding.svg";
 
 const Dashboard = () => {
   const { projects, loading } = useProjects();
@@ -64,12 +65,23 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-full w-full flex-col p-7">
-      <Link to="/templates" className="self-end">
-        <button className="w-fit rounded-lg bg-sea p-2 text-white hover:bg-sea-hover">
+      <Link to="/templates" className="z-20 self-end">
+        <button className="w-fit rounded-lg bg-sea p-3 font-semibold text-white hover:bg-sea-hover">
           Create New SeaLink
         </button>
       </Link>
-
+      {projects.length === 0 && (
+        <div className="0 absolute inset-0 flex flex-col items-center justify-center">
+          <img
+            src={codingImg}
+            alt="Coding"
+            className="mb-6 h-32 w-32 opacity-50"
+          />
+          <h1 className="text-[26px] font-extrabold text-sea opacity-50 sm:text-[38px] xl:text-[72px]">
+            Let Create Your First SeaLink
+          </h1>
+        </div>
+      )}
       <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(full,270px))] gap-5 p-4 sm:grid-cols-[repeat(auto-fill,minmax(330px,330px))]">
         {projects.map((project) => {
           const CardComponent = cardComponents[project.templateId];

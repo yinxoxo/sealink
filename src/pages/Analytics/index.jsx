@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useProjects } from "../../contexts/ProjectContext/useProjects";
 import dayjs from "dayjs";
 import Loading from "../../components/Loading/index";
+import sadImage from "../../images/sad.svg";
 
 const Analytics = () => {
   const { projects, loading } = useProjects();
@@ -12,9 +13,18 @@ const Analytics = () => {
 
   return (
     <div className="h-fit min-h-svh w-full bg-lightGray p-7">
-      <h1 className="mb-6 mt-14 text-3xl font-bold sm:mb-10 sm:mt-0">
+      {projects.length === 0 && (
+        <div className="0 absolute inset-0 flex flex-col items-center justify-center">
+          <img src={sadImage} alt="sad" className="mb-6 h-32 w-32 opacity-50" />
+          <h1 className="text-[22px] font-extrabold opacity-50 sm:text-[32px] xl:text-[42px]">
+            Oops! You don't have any projects yet
+          </h1>
+        </div>
+      )}
+      <h1 className="mb-6 mt-14 text-3xl font-bold sm:mb-10 lg:mt-0">
         Select a Project to <span className="text-sea-hover">Analyze</span>
       </h1>
+
       <div className="grid w-full grid-cols-[repeat(auto-fill,_minmax(200px,200px))] justify-center gap-5 sm:justify-start">
         {projects.map((project) => (
           <Link
