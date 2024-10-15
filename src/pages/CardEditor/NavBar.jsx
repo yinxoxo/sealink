@@ -42,7 +42,7 @@ const NavBar = ({
   };
 
   return (
-    <nav className="fixed top-0 z-10 w-full bg-white lg:w-[450px]">
+    <nav className="fixed top-0 z-10 w-full bg-white xl:w-[450px]">
       <div className="relative flex items-center justify-between border-b-2 border-solid border-gray-300 p-5 text-white">
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -92,13 +92,13 @@ const NavBar = ({
         {isMobile ? (
           <FaDesktop
             size={20}
-            className="hidden cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover sm:inline-block"
+            className="hidden cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover xl:inline-block"
             onClick={handleToggleMobile}
           />
         ) : (
           <FaMobileScreen
             size={20}
-            className="hidden cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover"
+            className="hidden cursor-pointer text-icon transition-transform duration-300 hover:scale-125 hover:text-icon-hover xl:inline-block"
             onClick={handleToggleMobile}
           />
         )}

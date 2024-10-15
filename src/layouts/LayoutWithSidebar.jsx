@@ -9,7 +9,7 @@ const LayoutWithSidebar = () => {
     <div className="flex h-full">
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       <div
-        className={`transition-all duration-300 ${isOpen ? "sm:ml-64" : "sm:ml-20"} flex-1`}
+        className={`transition-all duration-300 ${isOpen ? "sm:ml-64" : "sm:ml-20 md:ml-0 xl:ml-20"} flex-1`}
       >
         <Outlet />
       </div>

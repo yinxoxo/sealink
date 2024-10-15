@@ -25,19 +25,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     "/dashboard/card-editor",
   )
     ? " hidden"
-    : " ";
+    : "fixed ";
 
   return (
     <div className="relative flex flex-col">
       <button
         onClick={toggleSidebar}
-        className={`${hamburgerButtonPosition} fixed left-5 top-5 z-50 rounded-full bg-white p-2 text-[25px] shadow-md sm:hidden`}
+        className={`${hamburgerButtonPosition} left-5 top-5 z-50 rounded-full bg-white p-2 text-[25px] shadow-md`}
       >
         <FaBars />
       </button>
       <nav
         className={`fixed z-50 flex h-full ${
-          isOpen ? "w-full sm:w-64" : "left-[-4rem] w-0 sm:left-0 sm:w-20"
+          isOpen
+            ? "w-full sm:w-64"
+            : "left-[-4rem] w-0 sm:left-0 sm:w-20 md:left-[-5rem] xl:left-0 xl:w-20"
         } flex-col justify-between bg-white shadow-lg transition-all duration-300`}
       >
         <button

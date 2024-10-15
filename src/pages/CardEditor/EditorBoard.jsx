@@ -1070,7 +1070,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const renderAvatarEditor = () => (
     <div>
       <div className="flex w-full">
-        <FaBacon />
         <h1 className="ml-2 text-3xl font-bold">Avatar</h1>
       </div>
 
@@ -1165,7 +1164,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
                 <div className="mb-4 flex w-full">
-                  <FaBacon />
                   <h1 className="ml-2 text-3xl font-bold"> Title (required)</h1>
                 </div>
                 <Input
@@ -1187,7 +1185,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
                 <div className="my-6 flex w-full">
-                  <FaBacon />
                   <h1 className="ml-2 text-2xl font-bold">Action</h1>
                 </div>
                 <RadioGroup
@@ -1225,7 +1222,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   return (
     <section
-      className="right-0 z-20 flex w-full max-w-[450px] flex-col overflow-y-auto bg-white lg:h-full lg:min-h-svh"
+      className="right-0 z-20 flex w-full flex-col overflow-y-auto bg-white lg:h-full lg:min-h-svh lg:w-full xl:max-w-[450px]"
       onClick={handleOuterClick}
     >
       <DeployModal
@@ -1243,7 +1240,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         onReset={handleReset}
       />
 
-      <div className="flex flex-col p-5 lg:mt-10">
+      <div className="flex flex-col p-5 xl:mt-16">
         {editingType === "text"
           ? renderTextEditor()
           : editingType === "icon"
