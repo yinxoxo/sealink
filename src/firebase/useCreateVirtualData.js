@@ -50,11 +50,11 @@ const useCreateVirtualData = () => {
     return newDate;
   };
 
-  const generateFakeVisitorDataForMonth = async (userId, projectId) => {
+  const generateFakeVisitorDataForYear = async (userId, projectId) => {
     try {
       const today = new Date();
-      const oneMonthAgo = new Date(today);
-      oneMonthAgo.setMonth(today.getMonth() - 1);
+      const oneYearAgo = new Date(today);
+      oneYearAgo.setFullYear(today.getFullYear() - 1);
 
       const visitorDataCollection = collection(
         db,
@@ -62,7 +62,7 @@ const useCreateVirtualData = () => {
       );
 
       for (
-        let d = new Date(oneMonthAgo);
+        let d = new Date(oneYearAgo);
         d <= today;
         d.setDate(d.getDate() + 1)
       ) {
@@ -96,7 +96,7 @@ const useCreateVirtualData = () => {
     }
   };
 
-  return { generateFakeVisitorDataForMonth };
+  return { generateFakeVisitorDataForYear };
 };
 
 export default useCreateVirtualData;
