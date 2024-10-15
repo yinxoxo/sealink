@@ -82,18 +82,18 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="space-y-2">
+    <Dialog open={isOpen} onOpenChange={onClose} className="w-full">
+      <DialogContent className="w-[80%] space-y-2 sm:w-full sm:max-w-fit">
         <DialogHeader>
           <DialogTitle>Overview</DialogTitle>
         </DialogHeader>
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-[250px] sm:max-w-[460px]">
           <div className="mt-4">
             <label className="block text-sm font-medium">Project Title</label>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-2 w-full"
+              className="mt-2 w-full overflow-x-auto"
             />
 
             <div className="mt-4">
@@ -104,7 +104,7 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
                     href={`https://sealink-4b0fd.web.app${project.publishedUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 block w-full overflow-x-auto whitespace-nowrap rounded-md border border-gray-300 p-2 text-sea underline hover:text-sea-hover"
+                    className="mt-2 block w-full overflow-hidden overflow-x-auto whitespace-nowrap rounded-md border border-gray-300 p-2 text-sea underline hover:text-sea-hover"
                   >
                     {`https://sealink-4b0fd.web.app${project.publishedUrl}`}
                   </a>
