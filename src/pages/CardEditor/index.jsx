@@ -70,9 +70,13 @@ const CardEditorContent = ({ template }) => {
         }}
       />
 
-      <div className="relative z-10 mt-[60px] flex flex-grow flex-col items-center xl:h-screen">
+      <div className="relative z-10 mt-[60px] flex flex-grow flex-col items-center xl:mt-0 xl:h-screen">
         <div
-          className={`overflow-y-auto rounded-3xl shadow-2xl xl:my-auto ${isMobile ? "h-[700px] w-[400px]" : "h-[530px] w-[900px]"}`}
+          className={`overflow-y-auto rounded-3xl shadow-2xl xl:my-auto ${
+            isMobile
+              ? "h-[717px] w-[340px] lg:h-[801px] lg:w-[380px] 2xl:h-[1012px] 2xl:w-[480px]"
+              : "h-[calc(56.25vw)] w-[calc(100vw-200px)] xl:max-h-[426px] xl:max-w-[720px] 2xl:max-h-[636px] 2xl:max-w-[1080px]"
+          }`}
         >
           {renderTemplate()}
         </div>
