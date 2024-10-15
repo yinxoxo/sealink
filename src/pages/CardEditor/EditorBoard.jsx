@@ -1155,7 +1155,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   const renderUserProjectForm = () => {
     return (
-      <div className="rounded-lg p-4">
+      <div className="rounded-lg">
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             name="title"
@@ -1164,7 +1164,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
                 <div className="mb-4 flex w-full">
-                  <h1 className="ml-2 text-3xl font-bold"> Title (required)</h1>
+                  <h1 className="text-3xl font-bold">Title (required)</h1>
                 </div>
                 <Input
                   {...field}
@@ -1185,7 +1185,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
                 <div className="my-6 flex w-full">
-                  <h1 className="ml-2 text-2xl font-bold">Action</h1>
+                  <h1 className="text-2xl font-bold">Action</h1>
                 </div>
                 <RadioGroup
                   value={field.value}
@@ -1222,7 +1222,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
   return (
     <section
-      className="right-0 z-20 flex w-full flex-col overflow-y-auto bg-white lg:h-full lg:min-h-svh lg:w-full xl:max-w-[450px]"
+      className="right-0 z-20 flex w-full flex-col overflow-y-auto bg-white lg:h-full lg:max-h-svh lg:w-full xl:max-w-[450px]"
       onClick={handleOuterClick}
     >
       <DeployModal
