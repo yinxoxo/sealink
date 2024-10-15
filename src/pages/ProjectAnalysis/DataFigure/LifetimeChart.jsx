@@ -15,9 +15,9 @@ const LifetimeChart = ({ loading, visitorData }) => {
   return (
     <div className="w-full space-y-5 p-3">
       <h1 className="text-2xl font-semibold">Lifetime</h1>
-      <div className="flex w-full items-center justify-between bg-white">
+      <div className="flex w-full flex-wrap items-center justify-between space-y-2 bg-white">
         <div className="flex items-center space-x-2">
-          <div className="bg-lightGray rounded-full p-2">
+          <div className="rounded-full bg-lightGray p-2">
             <FiEye size={20} className="text-gray-700" />
           </div>
           <div>
@@ -27,7 +27,7 @@ const LifetimeChart = ({ loading, visitorData }) => {
         </div>
 
         <div className="flex items-center space-x-2">
-          <div className="bg-lightGray rounded-full p-2">
+          <div className="rounded-full bg-lightGray p-2">
             <FiLink size={20} className="text-gray-700" />
           </div>
           <div>
@@ -37,7 +37,7 @@ const LifetimeChart = ({ loading, visitorData }) => {
         </div>
 
         <div className="flex items-center space-x-2">
-          <div className="bg-lightGray rounded-full p-2">
+          <div className="rounded-full bg-lightGray p-2">
             <FiPercent size={20} className="text-gray-700" />
           </div>
           <div>

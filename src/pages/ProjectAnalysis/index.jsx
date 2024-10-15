@@ -35,7 +35,7 @@ const ProjectAnalysis = () => {
 
   return (
     <div className="h-fit min-h-svh w-full bg-lightGray p-7">
-      <div className="mb-6 flex w-full flex-col justify-between sm:mb-0 sm:flex-row">
+      <div className="mb-6 flex w-full flex-col justify-between sm:flex-row lg:mb-0">
         <h1 className="mb-6 mt-10 text-4xl font-bold sm:mt-0">Data Analyze</h1>
         <TimeRangeSelector
           selectedDateRange={selectedDateRange}
@@ -49,8 +49,8 @@ const ProjectAnalysis = () => {
           No visitor data available for analysis.
         </h1>
       )}
-      <div className="grid w-full grid-cols-2 grid-rows-[150px_auto_1fr] gap-4">
-        <div className="col-span-2 row-span-1 max-h-[150px] w-full min-w-[300px] rounded-lg bg-white p-4">
+      <div className="grid w-full grid-cols-1 grid-rows-[200px_auto_1fr] gap-y-4 sm:grid-cols-2 sm:gap-4">
+        <div className="w-full rounded-lg bg-white p-4 sm:col-span-2 sm:max-h-[150px] sm:min-w-[300px]">
           <LifetimeChart
             loading={loadingVisitorData}
             visitorData={projectVisitorData}
