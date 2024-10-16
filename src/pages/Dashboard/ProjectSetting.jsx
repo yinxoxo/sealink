@@ -81,31 +81,9 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
     });
   };
 
-  const handleGenerateScreenshot = async () => {
-    const fullUrl = `https://sealink-4b0fd.web.app${project.publishedUrl}`;
-
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:5001/sealink-4b0fd/us-central1/pup?url=${encodeURIComponent(fullUrl)}`,
-        {
-          method: "GET",
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to call Cloud Function");
-      }
-
-      const result = await response.text(); // Cloud Function 返回的內容
-      console.log("Cloud Function Response:", result);
-    } catch (error) {
-      console.error("Error generating screenshot:", error);
-    }
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose} className="w-full">
-      <DialogContent className="w-[80%] space-y-2 sm:w-full sm:max-w-[400px] lg:max-w-[500px]">
+      <DialogContent className="w-[80%] space-y-2 sm:w-full sm:max-w-[400px] lg:max-w-[510px]">
         <DialogHeader>
           <DialogTitle>Overview</DialogTitle>
         </DialogHeader>
@@ -136,13 +114,6 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
                       onClick={handleCopy}
                     >
                       {isCopied ? "Copied!" : "Copy URL"}
-                    </Button>
-
-                    <Button
-                      className="ml-4 mt-2 bg-sea text-white hover:bg-sea-hover"
-                      onClick={handleGenerateScreenshot}
-                    >
-                      Generate Screenshot
                     </Button>
                   </div>
                 </>
