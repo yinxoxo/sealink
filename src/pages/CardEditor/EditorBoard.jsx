@@ -38,7 +38,10 @@ import fontOptions from "../../cardTemplate/cardContent/fontOptions";
 
 import { storage } from "../../firebase/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
+import {
+  saveProjectToFirestore,
+  updateScreenshotUrl,
+} from "../../firebase/saveProjectToFirestore";
 
 import getCroppedImg from "../../utils/getCroppedImg";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
@@ -210,6 +213,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       },
       isPublished: data.action === "publish",
       publishedUrl: null,
+      screenshotUrl: projectData.screenshotUrl || null,
     };
 
     const dataToMutate = {
@@ -223,14 +227,19 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const mutation = useMutation(
     (dataToMutate) => saveProjectToFirestore(user.uid, projectId, dataToMutate),
     {
-      onSuccess: (result, dataToMutate) => {
+      onSuccess: async (result, dataToMutate) => {
         const { action } = dataToMutate;
         const { publishedUrl } = result;
         queryClient.invalidateQueries("userProjects");
 
         if (action === "publish") {
+          const fullUrl = `https://sealink-4b0fd.web.app${publishedUrl}`;
+          console.log("Generated fullUrl:", fullUrl);
+
           setNewProjectUrl(publishedUrl);
           setIsModalOpen(true);
+
+          await handleProjectScreenShot(fullUrl, projectId);
         } else {
           navigate("/dashboard");
         }
@@ -240,6 +249,32 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       },
     },
   );
+
+  const handleProjectScreenShot = async (fullUrl, projectId) => {
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:5001/sealink-4b0fd/us-central1/pup?url=${encodeURIComponent(fullUrl)}`,
+        {
+          method: "GET",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to call Cloud Function");
+      }
+
+      const result = await response.json();
+      const { screenshotUrl } = result;
+      console.log("Screenshot URL:", screenshotUrl);
+
+      await updateScreenshotUrl(user.uid, projectId, screenshotUrl);
+      console.log(
+        `Screenshot URL successfully uploaded for project ID: ${projectId}`,
+      );
+    } catch (error) {
+      console.error("Error generating screenshot:", error);
+    }
+  };
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
