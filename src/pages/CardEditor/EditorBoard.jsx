@@ -253,7 +253,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const handleProjectScreenShot = async (fullUrl, projectId) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:5001/sealink-4b0fd/us-central1/pup?url=${encodeURIComponent(fullUrl)}`,
+        `https://us-central1-sealink-4b0fd.cloudfunctions.net/pup?url=${encodeURIComponent(fullUrl)}`,
         {
           method: "GET",
         },

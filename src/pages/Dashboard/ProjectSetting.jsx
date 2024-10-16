@@ -105,7 +105,7 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose} className="w-full">
-      <DialogContent className="w-[80%] space-y-2 sm:w-full sm:max-w-fit">
+      <DialogContent className="w-[80%] space-y-2 sm:w-full sm:max-w-[400px] lg:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Overview</DialogTitle>
         </DialogHeader>

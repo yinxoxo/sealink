@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { useVisitorProject } from "../../firebase/useVisitorProject";
 import useRecordVisitorData from "@/firebase/useRecordVisitorData";
 import Loading from "../../components/Loading";
@@ -42,9 +43,23 @@ const Deploy = () => {
   if (isError || !projectData || !projectData.isPublished) {
     return <NotFound />;
   }
+  console.log("project data in deploy", projectData.screenshotUrl);
 
   return (
     <div className="h-full min-h-screen w-full">
+      <Helmet>
+        <title>{projectData.title}</title>
+        <meta property="og:title" content={projectData.title} />
+        <meta
+          property="og:description"
+          content="Check out this awesome project!"
+        />
+        {projectData.screenshotUrl && (
+          <meta property="og:image" content={projectData.screenshotUrl} />
+        )}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={window.location.href} />
+      </Helmet>
       {CardComponent ? <CardComponent data={projectData} /> : <NotFound />}
     </div>
   );

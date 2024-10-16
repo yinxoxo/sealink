@@ -4,6 +4,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
 import Templates from "./pages/Templates";
@@ -28,59 +29,62 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <DndProvider backend={HTML5Backend}>
-        <AuthProvider>
-          <ProjectsProvider>
-            <Router>
-              <Routes>
-                <Route path="/" element={<LayoutWithHeaderFooter />}>
-                  <Route index element={<Home />} />
-                  <Route path="templates" element={<Templates />} />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Route>
-                <Route path="/signup" element={<SignUp />} />
-                <Route
-                  path="/sealink/:userId/:template/:projectId"
-                  element={
-                    <CardEditorProvider>
-                      <Deploy />
-                    </CardEditorProvider>
-                  }
-                />
-                <Route
-                  path="/dashboard"
-                  element={<PrivateRoute element={<LayoutWithSidebar />} />}
-                >
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <DndProvider backend={HTML5Backend}>
+          <AuthProvider>
+            <ProjectsProvider>
+              <Router>
+                <Routes>
+                  <Route path="/" element={<LayoutWithHeaderFooter />}>
+                    <Route index element={<Home />} />
+                    <Route path="templates" element={<Templates />} />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </Route>
+                  <Route path="/signup" element={<SignUp />} />
                   <Route
-                    index
+                    path="/sealink/:userId/:template/:projectId"
                     element={
                       <CardEditorProvider>
-                        <Dashboard />
+                        <Deploy />
                       </CardEditorProvider>
                     }
                   />
+
                   <Route
-                    path="card-editor/:template/:projectId?"
-                    element={
-                      <CardEditorProvider>
-                        <CardEditor />
-                      </CardEditorProvider>
-                    }
-                  />
-                  <Route path="analytics" element={<Analytics />} />
-                  <Route
-                    path="analytics/:projectId"
-                    element={<ProjectAnalysis />}
-                  />
-                </Route>
-              </Routes>
-              <Toaster />
-            </Router>
-          </ProjectsProvider>
-        </AuthProvider>
-      </DndProvider>
-    </QueryClientProvider>
+                    path="/dashboard"
+                    element={<PrivateRoute element={<LayoutWithSidebar />} />}
+                  >
+                    <Route
+                      index
+                      element={
+                        <CardEditorProvider>
+                          <Dashboard />
+                        </CardEditorProvider>
+                      }
+                    />
+                    <Route
+                      path="card-editor/:template/:projectId?"
+                      element={
+                        <CardEditorProvider>
+                          <CardEditor />
+                        </CardEditorProvider>
+                      }
+                    />
+                    <Route path="analytics" element={<Analytics />} />
+                    <Route
+                      path="analytics/:projectId"
+                      element={<ProjectAnalysis />}
+                    />
+                  </Route>
+                </Routes>
+                <Toaster />
+              </Router>
+            </ProjectsProvider>
+          </AuthProvider>
+        </DndProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 }
 
