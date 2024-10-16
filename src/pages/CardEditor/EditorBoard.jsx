@@ -1198,8 +1198,12 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             rules={{ required: "Title is required" }}
             render={({ field, fieldState: { error } }) => (
               <div className="mb-4">
-                <div className="mb-4 flex w-full">
+                <div className="mb-4 flex w-full flex-col">
                   <h1 className="text-3xl font-bold">Title (required)</h1>
+                  <small className="mt-1 text-gray-500">
+                    This site's title (and what gets shown at the top of the
+                    browser window).
+                  </small>
                 </div>
                 <Input
                   {...field}
