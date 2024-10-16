@@ -77,7 +77,12 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { template } = useParams();
-  const { control, handleSubmit, setValue } = useForm();
+  const defaultValues = {
+    title: projectData?.title || "",
+  };
+  const { control, handleSubmit } = useForm({
+    defaultValues,
+  });
 
   const [history, setHistory] = useState([projectData]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -89,7 +94,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setCurrentStep(currentStep + 1);
     setRedoHistory([]);
     setProjectData(newData);
-    console.log("update data");
   };
 
   const handleUndo = () => {
@@ -146,12 +150,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setShowBackgroundColorPicker(false);
     setShowFontColorPicker(false);
   };
-
-  useEffect(() => {
-    if (projectData) {
-      setValue("title", projectData.title);
-    }
-  }, [projectData, setValue]);
 
   const onSubmit = async (data) => {
     const newProjectData = {
@@ -239,7 +237,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           setNewProjectUrl(publishedUrl);
           setIsModalOpen(true);
 
-          await handleProjectScreenShot(fullUrl, projectId);
+          // await handleProjectScreenShot(fullUrl, projectId);
         } else {
           navigate("/dashboard");
         }
@@ -250,31 +248,31 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     },
   );
 
-  const handleProjectScreenShot = async (fullUrl, projectId) => {
-    try {
-      const response = await fetch(
-        `https://us-central1-sealink-4b0fd.cloudfunctions.net/pup?url=${encodeURIComponent(fullUrl)}`,
-        {
-          method: "GET",
-        },
-      );
+  // const handleProjectScreenShot = async (fullUrl, projectId) => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://us-central1-sealink-4b0fd.cloudfunctions.net/pup?url=${encodeURIComponent(fullUrl)}`,
+  //       {
+  //         method: "GET",
+  //       },
+  //     );
 
-      if (!response.ok) {
-        throw new Error("Failed to call Cloud Function");
-      }
+  //     if (!response.ok) {
+  //       throw new Error("Failed to call Cloud Function");
+  //     }
 
-      const result = await response.json();
-      const { screenshotUrl } = result;
-      console.log("Screenshot URL:", screenshotUrl);
+  //     const result = await response.json();
+  //     const { screenshotUrl } = result;
+  //     console.log("Screenshot URL:", screenshotUrl);
 
-      await updateScreenshotUrl(user.uid, projectId, screenshotUrl);
-      console.log(
-        `Screenshot URL successfully uploaded for project ID: ${projectId}`,
-      );
-    } catch (error) {
-      console.error("Error generating screenshot:", error);
-    }
-  };
+  //     await updateScreenshotUrl(user.uid, projectId, screenshotUrl);
+  //     console.log(
+  //       `Screenshot URL successfully uploaded for project ID: ${projectId}`,
+  //     );
+  //   } catch (error) {
+  //     console.error("Error generating screenshot:", error);
+  //   }
+  // };
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
