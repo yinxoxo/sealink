@@ -49,7 +49,7 @@ const ProjectAnalysis = () => {
           No visitor data available for analysis.
         </h1>
       )}
-      <div className="grid w-full grid-cols-1 grid-rows-[200px_auto_1fr] gap-y-4 sm:grid-cols-2 sm:gap-4">
+      <div className="grid w-full grid-cols-1 grid-rows-[200px_auto_1fr] gap-y-4 sm:grid-cols-2 sm:grid-rows-[150px_auto_1fr] sm:gap-4">
         <div className="w-full rounded-lg bg-white p-4 sm:col-span-2 sm:max-h-[150px] sm:min-w-[300px]">
           <LifetimeChart
             loading={loadingVisitorData}
