@@ -29,5 +29,6 @@ export const fetchUserProjects = async (user) => {
 export const useUserProjects = (user) => {
   return useQuery(["userProjects", user?.uid], () => fetchUserProjects(user), {
     enabled: !!user?.uid,
+    refetchOnWindowFocus: false,
   });
 };
