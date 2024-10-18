@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userInfo) => {
     if (!userInfo.displayName) {
-      console.log("Display name missing, fetching from Firestore");
       const displayName = await fetchDisplayNameFromFirestore(userInfo.uid);
       userInfo = {
         ...userInfo,
@@ -38,13 +37,11 @@ export const AuthProvider = ({ children }) => {
     }
     setUser(userInfo);
     localStorage.setItem("user", JSON.stringify(userInfo));
-    console.log("User info set in localStorage and state:", userInfo);
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    console.log("User info removed from state and localStorage");
   };
 
   return (

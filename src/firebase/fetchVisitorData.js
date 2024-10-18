@@ -33,9 +33,6 @@ export const fetchVisitorData = async (user, projectId, startDate, endDate) => {
       id: visitorDoc.id,
       ...visitorDoc.data(),
     }));
-
-    console.log("Fetched visitor data:", visitorData);
-
     return visitorData;
   } catch (error) {
     console.error("Error fetching visitor data: ", error);
