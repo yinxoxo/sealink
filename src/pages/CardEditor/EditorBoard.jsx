@@ -120,7 +120,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       setProjectData(history[0]);
       setCurrentStep(0);
       setRedoHistory([]);
-      console.log("Project reset to initial state");
     }
   };
 
@@ -232,7 +231,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
 
         if (action === "publish") {
           const fullUrl = `https://sealink-4b0fd.web.app${publishedUrl}`;
-          console.log("Generated fullUrl:", fullUrl);
 
           setNewProjectUrl(publishedUrl);
           setIsModalOpen(true);
@@ -440,9 +438,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   };
 
   const handleIconDelete = (id) => {
-    console.log("Deleting icon with ID:", id);
     const updatedIcons = icons.filter((icon) => icon.id !== id);
-    console.log("Icons after deletion:", updatedIcons);
 
     const updatedData = {
       ...projectData,
@@ -558,7 +554,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             const updatedTexts = projectData.texts.map((item) =>
               item.id === selectedText ? editableTextItem : item,
             );
-            console.log(updatedTexts);
+
             const updatedData = {
               ...projectData,
               texts: updatedTexts,
@@ -1013,7 +1009,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                     backgroundColor: null,
                   },
                 };
-                console.log(updatedData);
+
                 setProjectData(updatedData);
                 updateProjectData(updatedData);
                 setIsCropModalVisible(false);
@@ -1175,7 +1171,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 },
               },
             };
-            console.log(updatedData);
             setProjectData(updatedData);
             updateProjectData(updatedData);
             setIsCropModalVisible(false);

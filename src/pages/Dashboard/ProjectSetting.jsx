@@ -30,7 +30,7 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
     {
       onSuccess: (result) => {
         queryClient.invalidateQueries("userProjects");
-        console.log(result);
+
         onClose();
       },
       onError: (error) => {

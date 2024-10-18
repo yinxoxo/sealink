@@ -25,7 +25,6 @@ const TimeRangeSelector = ({
   };
 
   const handleRangeChange = (value) => {
-    console.log("Selected range changed to:", value);
     setSelectedRange(value);
 
     if (value === "last7days") {
@@ -53,7 +52,6 @@ const TimeRangeSelector = ({
 
   const handleApply = () => {
     if (tempDateRange?.from && tempDateRange?.to) {
-      console.log("Applying custom date range:", tempDateRange);
       setSelectedRange("custom");
       setSelectedDateRange(tempDateRange);
       setShowCalendar(false);

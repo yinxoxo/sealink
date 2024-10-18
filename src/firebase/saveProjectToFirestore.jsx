@@ -12,10 +12,6 @@ export const updateScreenshotUrl = async (userId, projectId, screenshotUrl) => {
     const projectRef = doc(db, `users/${userId}/projects/${projectId}`);
 
     await setDoc(projectRef, { screenshotUrl }, { merge: true });
-
-    console.log(
-      `Screenshot URL successfully uploaded for project ID: ${projectId}`,
-    );
   } catch (error) {
     console.error("Error updating screenshot URL:", error);
   }
@@ -51,7 +47,7 @@ export const saveProjectToFirestore = async (
         },
         { merge: true },
       );
-      console.log("Project saved successfully with ID: ", projectId);
+
       return { projectId, publishedUrl: projectData.publishedUrl };
     } else {
       const projectRef = await addDoc(
@@ -71,10 +67,7 @@ export const saveProjectToFirestore = async (
         },
       );
       const newProjectId = projectRef.id;
-      console.log(
-        "Project created successfully with auto-generated ID: ",
-        projectRef.id,
-      );
+
       let publishedUrl = null;
       if (projectData.isPublished) {
         const publishedUrl = `/sealink/${userId}/${projectData.templateId}/${newProjectId}`;

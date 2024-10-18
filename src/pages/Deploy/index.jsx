@@ -43,7 +43,6 @@ const Deploy = () => {
   if (isError || !projectData || !projectData.isPublished) {
     return <NotFound />;
   }
-  console.log("project data in deploy", projectData.screenshotUrl);
 
   return (
     <div className="h-full min-h-screen w-full">

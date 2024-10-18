@@ -89,8 +89,6 @@ const useCreateVirtualData = () => {
           });
         }
       }
-
-      console.log("Successfully added fake data for the past month!");
     } catch (error) {
       console.error("Error generating fake data:", error);
     }

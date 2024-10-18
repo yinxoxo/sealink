@@ -43,7 +43,6 @@ const SignUp = () => {
       login(user);
       setUserId(user.uid);
       setIsNewUser(true);
-      console.log("User registered successfully with UID:", user.uid);
     } catch (error) {
       console.error("Registration failed:", error.message);
       setFormError(error.message);
@@ -68,7 +67,6 @@ const SignUp = () => {
       const updatedUser = { uid: userId, displayName };
       login(updatedUser);
       setIsNewUser(false);
-      console.log("Display name saved successfully");
       navigate("/dashboard");
     } catch (error) {
       console.error("Error saving display name:", error.message);
@@ -91,12 +89,9 @@ const SignUp = () => {
         displayName: updatedUser.displayName,
       });
 
-      console.log("Login successful!");
-
       const redirectTo = location.state?.from
         ? `/${location.state.from}`
         : "/dashboard";
-      console.log("Redirect to:", redirectTo);
       navigate(redirectTo);
     } catch (error) {
       console.error("Login failed:", error.message);
@@ -108,7 +103,6 @@ const SignUp = () => {
     try {
       const user = await loginWithGoogle();
       login(user);
-      console.log("Google Sign-in successful");
       const redirectTo = location.state?.from
         ? `/${location.state.from}`
         : "/dashboard";
