@@ -1,17 +1,17 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { deleteProjectFromFirestore } from "../../firebase/deleteProjectFromFirestore";
+import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
 
 const ProjectSetting = ({ project, isOpen, onClose }) => {
   const [title, setTitle] = useState(project.title);

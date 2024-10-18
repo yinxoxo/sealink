@@ -1,9 +1,9 @@
-import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
-import { useDrag, useDrop } from "react-dnd";
-import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
+import { useLocation } from "react-router-dom";
 import { ICON_MAP } from "../cardTemplate/cardContent/iconList";
+import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
 
 const ItemType = "ITEM";
 

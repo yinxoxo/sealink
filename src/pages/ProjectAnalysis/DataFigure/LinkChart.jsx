@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Loading from "../../../components/Loading";
-import { ICON_MAP } from "../../../cardTemplate/cardContent/iconList";
 import { RxButton } from "react-icons/rx";
+import { ICON_MAP } from "../../../cardTemplate/cardContent/iconList";
+import Loading from "../../../components/Loading";
 
 const LinkChart = ({ loading, visitorData }) => {
   const [activeTab, setActiveTab] = useState("socialIcons");

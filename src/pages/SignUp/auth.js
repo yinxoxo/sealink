@@ -1,10 +1,10 @@
-import { auth, googleProvider } from "../../firebase/firebaseConfig";
 import {
-  signInWithPopup,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { auth, googleProvider } from "../../firebase/firebaseConfig";
 
 const firestore = getFirestore();
 

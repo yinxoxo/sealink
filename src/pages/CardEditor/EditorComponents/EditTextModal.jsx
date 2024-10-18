@@ -1,24 +1,24 @@
-import { useState } from "react";
-import { ChromePicker } from "react-color";
-import PropTypes from "prop-types";
-import fontOptions from "../../../cardTemplate/cardContent/fontOptions";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
-  SelectTrigger,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { ChromePicker } from "react-color";
+import fontOptions from "../../../cardTemplate/cardContent/fontOptions";
 
 const EditTextModal = ({
   isTextModalVisible,

@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa6";
 
 const UploadButton = ({ onUpload }) => {
@@ -44,7 +44,7 @@ const UploadButton = ({ onUpload }) => {
       <Button
         onClick={handleClick}
         disabled={uploading}
-        className="bg-button hover:bg-button-hover w-full"
+        className="w-full bg-button hover:bg-button-hover"
       >
         <FaUpload className="mr-2 h-4 w-4" />
         {uploading ? "Uploading..." : "Upload"}

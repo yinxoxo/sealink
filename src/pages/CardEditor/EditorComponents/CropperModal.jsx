@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   DialogDescription,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import Cropper from "react-easy-crop";
 import PropTypes from "prop-types";
+import Cropper from "react-easy-crop";
 
 const CropperModal = ({
   isCropModalVisible,

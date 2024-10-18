@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import sealinkLogo from "../../images/logo.png";
-import { useAuth } from "../../contexts/AuthContext/useAuth";
-import Loading from "../Loading";
+import { useEffect, useState } from "react";
 import { PiIdentificationCard } from "react-icons/pi";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
+import sealinkLogo from "../../images/logo.png";
+import Loading from "../Loading";
 
 import { LuLayoutDashboard } from "react-icons/lu";
 

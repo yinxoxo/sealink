@@ -1,6 +1,6 @@
+import PropTypes from "prop-types";
 import { LuPenLine } from "react-icons/lu";
 import { MdDelete } from "react-icons/md";
-import PropTypes from "prop-types";
 
 const IconCard = ({
   icon: IconComponent,

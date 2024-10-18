@@ -1,9 +1,9 @@
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 
 const IconSelect = ({ icons, setSelectedIcon, ICON_LIST }) => {

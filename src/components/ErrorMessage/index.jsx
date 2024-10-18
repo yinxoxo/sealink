@@ -1,5 +1,5 @@
-import alertGif from "../../images/alert.gif";
 import { Link } from "react-router-dom";
+import alertGif from "../../images/alert.gif";
 
 const ErrorMessage = ({ message }) => {
   return (

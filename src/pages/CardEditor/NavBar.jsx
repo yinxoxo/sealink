@@ -1,27 +1,27 @@
-import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
-import {
-  FaAnglesLeft,
-  FaAnglesRight,
-  FaDesktop,
-  FaRocket,
-  FaBars,
-  FaMobileScreen,
-  FaArrowsRotate,
-} from "react-icons/fa6";
 import {
   FaEdit,
-  FaTextHeight,
+  FaFlipboard,
   FaIcons,
   FaImage,
   FaRegSquare,
-  FaFlipboard,
+  FaTextHeight,
 } from "react-icons/fa";
+import {
+  FaAnglesLeft,
+  FaAnglesRight,
+  FaArrowsRotate,
+  FaBars,
+  FaDesktop,
+  FaMobileScreen,
+  FaRocket,
+} from "react-icons/fa6";
+import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 
 import {
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 

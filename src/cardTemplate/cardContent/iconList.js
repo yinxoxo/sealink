@@ -1,18 +1,18 @@
 import {
-  FaFacebook,
-  FaInstagram,
-  FaTwitter,
-  FaEnvelope,
-  FaThreads,
-  FaGithub,
-  FaYoutube,
-  FaSnapchat,
-  FaImagePortrait,
   FaDev,
-  FaLinkedin,
-  FaSpotify,
-  FaPinterest,
   FaDiscord,
+  FaEnvelope,
+  FaFacebook,
+  FaGithub,
+  FaImagePortrait,
+  FaInstagram,
+  FaLinkedin,
+  FaPinterest,
+  FaSnapchat,
+  FaSpotify,
+  FaThreads,
+  FaTwitter,
+  FaYoutube,
 } from "react-icons/fa6";
 
 const ICON_LIST = [
@@ -105,4 +105,4 @@ const ICON_STYLE = {
   },
 };
 
-export { ICON_LIST, ICON_STYLE, ICON_MAP };
+export { ICON_LIST, ICON_MAP, ICON_STYLE };

@@ -1,6 +1,6 @@
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { db } from "./firebaseConfig";
 import { ICON_LIST } from "../cardTemplate/cardContent/iconList";
+import { db } from "./firebaseConfig";
 
 const useCreateVirtualData = () => {
   const getRandomInt = (min, max) =>

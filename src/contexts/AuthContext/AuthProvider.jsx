@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { AuthContext } from "./useAuth";
 
 export const AuthProvider = ({ children }) => {

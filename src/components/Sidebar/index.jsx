@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import sealinkLogo from "../../images/logo.png";
-import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext/useAuth";
 import {
   FaBars,
   FaChartColumn,
   FaCircleLeft,
   FaFolderOpen,
 } from "react-icons/fa6";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
+import sealinkLogo from "../../images/logo.png";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { user, logout } = useAuth();

@@ -1,6 +1,6 @@
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "./firebaseConfig";
 import { useQuery } from "react-query";
+import { db } from "./firebaseConfig";
 
 export const fetchUserProjects = async (user) => {
   if (!user?.uid) {

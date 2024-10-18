@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useProjects } from "../../contexts/ProjectContext/useProjects";
-import { IoSettingsOutline } from "react-icons/io5";
-import { HiOutlineQrCode, HiOutlinePencilSquare } from "react-icons/hi2";
 import {
   Card,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import dayjs from "dayjs";
+import { useState } from "react";
+import { HiOutlinePencilSquare, HiOutlineQrCode } from "react-icons/hi2";
+import { IoSettingsOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import ArtCard from "../../cardTemplate/ArtCard";
 import BreadCard from "../../cardTemplate/BreadCard";
 import ForestCard from "../../cardTemplate/ForestCard";
 import GalaxyCard from "../../cardTemplate/GalaxyCard";
 import JiaCard from "../../cardTemplate/JiaCard";
+import NinaWishCard from "../../cardTemplate/NinaWishCard";
 import SimpleCard from "../../cardTemplate/SimpleCard";
 import WoodCard from "../../cardTemplate/WoodCard";
-import NinaWishCard from "../../cardTemplate/NinaWishCard";
-import QrcodeModal from "./QrcodeModal";
-import ProjectSetting from "./ProjectSetting";
 import Loading from "../../components/Loading/index";
+import { useProjects } from "../../contexts/ProjectContext/useProjects";
 import codingImg from "../../images/coding.svg";
+import ProjectSetting from "./ProjectSetting";
+import QrcodeModal from "./QrcodeModal";
 
 const Dashboard = () => {
   const { projects, loading } = useProjects();

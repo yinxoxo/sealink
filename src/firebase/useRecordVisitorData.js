@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
 import {
   addDoc,
   collection,
-  serverTimestamp,
-  updateDoc,
   doc,
   getDoc,
+  serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { db } from "./firebaseConfig";
 
 const useRecordVisitorData = (userId, projectId) => {

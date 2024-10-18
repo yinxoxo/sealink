@@ -1,51 +1,47 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useForm, Controller } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
-import PropTypes from "prop-types";
-import NavBar from "./NavBar";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import NavBar from "./NavBar";
 
-import {
-  ICON_LIST,
-  ICON_STYLE,
-  ICON_MAP,
-} from "../../cardTemplate/cardContent/iconList";
-import IconCard from "./EditorComponents/IconCard";
-import TextCard from "./EditorComponents/TextCard";
-import ButtonCard from "./EditorComponents/ButtonCard";
-import DeployModal from "./EditorComponents/DeployModal";
-import EditTextModal from "./EditorComponents/EditTextModal";
-import EditIconModal from "./EditorComponents/EditIconModal";
-import EditButtonModal from "./EditorComponents/EditButtonModal";
-import CropperModal from "./EditorComponents/CropperModal";
-import UploadButton from "./EditorComponents/UploadButton";
-import IconSelect from "./EditorComponents/IconSelect";
 import { ChromePicker } from "react-color";
 import fontOptions from "../../cardTemplate/cardContent/fontOptions";
-
-import { storage } from "../../firebase/firebaseConfig";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import {
-  saveProjectToFirestore,
-  updateScreenshotUrl,
-} from "../../firebase/saveProjectToFirestore";
+  ICON_LIST,
+  ICON_MAP,
+  ICON_STYLE,
+} from "../../cardTemplate/cardContent/iconList";
+import ButtonCard from "./EditorComponents/ButtonCard";
+import CropperModal from "./EditorComponents/CropperModal";
+import DeployModal from "./EditorComponents/DeployModal";
+import EditButtonModal from "./EditorComponents/EditButtonModal";
+import EditIconModal from "./EditorComponents/EditIconModal";
+import EditTextModal from "./EditorComponents/EditTextModal";
+import IconCard from "./EditorComponents/IconCard";
+import IconSelect from "./EditorComponents/IconSelect";
+import TextCard from "./EditorComponents/TextCard";
+import UploadButton from "./EditorComponents/UploadButton";
 
-import getCroppedImg from "../../utils/getCroppedImg";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "../../firebase/firebaseConfig";
+import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
+
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
+import getCroppedImg from "../../utils/getCroppedImg";
 
 import { FaRegTrashCan } from "react-icons/fa6";
 

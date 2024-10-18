@@ -1,16 +1,16 @@
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { FaGoogle } from "react-icons/fa6";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
+import sealinkLogo from "../../images/logo.png";
 import {
-  loginWithGoogle,
   loginWithEmail,
+  loginWithGoogle,
   registerWithEmail,
   saveUserToFirestore,
 } from "./auth";
-import { useAuth } from "../../contexts/AuthContext/useAuth";
-import sealinkLogo from "../../images/logo.png";
-import { FaGoogle } from "react-icons/fa6";
-import { Button } from "@/components/ui/button";
 
 const SignUp = () => {
   const { login } = useAuth();

@@ -1,13 +1,13 @@
-import { useRef } from "react";
-import { QRCodeCanvas } from "qrcode.react";
-import logo from "../../images/logo.png";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { QRCodeCanvas } from "qrcode.react";
+import { useRef } from "react";
+import logo from "../../images/logo.png";
 
 const QrcodeModal = ({ isOpen, onClose, project }) => {
   const qrCodeRef = useRef();

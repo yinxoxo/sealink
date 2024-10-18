@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ArtCard from "../../cardTemplate/ArtCard";
-import SimpleCard from "../../cardTemplate/SimpleCard";
-import WoodCard from "../../cardTemplate/WoodCard";
 import BreadCard from "../../cardTemplate/BreadCard";
-import JiaCard from "../../cardTemplate/JiaCard";
 import ForestCard from "../../cardTemplate/ForestCard";
 import GalaxyCard from "../../cardTemplate/GalaxyCard";
+import JiaCard from "../../cardTemplate/JiaCard";
 import NinaWishCard from "../../cardTemplate/NinaWishCard";
-import EditBoard from "./EditorBoard";
+import SimpleCard from "../../cardTemplate/SimpleCard";
+import WoodCard from "../../cardTemplate/WoodCard";
 import ErrorMessage from "../../components/ErrorMessage";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
+import EditBoard from "./EditorBoard";
 
 const CardEditor = () => {
   const { template } = useParams();

@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "./firebaseConfig";
 import { useQuery } from "react-query";
+import { db } from "./firebaseConfig";
 
 export const visitorFetchProject = async (userId, projectId) => {
   if (!userId || !projectId) {
