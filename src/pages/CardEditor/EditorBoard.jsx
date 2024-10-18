@@ -226,12 +226,8 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         queryClient.invalidateQueries("userProjects");
 
         if (action === "publish") {
-          const fullUrl = `https://sealink-4b0fd.web.app${publishedUrl}`;
-
           setNewProjectUrl(publishedUrl);
           setIsModalOpen(true);
-
-          // await handleProjectScreenShot(fullUrl, projectId);
         } else {
           navigate("/dashboard");
         }
