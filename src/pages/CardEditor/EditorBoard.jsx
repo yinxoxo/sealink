@@ -246,32 +246,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     },
   );
 
-  // const handleProjectScreenShot = async (fullUrl, projectId) => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://us-central1-sealink-4b0fd.cloudfunctions.net/pup?url=${encodeURIComponent(fullUrl)}`,
-  //       {
-  //         method: "GET",
-  //       },
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to call Cloud Function");
-  //     }
-
-  //     const result = await response.json();
-  //     const { screenshotUrl } = result;
-  //     console.log("Screenshot URL:", screenshotUrl);
-
-  //     await updateScreenshotUrl(user.uid, projectId, screenshotUrl);
-  //     console.log(
-  //       `Screenshot URL successfully uploaded for project ID: ${projectId}`,
-  //     );
-  //   } catch (error) {
-  //     console.error("Error generating screenshot:", error);
-  //   }
-  // };
-
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
