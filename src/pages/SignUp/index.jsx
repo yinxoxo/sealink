@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaGoogle } from "react-icons/fa6";
+import { FaCircleUser, FaGoogle } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import sealinkLogo from "../../images/logo.png";
@@ -19,12 +19,19 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const [isLogin, setIsLogin] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
   const [userId, setUserId] = useState(null);
   const [formError, setFormError] = useState(null);
+
+  const handleVisitorLogin = () => {
+    setValue("email", "admin@mail.com");
+    setValue("password", "111111");
+    handleSubmit(handleLogin)();
+  };
 
   const handleRegister = async (data) => {
     const { email, password } = data;
@@ -207,6 +214,17 @@ const SignUp = () => {
                   className="w-full bg-button hover:bg-button-hover"
                 >
                   {isLogin ? "Log in" : "Sign up"}
+                </Button>
+              </div>
+              <div className="mt-6 space-y-4">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={handleVisitorLogin}
+                  className="w-full"
+                >
+                  <FaCircleUser className="mr-2" />
+                  Log in as Visitor
                 </Button>
               </div>
               <div className="space-y-4">
