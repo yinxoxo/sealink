@@ -35,12 +35,12 @@ import {
 } from "../../features/cardTemplate/data/iconList";
 
 import uploadImageToFirebase from "@/features/cardEdit/api/uploadImageToFirebase";
+import { FaRegTrashCan } from "react-icons/fa6";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
+import { useHistoryLogic } from "../../features/cardEdit/hooks/useHistoryLogic";
 import getCroppedImg from "../../features/cardEdit/utils/getCroppedImg";
 import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
-
-import { FaRegTrashCan } from "react-icons/fa6";
 
 const EditBoard = ({ isMobile, setIsMobile }) => {
   const { toast } = useToast();
@@ -77,43 +77,18 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     defaultValues,
   });
 
-  const [history, setHistory] = useState([projectData]);
-  const [currentStep, setCurrentStep] = useState(0);
-  const [redoHistory, setRedoHistory] = useState([]);
+  const {
+    handleUndo,
+    handleRedo,
+    handleReset,
+    updateHistory,
+    currentStep,
+    redoHistory,
+  } = useHistoryLogic(projectData, setProjectData);
 
   const updateProjectData = (newData) => {
-    const updatedHistory = [...history.slice(0, currentStep + 1), newData];
-    setHistory(updatedHistory);
-    setCurrentStep(currentStep + 1);
-    setRedoHistory([]);
+    updateHistory(newData);
     setProjectData(newData);
-  };
-
-  const handleUndo = () => {
-    if (currentStep > 0) {
-      const previousStep = currentStep - 1;
-      setRedoHistory([history[currentStep], ...redoHistory]);
-      setCurrentStep(previousStep);
-      setProjectData(history[previousStep]);
-    }
-  };
-
-  const handleRedo = () => {
-    if (redoHistory.length > 0) {
-      const nextStep = redoHistory[0];
-      setHistory([...history.slice(0, currentStep + 1), nextStep]);
-      setRedoHistory(redoHistory.slice(1));
-      setCurrentStep(currentStep + 1);
-      setProjectData(nextStep);
-    }
-  };
-
-  const handleReset = () => {
-    if (history.length > 0) {
-      setProjectData(history[0]);
-      setCurrentStep(0);
-      setRedoHistory([]);
-    }
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
