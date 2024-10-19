@@ -10,12 +10,17 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import uploadImageToFirebase from "@/features/cardEdit/api/uploadImageToFirebase";
+import { useIconEditor } from "@/features/cardEdit/hooks/useIconEditor";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { ChromePicker } from "react-color";
 import { Controller, useForm } from "react-hook-form";
+import { FaRegTrashCan } from "react-icons/fa6";
 import { useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext/useAuth";
+import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 import ButtonCard from "../../features/cardEdit/components/ButtonCard";
 import CropperModal from "../../features/cardEdit/components/CropperModal";
 import DeployModal from "../../features/cardEdit/components/DeployModal";
@@ -27,20 +32,11 @@ import IconSelect from "../../features/cardEdit/components/IconSelect";
 import NavBar from "../../features/cardEdit/components/NavBar";
 import TextCard from "../../features/cardEdit/components/TextCard";
 import UploadButton from "../../features/cardEdit/components/UploadButton";
-import fontOptions from "../../features/cardTemplate/data/fontOptions";
-import {
-  ICON_LIST,
-  ICON_MAP,
-  ICON_STYLE,
-} from "../../features/cardTemplate/data/iconList";
-
-import uploadImageToFirebase from "@/features/cardEdit/api/uploadImageToFirebase";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { useAuth } from "../../contexts/AuthContext/useAuth";
-import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 import { useHistoryLogic } from "../../features/cardEdit/hooks/useHistoryLogic";
 import { useSubmitProject } from "../../features/cardEdit/hooks/useSubmitProject";
 import getCroppedImg from "../../features/cardEdit/utils/getCroppedImg";
+import fontOptions from "../../features/cardTemplate/data/fontOptions";
+import { ICON_LIST } from "../../features/cardTemplate/data/iconList";
 const EditBoard = ({ isMobile, setIsMobile }) => {
   const { toast } = useToast();
   const {
@@ -52,16 +48,24 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     editingType,
   } = useCardEditorContext();
 
-  const icons = projectData.socialLinks.iconList.map((link) => ({
-    icon: ICON_MAP[link.name],
-    id: link.id,
-    href: link.href,
-    name: link.name,
-  }));
-  const iconColor =
-    projectData?.socialLinks?.style?.color || ICON_STYLE.SimpleCard.color;
-  const iconSize =
-    projectData?.socialLinks?.style?.size || ICON_STYLE.SimpleCard.size;
+  const updateProjectData = (newData) => {
+    updateHistory(newData);
+    setProjectData(newData);
+  };
+  const {
+    icons,
+    iconColor,
+    iconSize,
+    editIconData,
+    setEditIconData,
+    isModalVisible,
+    setIsModalVisible,
+    setSelectedIcon,
+    handleIconEdit,
+    handleSaveIconEdit,
+    addIcon,
+    handleIconDelete,
+  } = useIconEditor(projectData, setProjectData, updateProjectData, toast);
 
   const { itemsOrder } = projectData;
 
@@ -85,16 +89,9 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     redoHistory,
   } = useHistoryLogic(projectData, setProjectData);
 
-  const updateProjectData = (newData) => {
-    updateHistory(newData);
-    setProjectData(newData);
-  };
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProjectUrl, setNewProjectUrl] = useState("");
-  const [selectedIcon, setSelectedIcon] = useState("");
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [editIconData, setEditIconData] = useState(null);
+
   const [showBackgroundColorPicker, setShowBackgroundColorPicker] =
     useState(false);
   const [showFontColorPicker, setShowFontColorPicker] = useState(false);
@@ -163,58 +160,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     updateProjectData(updatedData);
   };
 
-  const handleIconEdit = (iconName) => {
-    const iconToEdit = icons.find((icon) => icon.name === iconName);
-    if (iconToEdit) {
-      setEditIconData(iconToEdit);
-      setIsModalVisible(true);
-    }
-  };
-
-  const handleSaveIconEdit = () => {
-    const updatedIcons = icons.map((icon) =>
-      icon.id === editIconData.id ? editIconData : icon,
-    );
-
-    const updatedData = {
-      ...projectData,
-      socialLinks: {
-        ...projectData.socialLinks,
-        iconList: updatedIcons,
-      },
-    };
-    setProjectData(updatedData);
-    updateProjectData(updatedData);
-    setIsModalVisible(false);
-  };
-
-  const addIcon = () => {
-    if (selectedIcon) {
-      const foundIcon = ICON_LIST.find((icon) => icon.name === selectedIcon);
-
-      if (foundIcon && foundIcon.icon) {
-        const newIcon = {
-          id: foundIcon.id,
-          name: foundIcon.name,
-          icon: foundIcon.icon,
-          href: foundIcon.href,
-        };
-
-        const updatedData = {
-          ...projectData,
-          socialLinks: {
-            ...projectData.socialLinks,
-            iconList: [...projectData.socialLinks.iconList, newIcon],
-          },
-        };
-        setProjectData(updatedData);
-        updateProjectData(updatedData);
-      } else {
-        console.error(`Icon ${selectedIcon} not found or invalid icon`);
-      }
-    }
-  };
-
   const handleButtonEdit = (button, index) => {
     setEditButtonData({ ...button, index });
     setIsButtonModalVisible(true);
@@ -258,20 +203,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     updateProjectData(updatedData);
   };
 
-  const handleIconDelete = (id) => {
-    const updatedIcons = icons.filter((icon) => icon.id !== id);
-
-    const updatedData = {
-      ...projectData,
-      socialLinks: {
-        ...projectData.socialLinks,
-        iconList: updatedIcons,
-      },
-    };
-    setProjectData(updatedData);
-    updateProjectData(updatedData);
-  };
-
   const handleButtonStyleChange = (styleProp, value) => {
     const updatedData = {
       ...projectData,
@@ -301,7 +232,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     iconSize,
     itemsOrder,
   });
-
   const handleSubmitProject = (data) => {
     onSubmit(data);
   };
