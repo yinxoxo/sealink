@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { ChromePicker } from "react-color";
 import { Controller, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import ButtonCard from "../../features/cardEdit/components/ButtonCard";
 import CropperModal from "../../features/cardEdit/components/CropperModal";
@@ -39,9 +39,8 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
 import { useHistoryLogic } from "../../features/cardEdit/hooks/useHistoryLogic";
+import { useSubmitProject } from "../../features/cardEdit/hooks/useSubmitProject";
 import getCroppedImg from "../../features/cardEdit/utils/getCroppedImg";
-import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
-
 const EditBoard = ({ isMobile, setIsMobile }) => {
   const { toast } = useToast();
   const {
@@ -117,98 +116,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setShowBackgroundColorPicker(false);
     setShowFontColorPicker(false);
   };
-
-  const onSubmit = async (data) => {
-    const newProjectData = {
-      title: data.title,
-      templateId: template,
-      background: {
-        backgroundColor: projectData.background.backgroundColor || null,
-        backgroundImage: projectData.background.backgroundImage || null,
-        opacity: projectData.background.opacity,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      },
-      socialLinks: {
-        id: "icons-1",
-        iconList: icons.map((icon) => ({
-          id: icon.name,
-          href: icon.href,
-          name: icon.name,
-        })),
-        style: {
-          color: iconColor,
-          size: iconSize,
-        },
-      },
-      texts: projectData.texts.map((text, index) => ({
-        id: `text-${index + 1}`,
-        text: text.text,
-        style: {
-          fontSize: text.style.fontSize,
-          fontWeight: text.style.fontWeight,
-          color: text.style.color,
-          fontFamily: text.style.fontFamily,
-        },
-      })),
-      buttons: {
-        buttonList: projectData.buttons.buttonList.map((button, index) => ({
-          id: `button-${index + 1}`,
-          text: button.text,
-          url: button.url,
-        })),
-        style: {
-          backgroundColor: projectData.buttons.style.backgroundColor,
-          width: projectData.buttons.style.width,
-          color: projectData.buttons.style.color,
-          borderRadius: projectData.buttons.style.borderRadius,
-          padding: projectData.buttons.style.padding,
-          fontSize: projectData.buttons.style.fontSize,
-          fontWeight: projectData.buttons.style.fontWeight,
-          fontFamily: projectData.buttons.style.fontFamily,
-        },
-      },
-      itemsOrder: itemsOrder,
-      avatar: {
-        image: projectData.avatar.image || null,
-        style: {
-          width: projectData.avatar.style.width,
-          height: projectData.avatar.style.height,
-        },
-      },
-      isPublished: data.action === "publish",
-      publishedUrl: null,
-      screenshotUrl: projectData.screenshotUrl || null,
-    };
-
-    const dataToMutate = {
-      ...newProjectData,
-      action: data.action,
-    };
-
-    mutation.mutate(dataToMutate);
-  };
-
-  const mutation = useMutation(
-    (dataToMutate) => saveProjectToFirestore(user.uid, projectId, dataToMutate),
-    {
-      onSuccess: async (result, dataToMutate) => {
-        const { action } = dataToMutate;
-        const { publishedUrl } = result;
-        queryClient.invalidateQueries("userProjects");
-
-        if (action === "publish") {
-          setNewProjectUrl(publishedUrl);
-          setIsModalOpen(true);
-        } else {
-          navigate("/dashboard");
-        }
-      },
-      onError: (error) => {
-        console.error("Error saving project:", error);
-      },
-    },
-  );
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -378,6 +285,25 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     };
     setProjectData(updatedData);
     updateProjectData(updatedData);
+  };
+
+  const { onSubmit } = useSubmitProject({
+    userId: user.uid,
+    projectId,
+    setNewProjectUrl,
+    setIsModalOpen,
+    navigate,
+    toast,
+    projectData,
+    template,
+    icons,
+    iconColor,
+    iconSize,
+    itemsOrder,
+  });
+
+  const handleSubmitProject = (data) => {
+    onSubmit(data);
   };
 
   const renderTextEditor = () => {
@@ -1098,7 +1024,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const renderUserProjectForm = () => {
     return (
       <div className="rounded-lg">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(handleSubmitProject)}>
           <Controller
             name="title"
             control={control}
