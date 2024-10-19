@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { RxButton } from "react-icons/rx";
-import { ICON_MAP } from "../../../cardTemplate/cardContent/iconList";
 import Loading from "../../../components/Loading";
+import { ICON_MAP } from "../../../features/cardTemplate/data/iconList";
 const LinkChart = ({ loading, visitorData }) => {
   const [activeTab, setActiveTab] = useState("socialIcons");
   if (loading || !visitorData) {

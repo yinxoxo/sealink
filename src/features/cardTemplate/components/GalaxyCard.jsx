@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useLocation } from "react-router-dom";
-import { ICON_MAP } from "../cardTemplate/cardContent/iconList";
-import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
+import { useCardEditorContext } from "../../../contexts/CardEditorContext/useCardEditorContext";
+import { ICON_MAP } from "../data/iconList";
 
 const ItemType = "ITEM";
 
@@ -63,7 +63,7 @@ DraggableItem.propTypes = {
   moveItem: PropTypes.func.isRequired,
 };
 
-const ForestCard = ({ data }) => {
+const GalaxyCard = ({ data }) => {
   const location = useLocation();
 
   const {
@@ -285,7 +285,7 @@ const ForestCard = ({ data }) => {
   );
 };
 
-ForestCard.propTypes = {
+GalaxyCard.propTypes = {
   data: PropTypes.shape({
     socialLinks: PropTypes.shape({
       iconList: PropTypes.arrayOf(
@@ -353,4 +353,4 @@ ForestCard.propTypes = {
     ).isRequired,
   }).isRequired,
 };
-export default ForestCard;
+export default GalaxyCard;

@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useLocation } from "react-router-dom";
-import { ICON_MAP } from "../cardTemplate/cardContent/iconList";
-import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
+import { useCardEditorContext } from "../../../contexts/CardEditorContext/useCardEditorContext";
+import { ICON_MAP } from "../data/iconList";
 
 const ItemType = "ITEM";
 
@@ -63,7 +63,7 @@ DraggableItem.propTypes = {
   moveItem: PropTypes.func.isRequired,
 };
 
-const GalaxyCard = ({ data }) => {
+const NinaWishCard = ({ data }) => {
   const location = useLocation();
 
   const {
@@ -285,7 +285,7 @@ const GalaxyCard = ({ data }) => {
   );
 };
 
-GalaxyCard.propTypes = {
+NinaWishCard.propTypes = {
   data: PropTypes.shape({
     socialLinks: PropTypes.shape({
       iconList: PropTypes.arrayOf(
@@ -353,4 +353,5 @@ GalaxyCard.propTypes = {
     ).isRequired,
   }).isRequired,
 };
-export default GalaxyCard;
+
+export default NinaWishCard;

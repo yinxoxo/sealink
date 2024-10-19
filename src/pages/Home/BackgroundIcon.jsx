@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
+import { ICON_LIST } from "../../features/cardTemplate/data/iconList";
 
 const BackgroundIcon = ({ currentIndex }) => {
   const COLOR_LIST = ["#B48EAE", "#BAACBD"];

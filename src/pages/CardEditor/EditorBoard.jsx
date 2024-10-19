@@ -18,12 +18,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import NavBar from "./NavBar";
 
 import { ChromePicker } from "react-color";
-import fontOptions from "../../cardTemplate/cardContent/fontOptions";
+import fontOptions from "../../features/cardTemplate/data/fontOptions";
 import {
   ICON_LIST,
   ICON_MAP,
   ICON_STYLE,
-} from "../../cardTemplate/cardContent/iconList";
+} from "../../features/cardTemplate/data/iconList";
 import ButtonCard from "./EditorComponents/ButtonCard";
 import CropperModal from "./EditorComponents/CropperModal";
 import DeployModal from "./EditorComponents/DeployModal";

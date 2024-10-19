@@ -2,15 +2,15 @@ import NotFound from "@/components/ErrorMessage/NotFound";
 import useRecordVisitorData from "@/firebase/useRecordVisitorData";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
-import ArtCard from "../../cardTemplate/ArtCard";
-import BreadCard from "../../cardTemplate/BreadCard";
-import ForestCard from "../../cardTemplate/ForestCard";
-import GalaxyCard from "../../cardTemplate/GalaxyCard";
-import JiaCard from "../../cardTemplate/JiaCard";
-import NinaWishCard from "../../cardTemplate/NinaWishCard";
-import SimpleCard from "../../cardTemplate/SimpleCard";
-import WoodCard from "../../cardTemplate/WoodCard";
 import Loading from "../../components/Loading";
+import ArtCard from "../../features/cardTemplate/components/ArtCard";
+import BreadCard from "../../features/cardTemplate/components/BreadCard";
+import ForestCard from "../../features/cardTemplate/components/ForestCard";
+import GalaxyCard from "../../features/cardTemplate/components/GalaxyCard";
+import JiaCard from "../../features/cardTemplate/components/JiaCard";
+import NinaWishCard from "../../features/cardTemplate/components/NinaWishCard";
+import SimpleCard from "../../features/cardTemplate/components/SimpleCard";
+import WoodCard from "../../features/cardTemplate/components/WoodCard";
 import { useVisitorProject } from "../../firebase/useVisitorProject";
 
 const Deploy = () => {

@@ -18,7 +18,7 @@ import { Slider } from "@/components/ui/slider";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { ChromePicker } from "react-color";
-import fontOptions from "../../../cardTemplate/cardContent/fontOptions";
+import fontOptions from "../../../features/cardTemplate/data/fontOptions";
 
 const EditTextModal = ({
   isTextModalVisible,

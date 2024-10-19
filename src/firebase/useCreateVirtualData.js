@@ -1,5 +1,5 @@
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { ICON_LIST } from "../cardTemplate/cardContent/iconList";
+import { ICON_LIST } from "./cardTemplate/cardContent/iconList";
 import { db } from "./firebaseConfig";
 
 const useCreateVirtualData = () => {

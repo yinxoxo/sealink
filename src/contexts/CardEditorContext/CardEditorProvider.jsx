@@ -1,15 +1,15 @@
+import PropTypes from "prop-types";
 import { createContext, useMemo, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import initialArtCardContent from "../../cardTemplate/cardContent/initialArtCardContent";
-import initialBreadCardContent from "../../cardTemplate/cardContent/initialBreadCardContent";
-import initialForestCardContent from "../../cardTemplate/cardContent/initialForestCardContent";
-import initialGalaxyCardContent from "../../cardTemplate/cardContent/initialGalaxyCardContent";
-import initialJiaCardContent from "../../cardTemplate/cardContent/initialJiaCardContent";
-import initialNinaWishCardContent from "../../cardTemplate/cardContent/initialNinaWishCardContent";
-import initialSimpleCardContent from "../../cardTemplate/cardContent/initialSimpleCardContent";
-import initialWoodCardContent from "../../cardTemplate/cardContent/initialWoodCardContent";
+import initialArtCardContent from "../../features/cardTemplate/data/initialArtCardContent";
+import initialBreadCardContent from "../../features/cardTemplate/data/initialBreadCardContent";
+import initialForestCardContent from "../../features/cardTemplate/data/initialForestCardContent";
+import initialGalaxyCardContent from "../../features/cardTemplate/data/initialGalaxyCardContent";
+import initialJiaCardContent from "../../features/cardTemplate/data/initialJiaCardContent";
+import initialNinaWishCardContent from "../../features/cardTemplate/data/initialNinaWishCardContent";
+import initialSimpleCardContent from "../../features/cardTemplate/data/initialSimpleCardContent";
+import initialWoodCardContent from "../../features/cardTemplate/data/initialWoodCardContent";
 import { useProjects } from "../ProjectContext/useProjects";
-
 export const CardEditorContext = createContext();
 export const CardEditorProvider = ({ children }) => {
   const location = useLocation();
@@ -80,4 +80,8 @@ export const CardEditorProvider = ({ children }) => {
       {children}
     </CardEditorContext.Provider>
   );
+};
+
+CardEditorProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

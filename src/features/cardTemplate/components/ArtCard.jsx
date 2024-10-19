@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useLocation } from "react-router-dom";
-import { ICON_MAP } from "../cardTemplate/cardContent/iconList";
-import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
+import { useCardEditorContext } from "../../../contexts/CardEditorContext/useCardEditorContext";
+import { ICON_MAP } from "../data/iconList";
 
 const ItemType = "ITEM";
 
@@ -63,7 +63,7 @@ DraggableItem.propTypes = {
   moveItem: PropTypes.func.isRequired,
 };
 
-const BreadCard = ({ data }) => {
+const ArtCard = ({ data }) => {
   const location = useLocation();
 
   const {
@@ -75,7 +75,6 @@ const BreadCard = ({ data }) => {
   const isTemplatesPage = location.pathname === "/templates";
   const isDashboardPage = location.pathname === "/dashboard";
   const isDeployPage = location.pathname.includes("/sealink");
-
   const projectData =
     isTemplatesPage || isDashboardPage || isDeployPage
       ? data
@@ -123,7 +122,6 @@ const BreadCard = ({ data }) => {
 
       if (item.type === "text") {
         const textItem = projectData.texts.find((text) => text.id == item.id);
-
         if (!textItem) return null;
         return (
           <DraggableItem
@@ -287,7 +285,7 @@ const BreadCard = ({ data }) => {
   );
 };
 
-BreadCard.propTypes = {
+ArtCard.propTypes = {
   data: PropTypes.shape({
     socialLinks: PropTypes.shape({
       iconList: PropTypes.arrayOf(
@@ -356,4 +354,4 @@ BreadCard.propTypes = {
   }).isRequired,
 };
 
-export default BreadCard;
+export default ArtCard;

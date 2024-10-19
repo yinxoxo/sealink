@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PropTypes from "prop-types";
-import { ICON_LIST } from "../../../cardTemplate/cardContent/iconList";
+import { ICON_LIST } from "../../../features/cardTemplate/data/iconList";
 
 const EditIconModal = ({
   isModalVisible,
