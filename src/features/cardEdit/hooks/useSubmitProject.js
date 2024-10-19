@@ -45,6 +45,7 @@ export const useSubmitProject = ({
 
   const onSubmit = (data) => {
     const newProjectData = {
+      action: data.action,
       title: data.title,
       templateId: template,
       background: {
