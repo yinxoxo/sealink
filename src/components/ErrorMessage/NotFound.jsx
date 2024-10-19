@@ -1,4 +1,4 @@
-import NotFoundSvg from "../../images/404.svg";
+import NotFoundSvg from "../../assets/images/404.svg";
 
 const NotFound = () => {
   return (

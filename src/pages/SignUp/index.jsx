@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import sealinkLogo from "../../assets/images/logo.png";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
-import sealinkLogo from "../../images/logo.png";
 import {
   loginWithEmail,
   loginWithGoogle,

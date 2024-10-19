@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import alertGif from "../../images/alert.gif";
+import alertGif from "../../assets/images/alert.gif";
 
 const ErrorMessage = ({ message }) => {
   return (

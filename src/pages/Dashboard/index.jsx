@@ -9,6 +9,7 @@ import { useState } from "react";
 import { HiOutlinePencilSquare, HiOutlineQrCode } from "react-icons/hi2";
 import { IoSettingsOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import codingImg from "../../assets/images/coding.svg";
 import ArtCard from "../../cardTemplate/ArtCard";
 import BreadCard from "../../cardTemplate/BreadCard";
 import ForestCard from "../../cardTemplate/ForestCard";
@@ -19,7 +20,6 @@ import SimpleCard from "../../cardTemplate/SimpleCard";
 import WoodCard from "../../cardTemplate/WoodCard";
 import Loading from "../../components/Loading/index";
 import { useProjects } from "../../contexts/ProjectContext/useProjects";
-import codingImg from "../../images/coding.svg";
 import ProjectSetting from "./ProjectSetting";
 import QrcodeModal from "./QrcodeModal";
 

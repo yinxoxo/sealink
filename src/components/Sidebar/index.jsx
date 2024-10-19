@@ -7,8 +7,8 @@ import {
   FaFolderOpen,
 } from "react-icons/fa6";
 import { Link, useLocation } from "react-router-dom";
+import sealinkLogo from "../../assets/images/logo.png";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
-import sealinkLogo from "../../images/logo.png";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const { logout } = useAuth();

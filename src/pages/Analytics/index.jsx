@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import sadImage from "../../assets/images/sad.svg";
 import Loading from "../../components/Loading/index";
 import { useProjects } from "../../contexts/ProjectContext/useProjects";
-import sadImage from "../../images/sad.svg";
 
 const Analytics = () => {
   const { projects, loading } = useProjects();

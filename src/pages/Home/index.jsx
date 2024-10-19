@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import pickleImg from "../../assets/images/pickle.png";
 import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
-import pickleImg from "../../images/pickle.png";
 import BackgroundIcon from "./BackgroundIcon";
 import { CardContainer, SocialLinksSection } from "./CardFigure";
 import IconCarousel from "./IconCarousel";
