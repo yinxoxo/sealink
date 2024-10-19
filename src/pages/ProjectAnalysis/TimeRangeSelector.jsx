@@ -7,9 +7,9 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { format } from "date-fns";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { LuCalendarRange } from "react-icons/lu";
-
 const TimeRangeSelector = ({
   selectedDateRange,
   setSelectedDateRange,
@@ -112,6 +112,16 @@ const TimeRangeSelector = ({
       )}
     </div>
   );
+};
+
+TimeRangeSelector.propTypes = {
+  selectedDateRange: PropTypes.shape({
+    from: PropTypes.instanceOf(Date),
+    to: PropTypes.instanceOf(Date),
+  }).isRequired,
+  setSelectedDateRange: PropTypes.func.isRequired,
+  selectedRange: PropTypes.string.isRequired,
+  setSelectedRange: PropTypes.func.isRequired,
 };
 
 export default TimeRangeSelector;

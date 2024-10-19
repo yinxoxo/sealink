@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import PropTypes from "prop-types";
 import { QRCodeCanvas } from "qrcode.react";
 import { useRef } from "react";
 import logo from "../../images/logo.png";
@@ -54,6 +55,17 @@ const QrcodeModal = ({ isOpen, onClose, project }) => {
       </DialogContent>
     </Dialog>
   );
+};
+
+QrcodeModal.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    isPublished: PropTypes.bool.isRequired,
+    publishedUrl: PropTypes.string,
+  }).isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default QrcodeModal;

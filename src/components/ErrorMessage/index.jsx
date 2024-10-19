@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import alertGif from "../../images/alert.gif";
 
@@ -13,3 +14,7 @@ const ErrorMessage = ({ message }) => {
 };
 
 export default ErrorMessage;
+
+ErrorMessage.propTypes = {
+  message: PropTypes.string.isRequired,
+};

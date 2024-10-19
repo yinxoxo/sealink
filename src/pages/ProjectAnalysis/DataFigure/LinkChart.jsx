@@ -1,8 +1,8 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { RxButton } from "react-icons/rx";
 import { ICON_MAP } from "../../../cardTemplate/cardContent/iconList";
 import Loading from "../../../components/Loading";
-
 const LinkChart = ({ loading, visitorData }) => {
   const [activeTab, setActiveTab] = useState("socialIcons");
   if (loading || !visitorData) {
@@ -132,6 +132,15 @@ const LinkChart = ({ loading, visitorData }) => {
       </div>
     </div>
   );
+};
+
+LinkChart.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  visitorData: PropTypes.arrayOf(
+    PropTypes.shape({
+      deviceType: PropTypes.string,
+    }),
+  ),
 };
 
 export default LinkChart;

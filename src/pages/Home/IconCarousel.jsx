@@ -1,5 +1,5 @@
+import PropTypes from "prop-types";
 import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
-
 const IconCarousel = ({ currentIndex }) => {
   const COLOR_LIST = ["#B48EAE", "#BAACBD"];
   const extendedIconList = [...ICON_LIST, ...ICON_LIST, ...ICON_LIST];
@@ -48,6 +48,10 @@ const IconCarousel = ({ currentIndex }) => {
       </div>
     </div>
   );
+};
+
+IconCarousel.propTypes = {
+  currentIndex: PropTypes.number.isRequired,
 };
 
 export default IconCarousel;

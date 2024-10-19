@@ -1,5 +1,6 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import PropTypes from "prop-types";
 import { Doughnut } from "react-chartjs-2";
 import Loading from "../../../components/Loading/index";
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
@@ -59,6 +60,15 @@ const DonutChart = ({ loading, visitorData }) => {
       <Doughnut data={chartData} options={options} />
     </div>
   );
+};
+
+DonutChart.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  visitorData: PropTypes.arrayOf(
+    PropTypes.shape({
+      deviceType: PropTypes.string,
+    }),
+  ),
 };
 
 export default DonutChart;

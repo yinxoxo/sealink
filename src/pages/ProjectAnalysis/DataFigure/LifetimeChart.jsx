@@ -1,6 +1,6 @@
+import PropTypes from "prop-types";
 import { FiEye, FiLink, FiPercent } from "react-icons/fi";
 import Loading from "../../../components/Loading";
-
 const LifetimeChart = ({ loading, visitorData }) => {
   if (loading || !visitorData) {
     return <Loading />;
@@ -50,4 +50,12 @@ const LifetimeChart = ({ loading, visitorData }) => {
   );
 };
 
+LifetimeChart.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  visitorData: PropTypes.arrayOf(
+    PropTypes.shape({
+      deviceType: PropTypes.string,
+    }),
+  ),
+};
 export default LifetimeChart;

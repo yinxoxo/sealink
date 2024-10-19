@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { ICON_LIST } from "../../cardTemplate/cardContent/iconList";
 
 const BackgroundIcon = ({ currentIndex }) => {
@@ -12,6 +13,10 @@ const BackgroundIcon = ({ currentIndex }) => {
       />
     </div>
   );
+};
+
+BackgroundIcon.propTypes = {
+  currentIndex: PropTypes.number.isRequired,
 };
 
 export default BackgroundIcon;

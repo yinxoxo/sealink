@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useEffect } from "react";
 import {
   FaBars,
@@ -10,7 +11,7 @@ import { useAuth } from "../../contexts/AuthContext/useAuth";
 import sealinkLogo from "../../images/logo.png";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const location = useLocation();
 
   const toggleSidebar = () => {
@@ -19,7 +20,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   useEffect(() => {
     setIsOpen(false);
-  }, [location]);
+  }, [location, setIsOpen]);
 
   const hamburgerButtonPosition = location.pathname.includes(
     "/dashboard/card-editor",
@@ -145,6 +146,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       </nav>
     </div>
   );
+};
+
+Sidebar.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

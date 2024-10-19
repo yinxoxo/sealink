@@ -1,9 +1,9 @@
-import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
-import { useDrag, useDrop } from "react-dnd";
-import { useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
+import { useLocation } from "react-router-dom";
 import { ICON_MAP } from "../cardTemplate/cardContent/iconList";
+import { useCardEditorContext } from "../contexts/CardEditorContext/useCardEditorContext";
 
 const ItemType = "ITEM";
 
@@ -283,6 +283,75 @@ const NinaWishCard = ({ data }) => {
       <div className="relative z-10 flex flex-col">{renderItems()}</div>
     </div>
   );
+};
+
+NinaWishCard.propTypes = {
+  data: PropTypes.shape({
+    socialLinks: PropTypes.shape({
+      iconList: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          href: PropTypes.string.isRequired,
+        }),
+      ).isRequired,
+      style: PropTypes.shape({
+        color: PropTypes.string,
+        size: PropTypes.number,
+      }),
+    }).isRequired,
+    avatar: PropTypes.shape({
+      image: PropTypes.string,
+      style: PropTypes.shape({
+        width: PropTypes.string,
+        height: PropTypes.string,
+      }),
+    }),
+    texts: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+        style: PropTypes.shape({
+          fontSize: PropTypes.string,
+          fontWeight: PropTypes.string,
+          color: PropTypes.string,
+          fontFamily: PropTypes.string,
+        }),
+      }),
+    ),
+    buttons: PropTypes.shape({
+      buttonList: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.string.isRequired,
+          text: PropTypes.string.isRequired,
+          url: PropTypes.string.isRequired,
+        }),
+      ).isRequired,
+      style: PropTypes.shape({
+        backgroundColor: PropTypes.string,
+        width: PropTypes.string,
+        color: PropTypes.string,
+        borderRadius: PropTypes.string,
+        padding: PropTypes.string,
+        fontSize: PropTypes.string,
+        fontWeight: PropTypes.string,
+        fontFamily: PropTypes.string,
+      }),
+    }).isRequired,
+    background: PropTypes.shape({
+      backgroundImage: PropTypes.string,
+      backgroundColor: PropTypes.string,
+      opacity: PropTypes.number,
+      backgroundSize: PropTypes.string,
+      backgroundPosition: PropTypes.string,
+    }),
+    itemsOrder: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+      }),
+    ).isRequired,
+  }).isRequired,
 };
 
 export default NinaWishCard;

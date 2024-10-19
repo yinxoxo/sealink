@@ -1,6 +1,6 @@
+import PropTypes from "prop-types";
 import { useMemo } from "react";
 import Loading from "../../../components/Loading/index";
-
 const DailyHeatmap = ({ loading, visitorData }) => {
   const timeSlots = [
     "00:00-04:00",
@@ -131,6 +131,15 @@ const DailyHeatmap = ({ loading, visitorData }) => {
       </div>
     </div>
   );
+};
+
+DailyHeatmap.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  visitorData: PropTypes.arrayOf(
+    PropTypes.shape({
+      deviceType: PropTypes.string,
+    }),
+  ),
 };
 
 export default DailyHeatmap;

@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
@@ -45,7 +46,6 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
       onSuccess: () => {
         queryClient.invalidateQueries("userProjects");
         onClose();
-        navigate("/dashboard");
       },
       onError: (error) => {
         console.error("Error deleting project:", error);
@@ -181,6 +181,17 @@ const ProjectSetting = ({ project, isOpen, onClose }) => {
       </DialogContent>
     </Dialog>
   );
+};
+
+ProjectSetting.propTypes = {
+  project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    isPublished: PropTypes.bool.isRequired,
+    publishedUrl: PropTypes.string,
+  }).isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default ProjectSetting;
