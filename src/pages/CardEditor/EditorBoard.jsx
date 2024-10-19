@@ -12,28 +12,27 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { ChromePicker } from "react-color";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import NavBar from "./NavBar";
-
-import { ChromePicker } from "react-color";
+import ButtonCard from "../../features/cardEdit/components/ButtonCard";
+import CropperModal from "../../features/cardEdit/components/CropperModal";
+import DeployModal from "../../features/cardEdit/components/DeployModal";
+import EditButtonModal from "../../features/cardEdit/components/EditButtonModal";
+import EditIconModal from "../../features/cardEdit/components/EditIconModal";
+import EditTextModal from "../../features/cardEdit/components/EditTextModal";
+import IconCard from "../../features/cardEdit/components/IconCard";
+import IconSelect from "../../features/cardEdit/components/IconSelect";
+import NavBar from "../../features/cardEdit/components/NavBar";
+import TextCard from "../../features/cardEdit/components/TextCard";
+import UploadButton from "../../features/cardEdit/components/UploadButton";
 import fontOptions from "../../features/cardTemplate/data/fontOptions";
 import {
   ICON_LIST,
   ICON_MAP,
   ICON_STYLE,
 } from "../../features/cardTemplate/data/iconList";
-import ButtonCard from "./EditorComponents/ButtonCard";
-import CropperModal from "./EditorComponents/CropperModal";
-import DeployModal from "./EditorComponents/DeployModal";
-import EditButtonModal from "./EditorComponents/EditButtonModal";
-import EditIconModal from "./EditorComponents/EditIconModal";
-import EditTextModal from "./EditorComponents/EditTextModal";
-import IconCard from "./EditorComponents/IconCard";
-import IconSelect from "./EditorComponents/IconSelect";
-import TextCard from "./EditorComponents/TextCard";
-import UploadButton from "./EditorComponents/UploadButton";
 
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/firebaseConfig";

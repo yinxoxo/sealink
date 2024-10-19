@@ -15,7 +15,7 @@ import {
   FaMobileScreen,
   FaRocket,
 } from "react-icons/fa6";
-import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
+import { useCardEditorContext } from "../../../contexts/CardEditorContext/useCardEditorContext";
 
 import {
   DropdownMenu,
