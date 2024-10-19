@@ -32,6 +32,7 @@ import IconSelect from "../../features/cardEdit/components/IconSelect";
 import NavBar from "../../features/cardEdit/components/NavBar";
 import TextCard from "../../features/cardEdit/components/TextCard";
 import UploadButton from "../../features/cardEdit/components/UploadButton";
+import { useButtonEditor } from "../../features/cardEdit/hooks/useButtonEditor";
 import { useHistoryLogic } from "../../features/cardEdit/hooks/useHistoryLogic";
 import { useSubmitProject } from "../../features/cardEdit/hooks/useSubmitProject";
 import getCroppedImg from "../../features/cardEdit/utils/getCroppedImg";
@@ -67,6 +68,17 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     handleIconDelete,
   } = useIconEditor(projectData, setProjectData, updateProjectData, toast);
 
+  const {
+    isButtonModalVisible,
+    setIsButtonModalVisible,
+    editButtonData,
+    setEditButtonData,
+    handleButtonEdit,
+    handleSaveButtonEdit,
+    handleButtonDelete,
+    handleButtonStyleChange,
+  } = useButtonEditor(projectData, setProjectData, updateProjectData);
+
   const { itemsOrder } = projectData;
 
   const queryClient = useQueryClient();
@@ -95,8 +107,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const [showBackgroundColorPicker, setShowBackgroundColorPicker] =
     useState(false);
   const [showFontColorPicker, setShowFontColorPicker] = useState(false);
-  const [isButtonModalVisible, setIsButtonModalVisible] = useState(false);
-  const [editButtonData, setEditButtonData] = useState(null);
+
   const [useBackgroundImage, setUseBackgroundImage] = useState(
     !!projectData.background.backgroundImage,
   );
@@ -153,64 +164,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           ...projectData.avatar.style,
           width: `${value}px`,
           height: `${value}px`,
-        },
-      },
-    };
-    setProjectData(updatedData);
-    updateProjectData(updatedData);
-  };
-
-  const handleButtonEdit = (button, index) => {
-    setEditButtonData({ ...button, index });
-    setIsButtonModalVisible(true);
-  };
-
-  const handleSaveButtonEdit = () => {
-    const updatedButtons = projectData.buttons.buttonList.map((button, i) =>
-      i === editButtonData.index ? { ...editButtonData } : button,
-    );
-
-    const updatedData = {
-      ...projectData,
-      buttons: {
-        ...projectData.buttons,
-        buttonList: updatedButtons,
-      },
-    };
-    setProjectData(updatedData);
-    updateProjectData(updatedData);
-    setIsButtonModalVisible(false);
-  };
-
-  const handleButtonDelete = (buttonId) => {
-    const updatedButtons = projectData.buttons.buttonList.filter(
-      (button) => button.id !== buttonId,
-    );
-    const updatedItemsOrder = projectData.itemsOrder.filter(
-      (orderItem) => orderItem.id !== buttonId,
-    );
-
-    const updatedData = {
-      ...projectData,
-      buttons: {
-        ...projectData.buttons,
-        buttonList: updatedButtons,
-      },
-      itemsOrder: updatedItemsOrder,
-    };
-
-    setProjectData(updatedData);
-    updateProjectData(updatedData);
-  };
-
-  const handleButtonStyleChange = (styleProp, value) => {
-    const updatedData = {
-      ...projectData,
-      buttons: {
-        ...projectData.buttons,
-        style: {
-          ...projectData.buttons.style,
-          [styleProp]: value,
         },
       },
     };
