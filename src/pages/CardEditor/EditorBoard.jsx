@@ -34,13 +34,11 @@ import {
   ICON_STYLE,
 } from "../../features/cardTemplate/data/iconList";
 
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { storage } from "../../firebase/firebaseConfig";
-import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
-
+import uploadImageToFirebase from "@/features/cardEdit/api/uploadImageToFirebase";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
-import getCroppedImg from "../../utils/getCroppedImg";
+import getCroppedImg from "../../features/cardEdit/utils/getCroppedImg";
+import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
 
 import { FaRegTrashCan } from "react-icons/fa6";
 
@@ -241,37 +239,13 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
-  const uploadImageToFirebase = (blob, folderName = "cropped_images") => {
-    return new Promise((resolve, reject) => {
-      const storageRef = ref(storage, `${folderName}/${Date.now()}.png`);
-      const uploadTask = uploadBytesResumable(storageRef, blob);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (error) => {
-          toast({
-            title: "Upload failed",
-            description: `Upload failed: ${error.message}`,
-            variant: "destructive",
-          });
-          reject(error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadURL);
-        },
-      );
-    });
-  };
-
   const handleSaveCroppedImage = async (folderName, onSuccessCallback) => {
     try {
       const { blob } = await getCroppedImg(imageUrl, croppedAreaPixels);
 
       setUploading(true);
 
-      const downloadURL = await uploadImageToFirebase(blob, folderName);
+      const downloadURL = await uploadImageToFirebase(blob, folderName, toast);
 
       setImageUrl(downloadURL);
       onSuccessCallback(downloadURL);
