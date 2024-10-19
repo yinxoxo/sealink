@@ -314,7 +314,7 @@ SimpleCard.propTypes = {
         text: PropTypes.string.isRequired,
         style: PropTypes.shape({
           fontSize: PropTypes.string,
-          fontWeight: PropTypes.string,
+          fontWeight: PropTypes.number,
           color: PropTypes.string,
           fontFamily: PropTypes.string,
         }),
@@ -335,7 +335,7 @@ SimpleCard.propTypes = {
         borderRadius: PropTypes.string,
         padding: PropTypes.string,
         fontSize: PropTypes.string,
-        fontWeight: PropTypes.string,
+        fontWeight: PropTypes.number,
         fontFamily: PropTypes.string,
       }),
     }).isRequired,
@@ -352,7 +352,7 @@ SimpleCard.propTypes = {
         type: PropTypes.string.isRequired,
       }),
     ).isRequired,
-  }).isRequired,
+  }),
 };
 
 export default SimpleCard;
