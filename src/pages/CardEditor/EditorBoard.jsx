@@ -10,14 +10,12 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import uploadImageToFirebase from "@/features/cardEdit/api/uploadImageToFirebase";
 import { useIconEditor } from "@/features/cardEdit/hooks/useIconEditor";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { ChromePicker } from "react-color";
 import { Controller, useForm } from "react-hook-form";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
@@ -34,8 +32,8 @@ import TextCard from "../../features/cardEdit/components/TextCard";
 import UploadButton from "../../features/cardEdit/components/UploadButton";
 import { useButtonEditor } from "../../features/cardEdit/hooks/useButtonEditor";
 import { useHistoryLogic } from "../../features/cardEdit/hooks/useHistoryLogic";
+import useImageUploadAndCrop from "../../features/cardEdit/hooks/useImageUploadAndCrop";
 import { useSubmitProject } from "../../features/cardEdit/hooks/useSubmitProject";
-import getCroppedImg from "../../features/cardEdit/utils/getCroppedImg";
 import fontOptions from "../../features/cardTemplate/data/fontOptions";
 import { ICON_LIST } from "../../features/cardTemplate/data/iconList";
 const EditBoard = ({ isMobile, setIsMobile }) => {
@@ -48,7 +46,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setSelectedText,
     editingType,
   } = useCardEditorContext();
-
   const updateProjectData = (newData) => {
     updateHistory(newData);
     setProjectData(newData);
@@ -67,7 +64,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     addIcon,
     handleIconDelete,
   } = useIconEditor(projectData, setProjectData, updateProjectData, toast);
-
   const {
     isButtonModalVisible,
     setIsButtonModalVisible,
@@ -78,10 +74,20 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     handleButtonDelete,
     handleButtonStyleChange,
   } = useButtonEditor(projectData, setProjectData, updateProjectData);
-
+  const {
+    imageUrl,
+    setImageUrl,
+    uploading,
+    crop,
+    setCrop,
+    zoom,
+    setZoom,
+    isCropModalVisible,
+    setIsCropModalVisible,
+    onCropComplete,
+    handleSaveCroppedImage,
+  } = useImageUploadAndCrop();
   const { itemsOrder } = projectData;
-
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { template } = useParams();
@@ -91,7 +97,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const { control, handleSubmit } = useForm({
     defaultValues,
   });
-
   const {
     handleUndo,
     handleRedo,
@@ -100,24 +105,14 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     currentStep,
     redoHistory,
   } = useHistoryLogic(projectData, setProjectData);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newProjectUrl, setNewProjectUrl] = useState("");
-
   const [showBackgroundColorPicker, setShowBackgroundColorPicker] =
     useState(false);
   const [showFontColorPicker, setShowFontColorPicker] = useState(false);
-
   const [useBackgroundImage, setUseBackgroundImage] = useState(
     !!projectData.background.backgroundImage,
   );
-
-  const [uploading, setUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [isCropModalVisible, setIsCropModalVisible] = useState(false);
   const [editableTextItem, setEditableTextItem] = useState(null);
 
   const handleOuterClick = () => {
@@ -125,36 +120,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setShowFontColorPicker(false);
   };
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  };
-
-  const handleSaveCroppedImage = async (folderName, onSuccessCallback) => {
-    try {
-      const { blob } = await getCroppedImg(imageUrl, croppedAreaPixels);
-
-      setUploading(true);
-
-      const downloadURL = await uploadImageToFirebase(blob, folderName, toast);
-
-      setImageUrl(downloadURL);
-      onSuccessCallback(downloadURL);
-      setUploading(false);
-
-      toast({
-        title: "Image uploaded",
-        description: "Image uploaded successfully!",
-      });
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
-      toast({
-        title: "Error",
-        description: "Failed to crop and upload the image.",
-        variant: "destructive",
-      });
-    }
-  };
   const handleAvatarSizeChange = (value) => {
     const updatedData = {
       ...projectData,
