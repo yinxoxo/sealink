@@ -30,6 +30,7 @@ import IconSelect from "../../features/cardEdit/components/IconSelect";
 import NavBar from "../../features/cardEdit/components/NavBar";
 import TextCard from "../../features/cardEdit/components/TextCard";
 import UploadButton from "../../features/cardEdit/components/UploadButton";
+import useAvatarEditor from "../../features/cardEdit/hooks/useAvatarEditor";
 import { useButtonEditor } from "../../features/cardEdit/hooks/useButtonEditor";
 import { useHistoryLogic } from "../../features/cardEdit/hooks/useHistoryLogic";
 import useImageUploadAndCrop from "../../features/cardEdit/hooks/useImageUploadAndCrop";
@@ -87,6 +88,13 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     onCropComplete,
     handleSaveCroppedImage,
   } = useImageUploadAndCrop();
+
+  const { handleAvatarSizeChange, deleteAvatar } = useAvatarEditor(
+    projectData,
+    setProjectData,
+    updateProjectData,
+  );
+
   const { itemsOrder } = projectData;
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -118,22 +126,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   const handleOuterClick = () => {
     setShowBackgroundColorPicker(false);
     setShowFontColorPicker(false);
-  };
-
-  const handleAvatarSizeChange = (value) => {
-    const updatedData = {
-      ...projectData,
-      avatar: {
-        ...projectData.avatar,
-        style: {
-          ...projectData.avatar.style,
-          width: `${value}px`,
-          height: `${value}px`,
-        },
-      },
-    };
-    setProjectData(updatedData);
-    updateProjectData(updatedData);
   };
 
   const { onSubmit } = useSubmitProject({
@@ -806,20 +798,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           <div className="my-4">
             <Button
               className="w-full bg-[#8992a3] hover:bg-[#595f6b]"
-              onClick={() => {
-                const updatedData = {
-                  ...projectData,
-                  avatar: {
-                    image: null,
-                    style: {
-                      width: "0px",
-                      height: "0px",
-                    },
-                  },
-                };
-                setProjectData(updatedData);
-                updateProjectData(updatedData);
-              }}
+              onClick={deleteAvatar}
             >
               <FaRegTrashCan className="mr-2 h-4 w-4" />
               Delete Avatar
