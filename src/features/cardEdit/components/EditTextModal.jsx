@@ -71,7 +71,7 @@ const EditTextModal = ({
               onValueCommit={(value) =>
                 setEditTextData({
                   ...editTextData,
-                  style: { ...editTextData.style, fontSize: value[0] },
+                  style: { ...editTextData.style, fontSize: `${value[0]}px` },
                 })
               }
               className="w-full"
