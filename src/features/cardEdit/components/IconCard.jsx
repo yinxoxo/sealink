@@ -15,7 +15,7 @@ const IconCard = ({
         <IconComponent size={24} />
         <span>{iconName}</span>
       </div>
-      <p className="text-sm text-gray-400">{iconHref}</p>
+      <p className="break-all text-sm text-gray-400">{iconHref}</p>
     </div>
 
     <div className="flex items-center space-x-3">
