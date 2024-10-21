@@ -12,7 +12,8 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { useIconEditor } from "@/features/cardEdit/hooks/useIconEditor";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import PropTypes from "prop-types";
+import { useReducer } from "react";
 import { ChromePicker } from "react-color";
 import { Controller, useForm } from "react-hook-form";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -38,7 +39,6 @@ import { useSubmitProject } from "../../features/cardEdit/hooks/useSubmitProject
 import fontOptions from "../../features/cardTemplate/data/fontOptions";
 import { ICON_LIST } from "../../features/cardTemplate/data/iconList";
 const EditBoard = ({ isMobile, setIsMobile }) => {
-  const { toast } = useToast();
   const {
     projectId,
     projectData,
@@ -47,6 +47,59 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     setSelectedText,
     editingType,
   } = useCardEditorContext();
+
+  const initialState = {
+    isDeployModalOpen: false,
+    newProjectUrl: "",
+    showBackgroundColorPicker: false,
+    showFontColorPicker: false,
+    useBackgroundImage: !!projectData.background.backgroundImage,
+    editableTextItem: null,
+  };
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case "SET_IS_MODAL_OPEN":
+        return { ...state, isDeployModalOpen: action.payload };
+      case "SET_NEW_PROJECT_URL":
+        return { ...state, newProjectUrl: action.payload };
+      case "TOGGLE_BACKGROUND_COLOR_PICKER":
+        return {
+          ...state,
+          showBackgroundColorPicker: !state.showBackgroundColorPicker,
+          showFontColorPicker: false,
+        };
+      case "TOGGLE_FONT_COLOR_PICKER":
+        return {
+          ...state,
+          showFontColorPicker: !state.showFontColorPicker,
+          showBackgroundColorPicker: false,
+        };
+      case "CLOSE_ALL_COLOR_PICKERS":
+        return {
+          ...state,
+          showBackgroundColorPicker: false,
+          showFontColorPicker: false,
+        };
+      case "SET_USE_BACKGROUND_IMAGE":
+        return {
+          ...state,
+          useBackgroundImage: action.payload,
+        };
+      case "SET_EDITABLE_TEXT_ITEM":
+        return {
+          ...state,
+          editableTextItem: action.payload,
+        };
+      default:
+        return state;
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const { toast } = useToast();
+
   const updateProjectData = (newData) => {
     updateHistory(newData);
     setProjectData(newData);
@@ -113,26 +166,15 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     currentStep,
     redoHistory,
   } = useHistoryLogic(projectData, setProjectData);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newProjectUrl, setNewProjectUrl] = useState("");
-  const [showBackgroundColorPicker, setShowBackgroundColorPicker] =
-    useState(false);
-  const [showFontColorPicker, setShowFontColorPicker] = useState(false);
-  const [useBackgroundImage, setUseBackgroundImage] = useState(
-    !!projectData.background.backgroundImage,
-  );
-  const [editableTextItem, setEditableTextItem] = useState(null);
 
   const handleOuterClick = () => {
-    setShowBackgroundColorPicker(false);
-    setShowFontColorPicker(false);
+    dispatch({ type: "CLOSE_ALL_COLOR_PICKERS" });
   };
 
   const { onSubmit } = useSubmitProject({
     userId: user.uid,
     projectId,
-    setNewProjectUrl,
-    setIsModalOpen,
+    dispatch,
     navigate,
     toast,
     projectData,
@@ -158,7 +200,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             textItem={item}
             onEdit={() => {
               setSelectedText(item.id);
-              setEditableTextItem(item);
+              dispatch({ type: "SET_EDITABLE_TEXT_ITEM", payload: item });
               setIsModalVisible(true);
             }}
             onDelete={() => {
@@ -228,11 +270,11 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         <EditTextModal
           isTextModalVisible={isModalVisible}
           setIsTextModalVisible={setIsModalVisible}
-          editTextData={editableTextItem}
-          setEditTextData={setEditableTextItem}
+          editTextData={state.editableTextItem}
+          dispatch={dispatch}
           handleSaveTextEdit={() => {
             const updatedTexts = projectData.texts.map((item) =>
-              item.id === selectedText ? editableTextItem : item,
+              item.id === selectedText ? state.editableTextItem : item,
             );
 
             const updatedData = {
@@ -293,11 +335,10 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setShowFontColorPicker(!showFontColorPicker);
-                    setShowBackgroundColorPicker(false);
+                    dispatch({ type: "TOGGLE_FONT_COLOR_PICKER" });
                   }}
                 >
-                  {showFontColorPicker && (
+                  {state.showFontColorPicker && (
                     <div
                       className="absolute top-10 z-10"
                       onClick={(e) => e.stopPropagation()}
@@ -385,7 +426,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             <ButtonCard
               key={button.id}
               button={button}
-              // index={index}
               onEdit={() => handleButtonEdit(button, index)}
               onDelete={() => handleButtonDelete(button.id)}
             />
@@ -452,11 +492,10 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowBackgroundColorPicker(!showBackgroundColorPicker);
-                  setShowFontColorPicker(false);
+                  dispatch({ type: "TOGGLE_BACKGROUND_COLOR_PICKER" });
                 }}
               >
-                {showBackgroundColorPicker && (
+                {state.showBackgroundColorPicker && (
                   <div
                     className="absolute top-10 z-10"
                     onClick={(e) => e.stopPropagation()}
@@ -603,11 +642,10 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowFontColorPicker(!showFontColorPicker);
-                  setShowBackgroundColorPicker(false);
+                  dispatch({ type: "TOGGLE_FONT_COLOR_PICKER" });
                 }}
               >
-                {showFontColorPicker && (
+                {state.showFontColorPicker && (
                   <div
                     className="absolute top-10 z-10"
                     onClick={(e) => e.stopPropagation()}
@@ -636,12 +674,14 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
           <h1 className="text-lg font-medium">Use Background Image ?</h1>
         </div>
         <Switch
-          checked={useBackgroundImage}
-          onCheckedChange={(checked) => setUseBackgroundImage(checked)}
+          checked={state.useBackgroundImage}
+          onCheckedChange={(checked) =>
+            dispatch({ type: "SET_USE_BACKGROUND_IMAGE", payload: checked })
+          }
         />
       </div>
 
-      {useBackgroundImage ? (
+      {state.useBackgroundImage ? (
         <div className="mt-2 space-y-2">
           <label className="text-sm font-medium">Background Image </label>
           <Input
@@ -709,11 +749,10 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                setShowBackgroundColorPicker(!showBackgroundColorPicker);
-                setShowFontColorPicker(false);
+                dispatch({ type: "TOGGLE_BACKGROUND_COLOR_PICKER" });
               }}
             >
-              {showBackgroundColorPicker && (
+              {state.showBackgroundColorPicker && (
                 <div
                   className="absolute top-10 z-10"
                   onClick={(e) => e.stopPropagation()}
@@ -721,7 +760,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                   <ChromePicker
                     color={projectData.background.backgroundColor || "#fff"}
                     onChange={(color) => {
-                      // setTempBackgroundColor(color.hex);
                       const updatedData = {
                         ...projectData,
                         background: {
@@ -925,10 +963,11 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       onClick={handleOuterClick}
     >
       <DeployModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        projectUrl={newProjectUrl}
+        isOpen={state.isDeployModalOpen}
+        onClose={() => dispatch({ type: "SET_IS_MODAL_OPEN", payload: false })}
+        projectUrl={state.newProjectUrl}
       />
+
       <NavBar
         isMobile={isMobile}
         setIsMobile={setIsMobile}
@@ -956,6 +995,11 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       </div>
     </section>
   );
+};
+
+EditBoard.propTypes = {
+  isMobile: PropTypes.bool.isRequired,
+  setIsMobile: PropTypes.func.isRequired,
 };
 
 export default EditBoard;

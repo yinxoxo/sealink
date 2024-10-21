@@ -24,7 +24,7 @@ const EditTextModal = ({
   isTextModalVisible,
   setIsTextModalVisible,
   editTextData,
-  setEditTextData,
+  dispatch,
   handleSaveTextEdit,
 }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
@@ -50,7 +50,10 @@ const EditTextModal = ({
             type="text"
             value={editTextData.text}
             onChange={(e) =>
-              setEditTextData({ ...editTextData, text: e.target.value })
+              dispatch({
+                type: "SET_EDITABLE_TEXT_ITEM",
+                payload: { ...editTextData, text: e.target.value },
+              })
             }
           />
         </div>
@@ -69,9 +72,12 @@ const EditTextModal = ({
               max={100}
               step={1}
               onValueCommit={(value) =>
-                setEditTextData({
-                  ...editTextData,
-                  style: { ...editTextData.style, fontSize: `${value[0]}px` },
+                dispatch({
+                  type: "SET_EDITABLE_TEXT_ITEM",
+                  payload: {
+                    ...editTextData,
+                    style: { ...editTextData.style, fontSize: `${value[0]}px` },
+                  },
                 })
               }
               className="w-full"
@@ -101,9 +107,12 @@ const EditTextModal = ({
                 <ChromePicker
                   color={editTextData.style.color}
                   onChangeComplete={(color) =>
-                    setEditTextData({
-                      ...editTextData,
-                      style: { ...editTextData.style, color: color.hex },
+                    dispatch({
+                      type: "SET_EDITABLE_TEXT_ITEM",
+                      payload: {
+                        ...editTextData,
+                        style: { ...editTextData.style, color: color.hex },
+                      },
                     })
                   }
                 />
@@ -122,9 +131,12 @@ const EditTextModal = ({
               max={700}
               step={100}
               onValueChange={(value) =>
-                setEditTextData({
-                  ...editTextData,
-                  style: { ...editTextData.style, fontWeight: value[0] },
+                dispatch({
+                  type: "SET_EDITABLE_TEXT_ITEM",
+                  payload: {
+                    ...editTextData,
+                    style: { ...editTextData.style, fontWeight: value[0] },
+                  },
                 })
               }
               className="w-full"
@@ -137,9 +149,12 @@ const EditTextModal = ({
           <Select
             value={editTextData.style.fontFamily.split(",")[0]}
             onValueChange={(value) =>
-              setEditTextData({
-                ...editTextData,
-                style: { ...editTextData.style, fontFamily: value },
+              dispatch({
+                type: "SET_EDITABLE_TEXT_ITEM",
+                payload: {
+                  ...editTextData,
+                  style: { ...editTextData.style, fontFamily: value },
+                },
               })
             }
           >
@@ -179,7 +194,7 @@ EditTextModal.propTypes = {
   isTextModalVisible: PropTypes.bool.isRequired,
   setIsTextModalVisible: PropTypes.func.isRequired,
   editTextData: PropTypes.object,
-  setEditTextData: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   handleSaveTextEdit: PropTypes.func.isRequired,
 };
 

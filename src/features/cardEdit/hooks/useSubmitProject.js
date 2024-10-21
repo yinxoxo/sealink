@@ -4,8 +4,7 @@ import { saveProjectToFirestore } from "../../../firebase/saveProjectToFirestore
 export const useSubmitProject = ({
   userId,
   projectId,
-  setNewProjectUrl,
-  setIsModalOpen,
+  dispatch,
   navigate,
   toast,
   projectData,
@@ -26,8 +25,8 @@ export const useSubmitProject = ({
         queryClient.invalidateQueries("userProjects");
 
         if (action === "publish") {
-          setNewProjectUrl(publishedUrl);
-          setIsModalOpen(true);
+          dispatch({ type: "SET_NEW_PROJECT_URL", payload: publishedUrl });
+          dispatch({ type: "SET_IS_MODAL_OPEN", payload: true });
         } else {
           navigate("/dashboard");
         }
