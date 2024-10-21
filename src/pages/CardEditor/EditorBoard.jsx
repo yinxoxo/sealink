@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { useIconEditor } from "@/features/cardEdit/hooks/useIconEditor";
 import { useToast } from "@/hooks/use-toast";
+import PropTypes from "prop-types";
 import { useReducer } from "react";
 import { ChromePicker } from "react-color";
 import { Controller, useForm } from "react-hook-form";
@@ -996,6 +997,11 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
       </div>
     </section>
   );
+};
+
+EditBoard.propTypes = {
+  isMobile: PropTypes.bool.isRequired,
+  setIsMobile: PropTypes.func.isRequired,
 };
 
 export default EditBoard;
