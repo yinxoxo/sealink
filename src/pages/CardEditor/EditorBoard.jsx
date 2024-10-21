@@ -426,7 +426,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
             <ButtonCard
               key={button.id}
               button={button}
-              // index={index}
               onEdit={() => handleButtonEdit(button, index)}
               onDelete={() => handleButtonDelete(button.id)}
             />
@@ -761,7 +760,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
                   <ChromePicker
                     color={projectData.background.backgroundColor || "#fff"}
                     onChange={(color) => {
-                      // setTempBackgroundColor(color.hex);
                       const updatedData = {
                         ...projectData,
                         background: {
