@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import Loading from "../../../components/Loading/index";
 const DailyHeatmap = ({ loading, visitorData }) => {
   const timeSlots = [
@@ -15,7 +15,7 @@ const DailyHeatmap = ({ loading, visitorData }) => {
     return date.toLocaleString("en-US", { month: "short" });
   };
 
-  const processData = () => {
+  const processData = useCallback(() => {
     const dateVisits = {};
     visitorData.forEach((visitor) => {
       const visitDate = new Date(visitor.visitTime.seconds * 1000);
@@ -39,21 +39,20 @@ const DailyHeatmap = ({ loading, visitorData }) => {
         slots: dateVisits[date],
       };
     });
-  };
+  }, [visitorData]);
 
-  const heatmapData = useMemo(() => processData(), [visitorData]);
+  const heatmapData = useMemo(() => processData(), [processData]);
 
   if (loading || !visitorData) {
     return <Loading />;
   }
 
   const getColor = (value) => {
-    if (value > 5) return "bg-[#4a798f]";
-    if (value > 4) return "bg-[#5296a6]";
-    if (value > 3) return "bg-[#7bb0bb]";
+    if (value > 6) return "bg-[#5296a6]";
+    if (value > 4) return "bg-[#7bb0bb]";
     if (value > 2) return "bg-[#a8c8d0]";
     if (value > 1) return "bg-[#bbd9e1]";
-    if (value > 0) return "bg-[#cadbdf]";
+    if (value > 0) return "bg-[#d7e9eb]";
     return "bg-[#f1f2f3]";
   };
 
@@ -64,7 +63,7 @@ const DailyHeatmap = ({ loading, visitorData }) => {
   const Legend = () => {
     const colors = [
       { color: "bg-[#f1f2f3]", label: "0" },
-      { color: "bg-[#cadbdf]", label: "1" },
+      { color: "bg-[#d7e9eb]", label: "1" },
       { color: "bg-[#bbd9e1]", label: "2" },
       { color: "bg-[#a8c8d0]", label: "3-4" },
       { color: "bg-[#7bb0bb]", label: "5-6" },

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage";
@@ -85,6 +86,10 @@ const CardEditorContent = ({ template }) => {
       <EditBoard isMobile={isMobile} setIsMobile={setIsMobile} />
     </section>
   );
+};
+
+CardEditorContent.propTypes = {
+  template: PropTypes.string.isRequired,
 };
 
 export default CardEditor;

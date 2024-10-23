@@ -20,8 +20,8 @@ import JiaCard from "../../features/cardTemplate/components/JiaCard";
 import NinaWishCard from "../../features/cardTemplate/components/NinaWishCard";
 import SimpleCard from "../../features/cardTemplate/components/SimpleCard";
 import WoodCard from "../../features/cardTemplate/components/WoodCard";
-import ProjectSetting from "./ProjectSetting";
-import QrcodeModal from "./QrcodeModal";
+import ProjectSetting from "../../features/dashboard/components/ProjectSetting";
+import QrcodeModal from "../../features/dashboard/components/QrcodeModal";
 
 const Dashboard = () => {
   const { projects, loading } = useProjects();

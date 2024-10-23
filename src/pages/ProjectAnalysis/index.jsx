@@ -2,11 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loading from "../../components/Loading/index";
 import { ProjectsContext } from "../../contexts/ProjectContext/ProjectsProvider";
-import DonutChart from "./DataFigure/DonutChart";
-import Heatmap from "./DataFigure/Heatmap";
-import LifetimeChart from "./DataFigure/LifetimeChart";
-import LinkChart from "./DataFigure/LinkChart";
-import TimeRangeSelector from "./TimeRangeSelector";
+import DonutChart from "../../features/projectAnalysis/components/DonutChart";
+import Heatmap from "../../features/projectAnalysis/components/Heatmap";
+import LifetimeChart from "../../features/projectAnalysis/components/LifetimeChart";
+import LinkChart from "../../features/projectAnalysis/components/LinkChart";
+import TimeRangeSelector from "../../features/projectAnalysis/components/TimeRangeSelector";
 
 const ProjectAnalysis = () => {
   const { projectId } = useParams();

@@ -10,7 +10,7 @@ import {
   loginWithGoogle,
   registerWithEmail,
   saveUserToFirestore,
-} from "./auth";
+} from "../../features/auth/api/auth";
 
 const SignUp = () => {
   const { login } = useAuth();

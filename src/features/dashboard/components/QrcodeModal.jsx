@@ -8,7 +8,7 @@ import {
 import PropTypes from "prop-types";
 import { QRCodeCanvas } from "qrcode.react";
 import { useRef } from "react";
-import logo from "../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.png";
 
 const QrcodeModal = ({ isOpen, onClose, project }) => {
   const qrCodeRef = useRef();

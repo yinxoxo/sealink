@@ -4,7 +4,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
-import { auth, googleProvider } from "../../firebase/firebaseConfig";
+import { auth, googleProvider } from "../../../firebase/firebaseConfig";
 
 const firestore = getFirestore();
 
