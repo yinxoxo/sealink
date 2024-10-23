@@ -171,110 +171,109 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     onSubmit(data);
   };
 
-  const renderTextEditor = () => (
-    <TextEditor
-      projectData={projectData}
-      setProjectData={setProjectData}
-      updateProjectData={updateProjectData}
-      setIsModalVisible={setIsModalVisible}
-      isModalVisible={isModalVisible}
-      dispatch={dispatch}
-      state={state}
-      itemsOrder={itemsOrder}
-      selectedText={selectedText}
-      setSelectedText={setSelectedText}
-    />
-  );
+  const editorMap = {
+    text: () => (
+      <TextEditor
+        projectData={projectData}
+        setProjectData={setProjectData}
+        updateProjectData={updateProjectData}
+        setIsModalVisible={setIsModalVisible}
+        isModalVisible={isModalVisible}
+        dispatch={dispatch}
+        state={state}
+        itemsOrder={itemsOrder}
+        selectedText={selectedText}
+        setSelectedText={setSelectedText}
+      />
+    ),
+    icon: () => (
+      <IconEditor
+        projectData={projectData}
+        icons={icons}
+        ICON_LIST={ICON_LIST}
+        iconColor={iconColor}
+        iconSize={iconSize}
+        addIcon={addIcon}
+        handleIconEdit={handleIconEdit}
+        handleIconDelete={handleIconDelete}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        setSelectedIcon={setSelectedIcon}
+        editIconData={editIconData}
+        setEditIconData={setEditIconData}
+        handleSaveIconEdit={handleSaveIconEdit}
+        state={state}
+        dispatch={dispatch}
+        updateProjectData={updateProjectData}
+      />
+    ),
+    button: () => (
+      <ButtonEditor
+        projectData={projectData}
+        setProjectData={setProjectData}
+        updateProjectData={updateProjectData}
+        isButtonModalVisible={isButtonModalVisible}
+        setIsButtonModalVisible={setIsButtonModalVisible}
+        editButtonData={editButtonData}
+        setEditButtonData={setEditButtonData}
+        handleButtonEdit={handleButtonEdit}
+        handleSaveButtonEdit={handleSaveButtonEdit}
+        handleButtonDelete={handleButtonDelete}
+        handleButtonStyleChange={handleButtonStyleChange}
+        state={state}
+        dispatch={dispatch}
+      />
+    ),
+    background: () => (
+      <BackgroundEditor
+        projectData={projectData}
+        setProjectData={setProjectData}
+        updateProjectData={updateProjectData}
+        state={state}
+        dispatch={dispatch}
+        setImageUrl={setImageUrl}
+        setIsCropModalVisible={setIsCropModalVisible}
+        imageUrl={imageUrl}
+        crop={crop}
+        setCrop={setCrop}
+        zoom={zoom}
+        setZoom={setZoom}
+        isCropModalVisible={isCropModalVisible}
+        onCropComplete={onCropComplete}
+        handleSaveCroppedImage={handleSaveCroppedImage}
+        uploading={uploading}
+      />
+    ),
+    avatar: () => (
+      <AvatarEditor
+        projectData={projectData}
+        setProjectData={setProjectData}
+        updateProjectData={updateProjectData}
+        handleAvatarSizeChange={handleAvatarSizeChange}
+        deleteAvatar={deleteAvatar}
+        setImageUrl={setImageUrl}
+        setIsCropModalVisible={setIsCropModalVisible}
+        imageUrl={imageUrl}
+        crop={crop}
+        setCrop={setCrop}
+        zoom={zoom}
+        setZoom={setZoom}
+        isCropModalVisible={isCropModalVisible}
+        onCropComplete={onCropComplete}
+        handleSaveCroppedImage={handleSaveCroppedImage}
+        uploading={uploading}
+      />
+    ),
+    saveProject: () => (
+      <UserProjectForm
+        control={control}
+        handleSubmit={handleSubmit}
+        handleSubmitProject={handleSubmitProject}
+      />
+    ),
+  };
 
-  const renderIconList = () => (
-    <IconEditor
-      projectData={projectData}
-      icons={icons}
-      ICON_LIST={ICON_LIST}
-      iconColor={iconColor}
-      iconSize={iconSize}
-      addIcon={addIcon}
-      handleIconEdit={handleIconEdit}
-      handleIconDelete={handleIconDelete}
-      isModalVisible={isModalVisible}
-      setIsModalVisible={setIsModalVisible}
-      setSelectedIcon={setSelectedIcon}
-      editIconData={editIconData}
-      setEditIconData={setEditIconData}
-      handleSaveIconEdit={handleSaveIconEdit}
-      state={state}
-      dispatch={dispatch}
-      updateProjectData={updateProjectData}
-    />
-  );
-
-  const renderButtonEditor = () => (
-    <ButtonEditor
-      projectData={projectData}
-      setProjectData={setProjectData}
-      updateProjectData={updateProjectData}
-      isButtonModalVisible={isButtonModalVisible}
-      setIsButtonModalVisible={setIsButtonModalVisible}
-      editButtonData={editButtonData}
-      setEditButtonData={setEditButtonData}
-      handleButtonEdit={handleButtonEdit}
-      handleSaveButtonEdit={handleSaveButtonEdit}
-      handleButtonDelete={handleButtonDelete}
-      handleButtonStyleChange={handleButtonStyleChange}
-      state={state}
-      dispatch={dispatch}
-    />
-  );
-
-  const renderBackgroundEditor = () => (
-    <BackgroundEditor
-      projectData={projectData}
-      setProjectData={setProjectData}
-      updateProjectData={updateProjectData}
-      state={state}
-      dispatch={dispatch}
-      setImageUrl={setImageUrl}
-      setIsCropModalVisible={setIsCropModalVisible}
-      imageUrl={imageUrl}
-      crop={crop}
-      setCrop={setCrop}
-      zoom={zoom}
-      setZoom={setZoom}
-      isCropModalVisible={isCropModalVisible}
-      onCropComplete={onCropComplete}
-      handleSaveCroppedImage={handleSaveCroppedImage}
-      uploading={uploading}
-    />
-  );
-
-  const renderAvatarEditor = () => (
-    <AvatarEditor
-      projectData={projectData}
-      setProjectData={setProjectData}
-      updateProjectData={updateProjectData}
-      handleAvatarSizeChange={handleAvatarSizeChange}
-      deleteAvatar={deleteAvatar}
-      setImageUrl={setImageUrl}
-      setIsCropModalVisible={setIsCropModalVisible}
-      imageUrl={imageUrl}
-      crop={crop}
-      setCrop={setCrop}
-      zoom={zoom}
-      setZoom={setZoom}
-      isCropModalVisible={isCropModalVisible}
-      onCropComplete={onCropComplete}
-      handleSaveCroppedImage={handleSaveCroppedImage}
-      uploading={uploading}
-    />
-  );
-
-  const renderUserProjectForm = () => (
-    <UserProjectForm
-      control={control}
-      handleSubmit={handleSubmit}
-      handleSubmitProject={handleSubmitProject}
-    />
-  );
+  const renderEditor = () => editorMap[editingType]();
 
   return (
     <section
@@ -286,7 +285,6 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         onClose={() => dispatch({ type: "SET_IS_MODAL_OPEN", payload: false })}
         projectUrl={state.newProjectUrl}
       />
-
       <NavBar
         isMobile={isMobile}
         setIsMobile={setIsMobile}
@@ -296,22 +294,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         disableRedo={redoHistory.length === 0}
         onReset={handleReset}
       />
-
-      <div className="flex flex-col p-5 xl:mt-16">
-        {editingType === "text"
-          ? renderTextEditor()
-          : editingType === "icon"
-            ? renderIconList()
-            : editingType === "saveProject"
-              ? renderUserProjectForm()
-              : editingType === "button"
-                ? renderButtonEditor()
-                : editingType === "background"
-                  ? renderBackgroundEditor()
-                  : editingType === "avatar"
-                    ? renderAvatarEditor()
-                    : null}
-      </div>
+      <div className="flex flex-col p-5 xl:mt-16">{renderEditor()}</div>
     </section>
   );
 };
