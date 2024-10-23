@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
+import AvatarEditor from "@/features/cardEdit/components/AvatarEditor";
 import BackgroundEditor from "@/features/cardEdit/components/BackgroundEditor";
 import ButtonEditor from "@/features/cardEdit/components/ButtonEditor";
 import IconEditor from "@/features/cardEdit/components/IconEditor";
@@ -11,14 +11,11 @@ import { useToast } from "@/hooks/use-toast";
 import PropTypes from "prop-types";
 import { useReducer } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { FaRegTrashCan } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext/useAuth";
 import { useCardEditorContext } from "../../contexts/CardEditorContext/useCardEditorContext";
-import CropperModal from "../../features/cardEdit/components/CropperModal";
 import DeployModal from "../../features/cardEdit/components/DeployModal";
 import NavBar from "../../features/cardEdit/components/NavBar";
-import UploadButton from "../../features/cardEdit/components/UploadButton";
 import useAvatarEditor from "../../features/cardEdit/hooks/useAvatarEditor";
 import { useButtonEditor } from "../../features/cardEdit/hooks/useButtonEditor";
 import { useHistoryLogic } from "../../features/cardEdit/hooks/useHistoryLogic";
@@ -253,75 +250,24 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   );
 
   const renderAvatarEditor = () => (
-    <div>
-      <div className="flex w-full">
-        <h1 className="ml-2 text-3xl font-bold">Avatar</h1>
-      </div>
-
-      {projectData.avatar?.image && (
-        <>
-          <div className="mt-4 flex flex-col space-y-2">
-            <label className="text-sm font-medium">Adjust Avatar Size</label>
-            <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
-              <Slider
-                min={50}
-                max={300}
-                defaultValue={[parseInt(projectData.avatar.style.width, 10)]}
-                onValueCommit={(value) => handleAvatarSizeChange(value[0])}
-              />
-            </div>
-          </div>
-          <div className="my-4">
-            <Button
-              className="w-full bg-[#8992a3] hover:bg-[#595f6b]"
-              onClick={deleteAvatar}
-            >
-              <FaRegTrashCan className="mr-2 h-4 w-4" />
-              Delete Avatar
-            </Button>
-          </div>
-        </>
-      )}
-      <div className="my-4 w-full">
-        <UploadButton
-          onUpload={(downloadURL) => {
-            setImageUrl(downloadURL);
-            setIsCropModalVisible(true);
-          }}
-        />
-      </div>
-      <CropperModal
-        isCropModalVisible={isCropModalVisible}
-        setIsCropModalVisible={setIsCropModalVisible}
-        imageUrl={imageUrl}
-        crop={crop}
-        setCrop={setCrop}
-        zoom={zoom}
-        setZoom={setZoom}
-        cropShape="round"
-        aspect={1 / 1}
-        onCropComplete={onCropComplete}
-        handleSaveCroppedImage={() =>
-          handleSaveCroppedImage("avatars", (downloadURL) => {
-            const updatedData = {
-              ...projectData,
-              avatar: {
-                ...projectData.avatar,
-                image: downloadURL,
-                style: {
-                  width: "100px",
-                  height: "100px",
-                },
-              },
-            };
-            setProjectData(updatedData);
-            updateProjectData(updatedData);
-            setIsCropModalVisible(false);
-          })
-        }
-        uploading={uploading}
-      />
-    </div>
+    <AvatarEditor
+      projectData={projectData}
+      setProjectData={setProjectData}
+      updateProjectData={updateProjectData}
+      handleAvatarSizeChange={handleAvatarSizeChange}
+      deleteAvatar={deleteAvatar}
+      setImageUrl={setImageUrl}
+      setIsCropModalVisible={setIsCropModalVisible}
+      imageUrl={imageUrl}
+      crop={crop}
+      setCrop={setCrop}
+      zoom={zoom}
+      setZoom={setZoom}
+      isCropModalVisible={isCropModalVisible}
+      onCropComplete={onCropComplete}
+      handleSaveCroppedImage={handleSaveCroppedImage}
+      uploading={uploading}
+    />
   );
 
   const renderUserProjectForm = () => {
