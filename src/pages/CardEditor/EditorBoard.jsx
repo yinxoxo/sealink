@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import TextEditor from "@/features/cardEdit/components/TextEditor";
 import { useIconEditor } from "@/features/cardEdit/hooks/useIconEditor";
 import { useToast } from "@/hooks/use-toast";
 import PropTypes from "prop-types";
@@ -25,11 +26,9 @@ import CropperModal from "../../features/cardEdit/components/CropperModal";
 import DeployModal from "../../features/cardEdit/components/DeployModal";
 import EditButtonModal from "../../features/cardEdit/components/EditButtonModal";
 import EditIconModal from "../../features/cardEdit/components/EditIconModal";
-import EditTextModal from "../../features/cardEdit/components/EditTextModal";
 import IconCard from "../../features/cardEdit/components/IconCard";
 import IconSelect from "../../features/cardEdit/components/IconSelect";
 import NavBar from "../../features/cardEdit/components/NavBar";
-import TextCard from "../../features/cardEdit/components/TextCard";
 import UploadButton from "../../features/cardEdit/components/UploadButton";
 import useAvatarEditor from "../../features/cardEdit/hooks/useAvatarEditor";
 import { useButtonEditor } from "../../features/cardEdit/hooks/useButtonEditor";
@@ -188,107 +187,20 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     onSubmit(data);
   };
 
-  const renderTextEditor = () => {
-    return (
-      <>
-        <div className="mb-4 flex w-full">
-          <h1 className="ml-2 text-3xl font-bold">Texts</h1>
-        </div>
-        {projectData.texts.map((item) => (
-          <TextCard
-            key={item.id}
-            textItem={item}
-            onEdit={() => {
-              setSelectedText(item.id);
-              dispatch({ type: "SET_EDITABLE_TEXT_ITEM", payload: item });
-              setIsModalVisible(true);
-            }}
-            onDelete={() => {
-              const updatedTexts = projectData.texts.filter(
-                (textItem) => textItem.id !== item.id,
-              );
-
-              const updatedItemsOrder = itemsOrder.filter(
-                (orderItem) => orderItem.id !== item.id,
-              );
-
-              const updatedData = {
-                ...projectData,
-                texts: updatedTexts,
-                itemsOrder: updatedItemsOrder,
-              };
-              setProjectData(updatedData);
-              updateProjectData(updatedData);
-            }}
-            onUpdate={(updatedItem) => {
-              const updatedTexts = projectData.texts.map((textItem) =>
-                textItem.id === item.id ? updatedItem : textItem,
-              );
-              const updatedData = {
-                ...projectData,
-                texts: updatedTexts,
-              };
-              setProjectData(updatedData);
-              updateProjectData(updatedData);
-            }}
-          />
-        ))}
-        <Button
-          className="mt-6 bg-button hover:bg-button-hover"
-          onClick={() => {
-            const maxId = projectData.texts.reduce((max, text) => {
-              const idNumber = parseInt(text.id.split("-")[1]);
-              return idNumber > max ? idNumber : max;
-            }, 0);
-
-            const newTextId = `text-${maxId + 1}`;
-            const newTextItem = {
-              id: newTextId,
-              text: "New Text",
-              style: {
-                fontSize: "16px",
-                fontWeight: 400,
-                color: "#000000",
-                fontFamily: "Arial",
-              },
-            };
-            const updatedData = {
-              ...projectData,
-              texts: [...projectData.texts, newTextItem],
-              itemsOrder: [
-                ...projectData.itemsOrder,
-                { id: newTextId, type: "text" },
-              ],
-            };
-            setProjectData(updatedData);
-            updateProjectData(updatedData);
-          }}
-        >
-          Add New Text
-        </Button>
-
-        <EditTextModal
-          isTextModalVisible={isModalVisible}
-          setIsTextModalVisible={setIsModalVisible}
-          editTextData={state.editableTextItem}
-          dispatch={dispatch}
-          handleSaveTextEdit={() => {
-            const updatedTexts = projectData.texts.map((item) =>
-              item.id === selectedText ? state.editableTextItem : item,
-            );
-
-            const updatedData = {
-              ...projectData,
-              texts: updatedTexts,
-            };
-            setProjectData(updatedData);
-            updateProjectData(updatedData);
-            setIsModalVisible(false);
-          }}
-        />
-      </>
-    );
-  };
+  const renderTextEditor = () => (
+    <TextEditor
+      projectData={projectData}
+      setProjectData={setProjectData}
+      updateProjectData={updateProjectData}
+      setIsModalVisible={setIsModalVisible}
+      isModalVisible={isModalVisible}
+      dispatch={dispatch}
+      state={state}
+      itemsOrder={itemsOrder}
+      selectedText={selectedText}
+      setSelectedText={setSelectedText}
+    />
+  );
 
   const renderIconList = () => (
     <>
