@@ -19,45 +19,58 @@ const TextEditor = ({
       <div className="mb-4 flex w-full">
         <h1 className="ml-2 text-3xl font-bold">Texts</h1>
       </div>
-      {projectData.texts.map((item) => (
-        <TextCard
-          key={item.id}
-          textItem={item}
-          onEdit={() => {
-            setSelectedText(item.id);
-            dispatch({ type: "SET_EDITABLE_TEXT_ITEM", payload: item });
-            setIsModalVisible(true);
-          }}
-          onDelete={() => {
-            const updatedTexts = projectData.texts.filter(
-              (textItem) => textItem.id !== item.id,
-            );
+      {itemsOrder
+        .filter((orderItem) => orderItem.type === "text")
+        .map((orderItem) => {
+          const textItem = projectData.texts.find(
+            (text) => text.id === orderItem.id,
+          );
+          return (
+            textItem && (
+              <TextCard
+                key={textItem.id}
+                textItem={textItem}
+                onEdit={() => {
+                  setSelectedText(textItem.id);
+                  dispatch({
+                    type: "SET_EDITABLE_TEXT_ITEM",
+                    payload: textItem,
+                  });
+                  setIsModalVisible(true);
+                }}
+                onDelete={() => {
+                  const updatedTexts = projectData.texts.filter(
+                    (textItem) => textItem.id !== orderItem.id,
+                  );
 
-            const updatedItemsOrder = itemsOrder.filter(
-              (orderItem) => orderItem.id !== item.id,
-            );
+                  const updatedItemsOrder = itemsOrder.filter(
+                    (order) => order.id !== orderItem.id,
+                  );
 
-            const updatedData = {
-              ...projectData,
-              texts: updatedTexts,
-              itemsOrder: updatedItemsOrder,
-            };
-            setProjectData(updatedData);
-            updateProjectData(updatedData);
-          }}
-          onUpdate={(updatedItem) => {
-            const updatedTexts = projectData.texts.map((textItem) =>
-              textItem.id === item.id ? updatedItem : textItem,
-            );
-            const updatedData = {
-              ...projectData,
-              texts: updatedTexts,
-            };
-            setProjectData(updatedData);
-            updateProjectData(updatedData);
-          }}
-        />
-      ))}
+                  const updatedData = {
+                    ...projectData,
+                    texts: updatedTexts,
+                    itemsOrder: updatedItemsOrder,
+                  };
+                  setProjectData(updatedData);
+                  updateProjectData(updatedData);
+                }}
+                onUpdate={(updatedItem) => {
+                  const updatedTexts = projectData.texts.map((textItem) =>
+                    textItem.id === updatedItem.id ? updatedItem : textItem,
+                  );
+                  const updatedData = {
+                    ...projectData,
+                    texts: updatedTexts,
+                  };
+                  setProjectData(updatedData);
+                  updateProjectData(updatedData);
+                }}
+              />
+            )
+          );
+        })}
+
       <Button
         className="mt-6 bg-button hover:bg-button-hover"
         onClick={() => {

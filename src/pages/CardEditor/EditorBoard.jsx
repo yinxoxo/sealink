@@ -222,6 +222,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         handleButtonStyleChange={handleButtonStyleChange}
         state={state}
         dispatch={dispatch}
+        itemsOrder={itemsOrder}
       />
     ),
     background: () => (

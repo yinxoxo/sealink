@@ -27,8 +27,16 @@ const ButtonEditor = ({
   handleButtonStyleChange,
   state,
   dispatch,
+  itemsOrder,
 }) => {
-  const { style, buttonList } = projectData.buttons;
+  const { style } = projectData.buttons;
+  const orderedButtonList = itemsOrder
+    .filter((orderItem) => orderItem.type === "button")
+    .map((orderItem) => {
+      return projectData.buttons.buttonList.find(
+        (button) => button.id === orderItem.id,
+      );
+    });
 
   return (
     <>
@@ -37,7 +45,7 @@ const ButtonEditor = ({
       </div>
 
       <div className="mt-4">
-        {buttonList.map((button, index) => (
+        {orderedButtonList.map((button, index) => (
           <ButtonCard
             key={button.id}
             button={button}
@@ -292,6 +300,12 @@ ButtonEditor.propTypes = {
   handleButtonStyleChange: PropTypes.func.isRequired,
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
+  itemsOrder: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
 };
 
 export default ButtonEditor;
