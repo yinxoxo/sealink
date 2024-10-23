@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import PropTypes from "prop-types";
 import { FaRegTrashCan } from "react-icons/fa6";
-import CropperModal from "../../features/cardEdit/components/CropperModal";
-import UploadButton from "../../features/cardEdit/components/UploadButton";
+import CropperModal from "./CropperModal";
+import UploadButton from "./UploadButton";
 
 const AvatarEditor = ({
   projectData,
