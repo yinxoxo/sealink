@@ -10,9 +10,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useAuth } from "../../contexts/AuthContext/useAuth";
-import { deleteProjectFromFirestore } from "../../firebase/deleteProjectFromFirestore";
-import { saveProjectToFirestore } from "../../firebase/saveProjectToFirestore";
+import { useAuth } from "../../../contexts/AuthContext/useAuth";
+import { deleteProjectFromFirestore } from "../../../firebase/deleteProjectFromFirestore";
+import { saveProjectToFirestore } from "../../../firebase/saveProjectToFirestore";
 
 const ProjectSetting = ({ project, isOpen, onClose }) => {
   const [title, setTitle] = useState(project.title);
