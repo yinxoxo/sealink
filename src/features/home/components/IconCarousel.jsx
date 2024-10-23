@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { ICON_LIST } from "../../features/cardTemplate/data/iconList";
+import { ICON_LIST } from "../../cardTemplate/data/iconList";
 const IconCarousel = ({ currentIndex }) => {
   const COLOR_LIST = ["#B48EAE", "#BAACBD"];
   const extendedIconList = [...ICON_LIST, ...ICON_LIST, ...ICON_LIST];
