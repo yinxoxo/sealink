@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import IconEditor from "@/features/cardEdit/components/IconEditor";
 import TextEditor from "@/features/cardEdit/components/TextEditor";
 import { useIconEditor } from "@/features/cardEdit/hooks/useIconEditor";
 import { useToast } from "@/hooks/use-toast";
@@ -25,9 +26,6 @@ import ButtonCard from "../../features/cardEdit/components/ButtonCard";
 import CropperModal from "../../features/cardEdit/components/CropperModal";
 import DeployModal from "../../features/cardEdit/components/DeployModal";
 import EditButtonModal from "../../features/cardEdit/components/EditButtonModal";
-import EditIconModal from "../../features/cardEdit/components/EditIconModal";
-import IconCard from "../../features/cardEdit/components/IconCard";
-import IconSelect from "../../features/cardEdit/components/IconSelect";
 import NavBar from "../../features/cardEdit/components/NavBar";
 import UploadButton from "../../features/cardEdit/components/UploadButton";
 import useAvatarEditor from "../../features/cardEdit/hooks/useAvatarEditor";
@@ -109,9 +107,9 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     iconSize,
     editIconData,
     setEditIconData,
+    setSelectedIcon,
     isModalVisible,
     setIsModalVisible,
-    setSelectedIcon,
     handleIconEdit,
     handleSaveIconEdit,
     addIcon,
@@ -203,125 +201,25 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
   );
 
   const renderIconList = () => (
-    <>
-      {editingType === "icon" ? (
-        <>
-          <div className="mb-4 flex w-full">
-            <h1 className="ml-2 text-3xl font-bold">Icons</h1>
-          </div>
-          {icons.map((icon) => (
-            <IconCard
-              key={icon.id}
-              icon={icon.icon}
-              iconColor="black"
-              iconName={icon.name}
-              iconHref={icon.href}
-              onEdit={() => handleIconEdit(icon.name)}
-              onDelete={() => handleIconDelete(icon.id)}
-            />
-          ))}
-          <div className="mt-8 w-full">
-            <IconSelect
-              icons={icons}
-              setSelectedIcon={setSelectedIcon}
-              ICON_LIST={ICON_LIST}
-            />
-            <Button
-              className="mt-2 w-full bg-button hover:bg-button-hover"
-              onClick={addIcon}
-            >
-              Add Icon
-            </Button>
-          </div>
-          <div className="mt-6 flex w-full">
-            <h1 className="ml-2 text-2xl font-bold">Appearance</h1>
-          </div>
-          <div className="mt-4 space-y-6">
-            <div className="flex flex-col space-y-2">
-              <label className="text-sm font-medium">Icon Color</label>
-              <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-[#f4f4f5] p-2">
-                <div
-                  className="relative h-6 w-20 cursor-pointer rounded"
-                  style={{
-                    backgroundColor: projectData.socialLinks.style.color,
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    dispatch({ type: "TOGGLE_FONT_COLOR_PICKER" });
-                  }}
-                >
-                  {state.showFontColorPicker && (
-                    <div
-                      className="absolute top-10 z-10"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <ChromePicker
-                        color={editIconData?.color}
-                        onChangeComplete={(color) => {
-                          setEditIconData({
-                            ...editIconData,
-                            color: color.hex,
-                          });
-                          const updatedData = {
-                            ...projectData,
-                            socialLinks: {
-                              ...projectData.socialLinks,
-                              style: {
-                                ...projectData.socialLinks.style,
-                                color: color.hex,
-                              },
-                            },
-                          };
-                          setProjectData(updatedData);
-                          updateProjectData(updatedData);
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-col space-y-2">
-              <label className="text-sm font-medium">Icon Size</label>
-              <span className="text-sm">{iconSize}px</span>
-              <div className="flex w-full items-center justify-between rounded-lg border border-gray-200 p-4">
-                <Slider
-                  min={10}
-                  max={100}
-                  step={1}
-                  defaultValue={[iconSize]}
-                  onValueCommit={(value) => {
-                    const newSize = value[0];
-                    const updatedData = {
-                      ...projectData,
-                      socialLinks: {
-                        ...projectData.socialLinks,
-                        style: {
-                          ...projectData.socialLinks.style,
-                          size: newSize,
-                        },
-                      },
-                    };
-                    setProjectData(updatedData);
-                    updateProjectData(updatedData);
-                  }}
-                  className="w-full"
-                />
-              </div>
-            </div>
-          </div>
-        </>
-      ) : null}
-      {editIconData && (
-        <EditIconModal
-          isModalVisible={isModalVisible}
-          setIsModalVisible={setIsModalVisible}
-          editIconData={editIconData}
-          setEditIconData={setEditIconData}
-          handleSaveEdit={handleSaveIconEdit}
-        />
-      )}
-    </>
+    <IconEditor
+      projectData={projectData}
+      icons={icons}
+      ICON_LIST={ICON_LIST}
+      iconColor={iconColor}
+      iconSize={iconSize}
+      addIcon={addIcon}
+      handleIconEdit={handleIconEdit}
+      handleIconDelete={handleIconDelete}
+      isModalVisible={isModalVisible}
+      setIsModalVisible={setIsModalVisible}
+      setSelectedIcon={setSelectedIcon}
+      editIconData={editIconData}
+      setEditIconData={setEditIconData}
+      handleSaveIconEdit={handleSaveIconEdit}
+      state={state}
+      dispatch={dispatch}
+      updateProjectData={updateProjectData}
+    />
   );
 
   const renderButtonEditor = () => {
