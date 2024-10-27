@@ -21,6 +21,7 @@ const IconEditor = ({
   editIconData,
   setEditIconData,
   handleSaveIconEdit,
+  isIconAlreadyAdded,
   state,
   dispatch,
   updateProjectData,
@@ -48,10 +49,19 @@ const IconEditor = ({
           ICON_LIST={ICON_LIST}
         />
         <Button
-          className="mt-2 w-full bg-button hover:bg-button-hover"
-          onClick={addIcon}
+          className={`mt-2 w-full ${
+            isIconAlreadyAdded
+              ? "cursor-not-allowed bg-gray-400"
+              : "bg-button hover:bg-button-hover"
+          }`}
+          onClick={() => {
+            if (!isIconAlreadyAdded) {
+              addIcon();
+            }
+          }}
+          disabled={isIconAlreadyAdded}
         >
-          Add Icon
+          {isIconAlreadyAdded ? "Icon Already Added" : "Add Icon"}
         </Button>
       </div>
       <div className="mt-6 flex w-full">
@@ -160,6 +170,7 @@ IconEditor.propTypes = {
   state: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   updateProjectData: PropTypes.func.isRequired,
+  isIconAlreadyAdded: PropTypes.bool,
 };
 
 export default IconEditor;

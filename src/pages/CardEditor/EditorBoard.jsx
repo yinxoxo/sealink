@@ -99,6 +99,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
     handleSaveIconEdit,
     addIcon,
     handleIconDelete,
+    isIconAlreadyAdded,
   } = useIconEditor(projectData, setProjectData, updateProjectData, toast);
   const {
     isButtonModalVisible,
@@ -199,6 +200,7 @@ const EditBoard = ({ isMobile, setIsMobile }) => {
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
         setSelectedIcon={setSelectedIcon}
+        isIconAlreadyAdded={isIconAlreadyAdded}
         editIconData={editIconData}
         setEditIconData={setEditIconData}
         handleSaveIconEdit={handleSaveIconEdit}
