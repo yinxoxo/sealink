@@ -175,7 +175,7 @@ const ForestCard = ({ data }) => {
             id={item.id}
             content={
               <div
-                className={`${getItemStyle(item.type)} cursor-pointer`}
+                className={`${getItemStyle(item.type)} `}
                 onClick={() => setEditingType("icon")}
               >
                 {icons.map((icon) => {
@@ -197,6 +197,7 @@ const ForestCard = ({ data }) => {
                       href={href}
                       target={icon.name === "email" ? "_self" : "_blank"}
                       rel="noopener noreferrer"
+                      className="mt-2"
                     >
                       <IconComponent size={iconSize} color={iconColor} />
                     </a>
@@ -250,7 +251,7 @@ const ForestCard = ({ data }) => {
           fontFamily: projectData.buttons.style.fontFamily,
         };
       case "icons":
-        return "flex justify-center space-x-4";
+        return "flex justify-center space-x-4 cursor-pointer flex-wrap ";
       case "avatar":
         return {
           width: projectData.avatar.style.width,

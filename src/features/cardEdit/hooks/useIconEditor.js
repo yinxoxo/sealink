@@ -23,6 +23,10 @@ export const useIconEditor = (
   const iconColor = projectData?.socialLinks?.style?.color;
   const iconSize = projectData?.socialLinks?.style?.size;
 
+  const isIconAlreadyAdded = selectedIcon
+    ? icons.some((icon) => icon.name === selectedIcon)
+    : false;
+
   const handleIconEdit = (iconName) => {
     const iconToEdit = icons.find((icon) => icon.name === iconName);
     if (iconToEdit) {
@@ -47,9 +51,12 @@ export const useIconEditor = (
     updateProjectData(updatedData);
     setIsModalVisible(false);
   };
-
   const addIcon = () => {
     if (selectedIcon) {
+      if (isIconAlreadyAdded) {
+        return;
+      }
+
       const foundIcon = ICON_LIST.find((icon) => icon.name === selectedIcon);
 
       if (foundIcon && foundIcon.icon) {
@@ -103,5 +110,6 @@ export const useIconEditor = (
     handleSaveIconEdit,
     addIcon,
     handleIconDelete,
+    isIconAlreadyAdded,
   };
 };
