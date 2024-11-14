@@ -1,4 +1,5 @@
 import NotFound from "@/components/ErrorMessage/NotFound";
+import { useFetchProjectByToken } from "@/firebase/fetchProjectInfoByToken";
 import useRecordVisitorData from "@/firebase/useRecordVisitorData";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router-dom";
@@ -14,7 +15,17 @@ import WoodCard from "../../features/cardTemplate/components/WoodCard";
 import { useVisitorProject } from "../../firebase/useVisitorProject";
 
 const Deploy = () => {
-  const { userId, template, projectId } = useParams();
+  const { token } = useParams();
+
+  const {
+    data: projectInfo,
+    isLoading: isLoadingToken,
+    isError: isErrorToken,
+  } = useFetchProjectByToken(token);
+
+  const userId = projectInfo?.userId;
+  const projectId = projectInfo?.projectId;
+
   const {
     data: projectData,
     isLoading,
@@ -31,16 +42,16 @@ const Deploy = () => {
     WoodCard,
     NinaWishCard,
   };
-
+  const template = projectData?.templateId;
   const CardComponent = cardComponents[template];
 
   useRecordVisitorData(userId, projectId);
 
-  if (isLoading) {
+  if (isLoading || isLoadingToken) {
     return <Loading />;
   }
 
-  if (isError || !projectData || !projectData.isPublished) {
+  if (isError || isErrorToken || !projectData || !projectData.isPublished) {
     return <NotFound />;
   }
 

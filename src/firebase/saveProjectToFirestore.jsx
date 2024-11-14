@@ -2,8 +2,11 @@ import {
   addDoc,
   collection,
   doc,
+  getDocs,
+  query,
   serverTimestamp,
   setDoc,
+  where,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 
@@ -17,6 +20,24 @@ export const updateScreenshotUrl = async (userId, projectId, screenshotUrl) => {
   }
 };
 
+const getToken = async (userId, projectId) => {
+  const tokenQuery = query(
+    collection(db, "tokens"),
+    where("projectId", "==", projectId),
+  );
+  const tokenSnapshot = await getDocs(tokenQuery);
+  if (!tokenSnapshot.empty) {
+    const token = tokenSnapshot.docs[0].id;
+    return token;
+  } else {
+    const tokenRef = await addDoc(collection(db, "tokens"), {
+      userId,
+      projectId,
+    });
+    return tokenRef.id;
+  }
+};
+
 export const saveProjectToFirestore = async (
   userId,
   projectId,
@@ -27,7 +48,8 @@ export const saveProjectToFirestore = async (
   try {
     if (projectId) {
       if (projectData.isPublished) {
-        projectData.publishedUrl = `/sealink/${userId}/${projectData.templateId}/${projectId}`;
+        const token = await getToken(userId, projectId);
+        projectData.publishedUrl = `/sealink/${token}`;
       }
       const projectRef = doc(db, `users/${userId}/projects/${projectId}`);
       await setDoc(
@@ -70,7 +92,8 @@ export const saveProjectToFirestore = async (
 
       let publishedUrl = null;
       if (projectData.isPublished) {
-        const publishedUrl = `/sealink/${userId}/${projectData.templateId}/${newProjectId}`;
+        const token = await getToken(userId, newProjectId);
+        publishedUrl = `/sealink/${token}`;
         await setDoc(
           doc(db, `users/${userId}/projects/${newProjectId}`),
           { publishedUrl },
